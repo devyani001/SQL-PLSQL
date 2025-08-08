@@ -1,0 +1,113 @@
+            PL-SQL INSTALLATION ...
+            ===================
+            
+steps to install PL-SQL
+---------------------------
+Goto Google.com
+Search for "postgresql.org"
+    - .org = organization      means providing services without asking for money.
+    - .com = commercialization means providing services with asking money.
+    - .in  = for india
+click on "www.postgrsql.org"
+click on hyperlink "Download the installer"
+    it will how list of OS and its latest postgrsql's
+click on latest postresql of "Windows x86-64"
+Downloading of Postgrsql will start and you will find it in "Downloads"
+
+1)  start SQL shell (psql) 
+    Server [localhost]:
+    Database [postgres]:
+    Port [5432]:
+    Username [postgres]:
+    Password for user postgres:
+
+    psql (17.5)
+    WARNING: Console code page (437) differs from Windows code page (1252)
+             8-bit characters might not work correctly. See psql reference
+             page "Notes for Windows users" for details.
+    Type "help" for help.
+
+
+2)  CREATE cmd
+    postgres=# show databases;
+    ERROR:  unrecognized configuration parameter "databases"
+    postgres=# create database mydb;
+    CREATE DATABASE
+    postgres=#
+
+3)  complete shell chya baher yene
+    postgres=# \q
+    Press any key to continue . . .
+
+4)  how to open created database in PL-SQL
+    Server [localhost]:
+    Database [postgres]: mydb
+    Port [5432]:
+    Username [postgres]:
+    Password for user postgres:
+
+    psql (17.5)
+    WARNING: Console code page (437) differs from Windows code page (1252)
+             8-bit characters might not work correctly. See psql reference
+            page "Notes for Windows users" for details.
+    Type "help" for help.
+
+    mydb=#                                  // inside mydb database ...
+
+5)  table === relation ( samanarthi shabt )
+    mydb=# \dt                              // db madhe kiti tables ahe check krto \dt 
+    Did not find any relations.
+
+6)  check databases available 
+    mydb=# \l
+                                                            List of databases
+      Name    |  Owner   | Encoding | Locale Provider |      Collate       |       Ctype        | Locale | ICU Rules |   Access privileges
+    -----------+----------+----------+-----------------+--------------------+--------------------+--------+-----------+-----------------------
+    mydb      | postgres | UTF8     | libc            | English_India.1252 | English_India.1252 |        |           |
+    postgres  | postgres | UTF8     | libc            | English_India.1252 | English_India.1252 |        |           |
+    template0 | postgres | UTF8     | libc            | English_India.1252 | English_India.1252 |        |           | =c/postgres          +
+              |          |          |                 |                    |                    |        |           | postgres=CTc/postgres
+    template1 | postgres | UTF8     | libc            | English_India.1252 | English_India.1252 |        |           | =c/postgres          +
+              |          |          |                 |                    |                    |        |           | postgres=CTc/postgres
+    (4 rows)
+
+
+show tables                                 --> \dt
+show databases with default info            --> \l
+showing database's names only               --> select datname from pg_database;
+
+7)  existing database chi naav show krto pkt not entire data ...
+    pn mulanna hi cmd jaast mahit aste --> "select datname from pg_database;"
+    mydb=# select datname from pg_database;     //only for PL-SQL, it includes pg_database i.e., PostgreSQL 
+    datname
+    -----------
+    postgres
+    mydb
+    template1
+    template0
+    (4 rows)
+
+8) SQL to find how many database exists
+    mydb=# select count (datname) from pg_database;
+    count
+    -------
+        4                                      // no. of database is 4 ...
+    (1 row)
+    =========================
+
+    ANS :   mydb
+            postgres
+            template0
+            template1
+
+9)
+    //Oracle madhe commit fire krave lagtat nhi tr table vgre delete hote sgle.
+        - ithe Oracle madhe commit kely shivay data save hot nhi ...
+        - first commit and then leave SQL Shell(psql) --> direct X krun screen leave nka kru
+            just enter \q and exit ...
+        - BUT PL-SQL madhe commit nste. Auto save houn aste tithe.
+
+    mydb=# commit
+    mydb-# commit;
+
+    ATM madhe jata tevha lihun yete "transaction failed" pn jevha tumhi pin takta tevha "transaction successful hote" tevha tyala "committed transaction mhntat"
