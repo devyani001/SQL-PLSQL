@@ -1,6 +1,6 @@
             PL-SQL INSTALLATION ...
             ===================
-            
+
 steps to install PL-SQL
 ---------------------------
 Goto Google.com
@@ -35,7 +35,7 @@ Downloading of Postgrsql will start and you will find it in "Downloads"
     CREATE DATABASE
     postgres=#
 
-3)  complete shell chya baher yene
+3)  complete shell chya baher yene PL-SQL madhe
     postgres=# \q
     Press any key to continue . . .
 
