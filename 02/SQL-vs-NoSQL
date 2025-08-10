@@ -1,0 +1,20 @@
+data -> table -> database -> database server / (s/w)
+
+
+there are two types of databases -
+------------------------------------
+    1. SQL   Database   : MySQL, PostgresSQL, Oracle
+    2. NoSQL Database   : MongoDB
+
+SQL Databases are Structured Databases
+because each record 'should' have fixed no. of values.
+- value nhi dili tr by default NULL gheto.
+
+NoSQL databases are Unstructured Databases
+because each document may be different size.
+        --> NoSQL madhe 'document' mhnte ani SQL madhe 'Record' mhntat.
+- jevdhya value dyal tevdhech value ghete no extra/default value.
+- table  la 'Collection' mhntat
+- record la 'Document'   mhntat
+- each document is stored in KEY : VALUE pair.
+    yalach js madhe JSON FORMAT mhntat.

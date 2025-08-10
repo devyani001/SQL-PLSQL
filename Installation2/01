@@ -1,18 +1,13 @@
-Server [localhost]:
-Database [postgres]:
-Port [5432]:
-Username [postgres]:
-Password for user postgres:
+                                MySql - Installation-1
 
-psql (17.5)
-WARNING: Console code page (437) differs from Windows code page (1252)
-         8-bit characters might not work correctly. See psql reference
-         page "Notes for Windows users" for details.
-Type "help" for help.
+Postgres --> MySql --> Oracle
+    - shiktana 3 mahine postgres vr shika mg 1 mahina cha break ghya ani tyach query mysql vr fire kra nantr prt 1 mahina cha break ghya
+      ani tyach query mg oracle vr fire kra ...
+    - ani resume madhe lihun take -- DATABASE - Postgres, MySql, Oracle.
 
-postgres=# show databases;
-ERROR:  unrecognized configuration parameter "databases"
-postgres=# create database mydb;
-CREATE DATABASE
-postgres=#
 
+CREATE DATABASE mydb;
+USE mydb;
+
+SHOW DATABASES;
+SHOW TABLES;
