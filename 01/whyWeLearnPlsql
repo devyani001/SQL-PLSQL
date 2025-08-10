@@ -1,0 +1,14 @@
+mi mysql software he database server hot tyat mi collegedb navach database bnvl tya madhe student navacha table hota
+- install kela to mysql database server hota
+  kal jsa postgres install kela to database nhi postgres database server hota.
+  Oracle ky hota server hota
+
+- DBMS ek pgm ahe tyach kam ahe user krun alela data ghyaycha ani database madhe save karaycha
+  nhi tr data hava asla tr to data ghyaycha ani database la deun dyaycha
+
+- database shi tumhala directly communicate krta yet nhi tumhala DBMS through ch communicate krav lagel;
+- backend wala lok ky krte 
+  they write business logic - je khi backend madhe code krtil tyala business logic mhnte
+  business logic === Processing logic
+  backend madhla sgla code business logic nste, code madhlya jya lines database shi communicate krtat tyalacH business logic mahntat.
+- html, css -> presentation logic.
