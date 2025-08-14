@@ -1,0 +1,66 @@
+GUI - Graphical User Interface
+CUI - Commandline User Interface
+        (Command Prompt | Terminal | Shell)
+
+
+
+je apn GUI ni krto te sgl aaplyala cmd prompt ni krta yete.
+- open cmd prompt
+- type nodepad.exe
+- it will open nodepad automatically
+===============================================================
+
+
+MySQL
+-------
+mysql> use tcadb;
+Database changed
+
+
+Postgres
+-----------------
+postgres=# \c mydb;
+You are now connected to database "mydb" as user "postgres".
+
+
+Q. What is Data ?
+-------------------
+--> Anything which is formed from letter, digits, symbol, images, video is a 'Data'.
+
+
+Q. What is a Database ?
+------------------------
+--> The place where data is kept 'Meaningfully' is called as Database.
+--> Logically related data is kept in a storage that is called a Database.
+    Logically - aplya file apli marksheet, Bahinichya file madhe tiche docs and marksheet.
+    Sahyadri hospital db madhe gele ani mhtl doctor appointment ahe tr logically related data ahe, pn
+    tithe jaun mla train ch ticket kadhaych ahe mhtl tr ky sambandh train cha hospital madhe i.e., not
+    logically related data.
+
+
+Q. What is DBMS ?
+---------------------
+--> It stands for Database Management System.
+--> It is a Software(program) which Manages Data.
+--> Manages data means performing operations like store/add, delete, update, fetch(display) on Data.
+
+
+Q. What is RDBMS ?
+---------------------
+--> It stands for Relational Database Management System.
+--> It is a database management system where data is managed/manipulated in terms of 'Table/Relation'.
+
+
+Q. What is SQL ?
+-----------------
+--> SQL stands for 'Structured Query Language';
+--> It is a Language through which user can interact/instruct the DBMS.
+--> It allows user to perform database operations like store, delete, update, fetch etc.
+
+    Language : C, C++, java etc.
+    ithe Interview madhe 'etc.' ya shbdavr ghetl hot eka mulala what is 'etc.' nhi mahit tr lihl kashala
+    ani 'java' cha 'j' small ahe, first letter should be Capital na 'Java'.
+
+    OS : Windows(), Linus(BCA/BCS)
+    - hath uchlaychya adhi 10 vela v4 kra ha section lihaycha ki nhi.
+    - he lihn mhnje tumhala yachya cmd mahit asne.
