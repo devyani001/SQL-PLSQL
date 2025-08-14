@@ -1,0 +1,85 @@
+Q. Why SQL is Used ?
+----------------------
+    1. SQL is used to perform CRUD Operations.
+    2. SQL is used to merge 'logically related data'.
+    3. SQL is used to 'Normalized Data'.
+
+
+
+1. SQL is used to perform CRUD Operations.
+--------------------------------------------
+    C - CREATE          Creating database or tables
+
+    R - READ            Fetching   data from a table
+                        Displaying data from a table
+
+    U - UPDATE          Either we are modifying one record or multiple records
+
+    D - DELETE          Either we are deleting  one record or multiple records
+
+
+
+2. SQL is used to merge 'logically related data'.
+---------------------------------------------------
+
+--> Merging logically related data means you are combining more than one tables.
+--> Tables are combined only when they should have atleast one common attribute(Field/column).
+--> Combining tables is nothing but JOIN Operations.
+
+            Student                                                 Teacher
+    rno | name | per | city                                 tno | tname | salary | city
+
+- SELECT * FROM Student, Teacher;
+    he donhi nhi kru skt he krayala at least 1 row common pahije.
+
+Example :
+Can you Find student & teacher from same city.
+Can you give name of student & teacher, those are from Old-Sangvi.
+
+
+
+3. SQL is used to 'Normalized Data'.
+--------------------------------------
+
+--> SQL is used to 'normalize data' means SQL helps implement the normalization process by creating well-structured, 
+    relational tables that reduce 'redundancy' and maintain 'data integrity'.
+
+
+--> Pratyek 'Cell' madhe 'ekach' value asnar hi assurity tumhala DBMS dete ya process la 'Normalization' mhnte.
+
+            Student
+    rno | name | per | phno
+    101 | AAA  | 60  | 9999, 7777               Not possible 9999, 7777
+    102 | BBB  | 70  | 8888
+
+--> u cannot store 2 values in one Cell.
+--> for that u need to add one extra column 'Contact'.
+
+            Student
+    rno | name | per | phno | Contact
+    101 | AAA  | 60  | 9999 | 7777
+    102 | BBB  | 70  | 8888 | NULL              student kde phone ch nhi
+
+
+                 Student
+
+                       |       Contact       |
+    | rno | name | per | contact1 | Contact2 |
+    | 101 | AAA  | 60  | 9999     | 7777     |
+    | 102 | BBB  | 70  | 8888     | NULL     |         student kde phone ch nhi
+
+
+--> Ithe rno, name, per, contact bss he 4 ch column bnte
+    contact1, contact2 asa code nhi krta yet.
+
+--> designer E-R diagram deto
+
+        rno     name    per    contact              // Attributes   --> Columns
+
+                   Student                          // Entity       --> Tables
+                 ER Diagram
+
+--> Entity    becomes 'Table'.
+--> Attribute becomes 'Columns'.
+--> Developer banvatana columns kiti bnvate lagnar ahe 5.
+--> Actual columns kiti ahe 4.
