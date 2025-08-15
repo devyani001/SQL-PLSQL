@@ -1,0 +1,169 @@
+Server [localhost]:
+Database [postgres]: tcadb16
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+tcadb16=# SELECT * FROM students;
+ERROR:  relation "students" does not exist
+LINE 1: SELECT * FROM students;
+                      ^
+tcadb16=# CREATE TABLE student(rno int, name varchar(10), per float);
+CREATE TABLE
+tcadb16=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+(0 rows)
+
+
+tcadb16=# SELECT name FROM student;
+ name
+------
+(0 rows)
+
+
+tcadb16=# INSERT INTO student VALUES(101,'AAA',60);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+(1 row)
+
+
+tcadb16=# INSERT INTO student VALUES(102,'BBB',70);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  70
+(2 rows)
+
+
+tcadb16=# rollback;
+WARNING:  there is no transaction in progress
+ROLLBACK
+tcadb16=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  70
+(2 rows)
+
+
+tcadb16=# insert into student values(103,'CCC',80);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  70
+ 103 | CCC  |  80
+(3 rows)
+
+
+tcadb16=# INSERT INTO student VALUES(104,'DDDDDDDDDDD',90);
+ERROR:  value too long for type character varying(10)
+tcadb16=# DROP DATABASE tcadb16;
+ERROR:  cannot drop the currently open database
+tcadb16=# \c postgres;
+You are now connected to database "postgres" as user "postgres".
+postgres=# DROP DATABASE tcadb16;
+DROP DATABASE
+postgres=# \l
+                                                            List of databases
+   Name    |  Owner   | Encoding | Locale Provider |      Collate       |       Ctype        | Locale | ICU Rules |   Access privileges
+-----------+----------+----------+-----------------+--------------------+--------------------+--------+-----------+-----------------------
+ mydb      | postgres | UTF8     | libc            | English_India.1252 | English_India.1252 |        |           |
+ postgres  | postgres | UTF8     | libc            | English_India.1252 | English_India.1252 |        |           |
+ template0 | postgres | UTF8     | libc            | English_India.1252 | English_India.1252 |        |           | =c/postgres          +
+           |          |          |                 |                    |                    |        |           | postgres=CTc/postgres
+ template1 | postgres | UTF8     | libc            | English_India.1252 | English_India.1252 |        |           | =c/postgres          +
+           |          |          |                 |                    |                    |        |           | postgres=CTc/postgres
+(4 rows)
+
+
+postgres=# \c tcadb16;
+connection to server at "localhost" (::1), port 5432 failed: FATAL:  database "tcadb16" does not exist
+Previous connection kept
+postgres=# CREATE DATABASE tcadb16;
+CREATE DATABASE
+postgres=# CREATE TABLE student(rno int, name varchar(10), per float);
+CREATE TABLE
+postgres=# INSERT INTO student VALUES(101,'AAA',60);
+INSERT 0 1
+postgres=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+(1 row)
+
+
+postgres=# \c postgres;
+You are now connected to database "postgres" as user "postgres".
+postgres=# DROP tcadb16;
+ERROR:  syntax error at or near "tcadb16"
+LINE 1: DROP tcadb16;
+             ^
+postgres=# DROP DATABASE tcadb16;
+DROP DATABASE
+postgres=# CREATE DATABASE tcadb16;
+CREATE DATABASE
+postgres=# CREATE TABLE student(rno int, name varchar(10), per float);
+ERROR:  relation "student" already exists
+postgres=# SELECT * FROM students;
+ERROR:  relation "students" does not exist
+LINE 1: SELECT * FROM students;
+                      ^
+postgres=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+(1 row)
+
+
+postgres=# INSERT INTO student VALUES(102,'BBB',70);
+INSERT 0 1
+postgres=# INSERT INTO student VALUES(103,'CCC',80);
+INSERT 0 1
+postgres=# INSERT INTO student VALUES(104,'DDD',60);
+INSERT 0 1
+postgres=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  70
+ 103 | CCC  |  80
+ 104 | DDD  |  60
+(4 rows)
+
+
+postgres=# DELETE FROM student WHERE rno=107;
+DELETE 0
+postgres=# DELETE FROM student WHERE rno=102;
+DELETE 1
+postgres=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 103 | CCC  |  80
+ 104 | DDD  |  60
+(3 rows)
+
+
+postgres=# DELETE FROM student;
+DELETE 3
+postgres=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+(0 rows)
+
+
+postgres=#

@@ -1,0 +1,119 @@
+Enter password: **********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 16
+Server version: 8.0.43 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE DATABASE tcadb16;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| college            |
+| information_schema |
+| mall               |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sakila             |
+| shopping           |
+| student            |
+| sys                |
+| tcadb16            |
+| world              |
+| xyz                |
++--------------------+
+13 rows in set (0.03 sec)
+
+mysql>
+mysql> \c tcadb16;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'tcadb16' at line 1
+mysql> USE tcadb16;
+Database changed
+mysql> CREATE TABLE student(rno int, name varchar(10), per float);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> select * from student;
+Empty set (0.00 sec)
+
+mysql> INSERT INTO student(101,'AAA',60);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '101,'AAA',60)' at line 1
+mysql> INSERT INTO student VALUES(101,'AAA',60);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO student VALUES(102,'BBB',60);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> INSERT INTO student VALUES(103,'CCC',80);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from student;
++------+------+------+
+| rno  | name | per  |
++------+------+------+
+|  101 | AAA  |   60 |
+|  102 | BBB  |   60 |
+|  103 | CCC  |   80 |
++------+------+------+
+3 rows in set (0.00 sec)
+
+mysql> UPDATE per=70 INTO student WHERE id=102;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '=70 INTO student WHERE id=102' at line 1
+mysql> DELETE FROM student WHERE rno=107;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DELETE FROM student WHERE rno=102;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from student;
++------+------+------+
+| rno  | name | per  |
++------+------+------+
+|  101 | AAA  |   60 |
+|  103 | CCC  |   80 |
++------+------+------+
+2 rows in set (0.00 sec)
+
+mysql> DELETE FROM student;
+Query OK, 2 rows affected (0.03 sec)
+
+mysql> select * from student;
+Empty set (0.00 sec)
+
+mysql> DROP TABLE student;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from student;
+ERROR 1146 (42S02): Table 'tcadb16.student' doesn't exist
+mysql> DROP DATABASE tcadb16;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| college            |
+| information_schema |
+| mall               |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sakila             |
+| shopping           |
+| student            |
+| sys                |
+| world              |
+| xyz                |
++--------------------+
+12 rows in set (0.00 sec)
+
+mysql>

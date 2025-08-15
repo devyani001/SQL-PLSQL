@@ -1,0 +1,239 @@
+CREATE & DROP - Database, Table
+
+Postgres
+-------------
+
+1)  postgres=# \l
+                                                            List of databases
+   Name    |  Owner   | Encoding | Locale Provider |      Collate       |       Ctype        | Locale | ICU Rules |   Access privileges
+-----------+----------+----------+-----------------+--------------------+--------------------+--------+-----------+-----------------------
+ mydb      | postgres | UTF8     | libc            | English_India.1252 | English_India.1252 |        |           |
+ postgres  | postgres | UTF8     | libc            | English_India.1252 | English_India.1252 |        |           |
+ template0 | postgres | UTF8     | libc            | English_India.1252 | English_India.1252 |        |           | =c/postgres          +
+           |          |          |                 |                    |                    |        |           | postgres=CTc/postgres
+ template1 | postgres | UTF8     | libc            | English_India.1252 | English_India.1252 |        |           | =c/postgres          +
+           |          |          |                 |                    |                    |        |           | postgres=CTc/postgres
+(4 rows)
+
+
+2)  postgres=# CREATE DATABASE tcadb16;
+    CREATE DATABASE
+
+3)  postgres=# \c tcadb16;
+    You are now connected to database "tcadb16" as user "postgres".
+    tcadb16=#
+
+linux vr pn yach cmd fire hotil. cmd remains same...
+
+4) 
+    Server [localhost]: ithe apn ata blank thevto, pn company madhe gelyavr tithla localhost cha IP Address takava lagel tithe 127.91.01
+                        like this, ani clg madhe clg chya own server asto tithla IP Address takava lagel.
+    Database [postgres]: tcadb16
+    Port [5432]: company cha port no. takava lagel like 8971
+    Username [postgres]:
+    Password for user postgres:
+
+    psql (17.5)
+    WARNING: Console code page (437) differs from Windows code page (1252)
+             8-bit characters might not work correctly. See psql reference
+             page "Notes for Windows users" for details.
+    Type "help" for help.
+
+5) 
+    Server [localhost]:
+    Database [postgres]: tcadb16
+    Port [5432]:
+    Username [postgres]:
+    Password for user postgres:
+
+    psql (17.5)
+    WARNING: Console code page (437) differs from Windows code page (1252)
+             8-bit characters might not work correctly. See psql reference
+             page "Notes for Windows users" for details.
+    Type "help" for help.
+
+    tcadb16=# SELECT * FROM students;
+    ERROR:  relation "students" does not exist
+    LINE 1: SELECT * FROM students;
+                      ^
+    TABLE == RELATION   (in Postgres)
+    -----------------------------------
+
+6) all columns
+    tcadb16=# CREATE TABLE student(rno int, name varchar(10), per float);
+    CREATE TABLE
+    tcadb16=# SELECT * FROM student;
+    rno | name | per
+    -----+------+-----
+    (0 rows)
+
+7)  tcadb16=# SELECT * FROM student;
+    * -> i want to display all columns
+    
+8) name column
+    tcadb16=# SELECT name FROM student;
+    name
+    ------
+    (0 rows)
+
+9) add records
+    INSERT INTO student VALUES(101,'AAA',60.30);
+    "Sachin"    -> prog lang madhe " " ya madhlya data la string mhntat.
+    'Sachin'    -> SQL madhe       ' ' ya madhlya data la string mhntat.
+     SQL        -> STRING ~ VARCHAR()
+
+    DON'T USE " " IN SQL
+    C/CPP                   SQL
+    String                  VARCHAR
+    " "             -        ' '
+  
+    tcadb16=# INSERT INTO student VALUES(101,'AAA',60);
+    INSERT 0 1
+    tcadb16=# SELECT * FROM student;
+     rno | name | per
+    -----+------+-----
+     101 | AAA  |  60
+    (1 row)
+
+    tcadb16=# INSERT INTO student VALUES(102,'BBB',70);
+    INSERT 0 1
+    tcadb16=# SELECT * FROM student;
+     rno | name | per
+    -----+------+-----
+     101 | AAA  |  60
+     102 | BBB  |  70
+    (2 rows)
+
+    //  same output for Lowercase Alphabates
+    tcadb16=# insert into student values(103,'CCC',80);
+    INSERT 0 1
+    tcadb16=# SELECT * FROM student;
+     rno | name | per
+    -----+------+-----
+     101 | AAA  |  60
+     102 | BBB  |  70
+     103 | CCC  |  80
+    (3 rows)
+
+    
+    tcadb16=# INSERT INTO student VALUES(104,'DDDDDDDDDDD',90);
+    ERROR:  value too long for type character varying(10)
+===============================================================================
+
+
+MySQL
+---------
+
+1) 
+    mysql> select * from student;
+    +------+------+------+
+    | rno  | name | per  |
+    +------+------+------+
+    |  101 | AAA  |   60 |
+    |  103 | CCC  |   80 |
+    +------+------+------+
+    2 rows in set (0.00 sec)
+
+    mysql> DELETE FROM student;
+    Query OK, 2 rows affected (0.03 sec)
+            0.03 sec - Time Complexity ahe.
+
+2) 
+    mysql> DROP TABLE student;
+    Query OK, 0 rows affected (0.02 sec)
+
+    mysql> select * from student;
+    ERROR 1146 (42S02): Table 'tcadb16.student' doesn't exist
+        Table = mhntat SQL madhe not 'RELATION'.
+===============================================================================
+
+
+
+Q. How to create database ?
+----------------------------
+    CREATE DATABASE tcadb16;
+
+
+Q. How to Connect the Database ?
+---------------------------------
+    \c tcadb16;
+
+
+Q. How to Create Table ?
+-------------------------
+    CREATE TABLE student(
+        rno  int,
+        name varchar(20),
+        per  float
+    );
+
+
+Q. How to Insert values ?
+---------------------------
+    add records
+    INSERT INTO student VALUES(101,'AAA',60.30);
+    "Sachin"    -> prog lang madhe " " ya madhlya data la string mhntat.
+    'Sachin'    -> SQL madhe       ' ' ya madhlya data la string mhntat.
+     SQL        -> STRING ~ VARCHAR()
+
+
+Q. How to delete table ?
+--------------------------
+    DROP TABLE student;
+
+Q. How to delete Record ?
+----------------------------
+    DELETE FROM student;                        // delete all records in table student
+        postgres=# DELETE FROM student;
+        DELETE 3
+        postgres=# SELECT * FROM student;
+         rno | name | per
+        -----+------+-----
+        (0 rows)
+
+
+    DELETE FROM student WHERE rno=102;          // delete the record having rno=102
+        postgres=# DELETE FROM student WHERE rno=102;
+        DELETE 1
+        postgres=# SELECT * FROM student;
+         rno | name | per
+        -----+------+-----
+         101 | AAA  |  60
+         103 | CCC  |  80
+         104 | DDD  |  60
+        (3 rows)
+    
+
+    jo record exist ch nhi krt asa rno dila tr
+    postgres=# DELETE FROM student WHERE rno=107;
+    DELETE 0                                    // delete kele kiti records 0.
+    
+
+Q. How to delete Database ?
+----------------------------
+    DROP DATABSE tcadb16;
+    
+    ex:
+    tcadb16=# DROP DATABASE tcadb16;
+    ERROR:  cannot drop the currently open database
+        jya phandi vr bsle ti phandi todal ka, you are currently in tcadb16.
+        pahile tyachya baher ya dusrya phandi vr jaa nantr db drop kra.
+
+    tcadb16=# \c postgres;
+    You are now connected to database "postgres" as user "postgres".
+    postgres=# DROP DATABASE tcadb16;
+    DROP DATABASE
+
+
+    SHOW DATABASES;         // MySQL
+    postgres=# \l           // Postgres
+
+
+    postgres=# \c tcadb16;
+    connection to server at "localhost" (::1), port 5432 failed: FATAL:  database "tcadb16" does not exist Previous connection kept
+
+
+Q. What is difference between DROP TABLE and DELETE TABLE ?
+------------------------------------------------------------
+--> DROP TABLE   removes TABLE from database.
+--> DELETE TABLE removes records from table.
