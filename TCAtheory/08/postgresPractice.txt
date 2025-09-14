@@ -1,0 +1,252 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb;
+connection to server at "localhost" (::1), port 5432 failed: FATAL:  database "tcadb" does not exist
+Previous connection kept
+postgres=# CREATE TABLE student(rno INT PRIMARY KEY, name VARCHAR(20), per FLOAT);
+ERROR:  relation "student" already exists
+postgres=# show student;
+ERROR:  unrecognized configuration parameter "student"
+postgres=# \l;
+invalid command \l;
+Try \? for help.
+postgres=# \l student;
+                                          List of databases
+ Name | Owner | Encoding | Locale Provider | Collate | Ctype | Locale | ICU Rules | Access privileges
+------+-------+----------+-----------------+---------+-------+--------+-----------+-------------------
+(0 rows)
+
+
+postgres=# drop student;
+ERROR:  syntax error at or near "student"
+LINE 1: drop student;
+             ^
+postgres=# drop students;
+ERROR:  syntax error at or near "students"
+LINE 1: drop students;
+             ^
+postgres=# DROP TABLE student;
+DROP TABLE
+postgres=# CREATE TABLE student(rno INT PRIMARY KEY, name VARCHAR(20), per FLOAT);
+CREATE TABLE
+postgres=# SELECT * FROM Student;
+ rno | name | per
+-----+------+-----
+(0 rows)
+
+
+postgres=# INSERT INTO student VALUES(101, 'AAA', 60);
+INSERT 0 1
+postgres=# INSERT INTO student VALUES(102, 'BBB', 70);
+INSERT 0 1
+postgres=# INSERT INTO student VALUES(103, 'CCC', 80);
+INSERT 0 1
+postgres=# INSERT INTO student VALUES(104, 'DDD', 90);
+INSERT 0 1
+postgres=# SELECT * FROM Student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  70
+ 103 | CCC  |  80
+ 104 | DDD  |  90
+(4 rows)
+
+
+postgres=# \d student;
+                     Table "public.student"
+ Column |         Type          | Collation | Nullable | Default
+--------+-----------------------+-----------+----------+---------
+ rno    | integer               |           | not null |
+ name   | character varying(20) |           |          |
+ per    | double precision      |           |          |
+Indexes:
+    "student_pkey" PRIMARY KEY, btree (rno)
+
+
+postgres=# INSERT INTO student(name,per) VALUES('EEE', 87);
+ERROR:  null value in column "rno" of relation "student" violates not-null constraint
+DETAIL:  Failing row contains (null, EEE, 87).
+postgres=# INSERT INTO student(rno,per) VALUES(105, 87);
+INSERT 0 1
+postgres=# SELECT * FROM Student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  70
+ 103 | CCC  |  80
+ 104 | DDD  |  90
+ 105 |      |  87
+(5 rows)
+
+
+postgres=# INSERT INTO student VALUES(104, 'DDD', 90);
+ERROR:  duplicate key value violates unique constraint "student_pkey"
+DETAIL:  Key (rno)=(104) already exists.
+postgres=# drop table student;
+DROP TABLE
+postgres=# CREATE TABLE student(rno INT PRIMARY KEY, name VARCHAR(20) NOT NULL, per FLOAT);
+CREATE TABLE
+postgres=# INSERT INTO student VALUES(101, 'AAA', 60);
+INSERT 0 1
+postgres=# INSERT INTO student VALUES(102, 'BBB', 70);
+INSERT 0 1
+postgres=# INSERT INTO student VALUES(103, 'CCC', 80);
+INSERT 0 1
+postgres=# INSERT INTO student VALUES(104, 'DDD', 90);
+INSERT 0 1
+postgres=# SELECT * FROM Student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  70
+ 103 | CCC  |  80
+ 104 | DDD  |  90
+(4 rows)
+
+
+postgres=# DROP TABLE student;
+DROP TABLE
+postgres=# \d student;
+Did not find any relation named "student".
+postgres=# CREATE TABLE student(rno INT PRIMARY KEY, name VARCHAR(20) NOT NULL, per FLOAT);
+CREATE TABLE
+postgres=# INSERT INTO student VALUES(101, 'AAA', 60);
+INSERT 0 1
+postgres=# INSERT INTO student VALUES(102, 'BBB', 70);
+INSERT 0 1
+postgres=# INSERT INTO student VALUES(103, 'CCC', 80);
+INSERT 0 1
+postgres=# INSERT INTO student VALUES(104, 'DDD', 90);
+INSERT 0 1
+postgres=# SELECT * FROM Student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  70
+ 103 | CCC  |  80
+ 104 | DDD  |  90
+(4 rows)
+
+
+postgres=# \d student;
+                     Table "public.student"
+ Column |         Type          | Collation | Nullable | Default
+--------+-----------------------+-----------+----------+---------
+ rno    | integer               |           | not null |
+ name   | character varying(20) |           | not null |
+ per    | double precision      |           |          |
+Indexes:
+    "student_pkey" PRIMARY KEY, btree (rno)
+
+
+postgres=# drop table student;
+DROP TABLE
+postgres=# CREATE TABLE student(rno INT PRIMARY KEY, name VARCHAR(20) NOT NULL, per FLOAT, email VARCHAR(30 UNIQUE));
+ERROR:  syntax error at or near "UNIQUE"
+LINE 1: ... VARCHAR(20) NOT NULL, per FLOAT, email VARCHAR(30 UNIQUE));
+                                                              ^
+postgres=# CREATE TABLE student(rno INT PRIMARY KEY, name VARCHAR(20) NOT NULL, per FLOAT, email VARCHAR(30) UNIQUE);
+CREATE TABLE
+postgres=# INSERT INTO student VALUES(101, 'AAA', 60, 'a@gmail.com');
+INSERT 0 1
+postgres=# SELECT * FROM Student;
+ rno | name | per |    email
+-----+------+-----+-------------
+ 101 | AAA  |  60 | a@gmail.com
+(1 row)
+
+
+postgres=# \d student;
+                     Table "public.student"
+ Column |         Type          | Collation | Nullable | Default
+--------+-----------------------+-----------+----------+---------
+ rno    | integer               |           | not null |
+ name   | character varying(20) |           | not null |
+ per    | double precision      |           |          |
+ email  | character varying(30) |           |          |
+Indexes:
+    "student_pkey" PRIMARY KEY, btree (rno)
+    "student_email_key" UNIQUE CONSTRAINT, btree (email)
+
+
+postgres=# INSERT INTO student VALUES(102, 'BBB', 70, 'b@gmail.com');
+INSERT 0 1
+postgres=# INSERT INTO student VALUES(103, 'CCC', 80, 'b@gmail.com');
+ERROR:  duplicate key value violates unique constraint "student_email_key"
+DETAIL:  Key (email)=(b@gmail.com) already exists.
+postgres=# SELECT * FROM Student;
+ rno | name | per |    email
+-----+------+-----+-------------
+ 101 | AAA  |  60 | a@gmail.com
+ 102 | BBB  |  70 | b@gmail.com
+(2 rows)
+
+
+postgres=# INSERT INTO student(rno,name,per) VALUES(102, 'CCC', 80);
+ERROR:  duplicate key value violates unique constraint "student_pkey"
+DETAIL:  Key (rno)=(102) already exists.
+postgres=# INSERT INTO student(rno,name,per) VALUES(103, 'CCC', 80);
+INSERT 0 1
+postgres=# SELECT * FROM Student;
+ rno | name | per |    email
+-----+------+-----+-------------
+ 101 | AAA  |  60 | a@gmail.com
+ 102 | BBB  |  70 | b@gmail.com
+ 103 | CCC  |  80 |
+(3 rows)
+
+
+postgres=# INSERT INTO student(rno,name,per) VALUES(104, 'DDD', 90);
+INSERT 0 1
+postgres=# SELECT * FROM Student;
+ rno | name | per |    email
+-----+------+-----+-------------
+ 101 | AAA  |  60 | a@gmail.com
+ 102 | BBB  |  70 | b@gmail.com
+ 103 | CCC  |  80 |
+ 104 | DDD  |  90 |
+(4 rows)
+
+
+postgres=# DROP TABLE STUDENT;
+DROP TABLE
+postgres=# CREATE TABLE student(rno INT PRIMARY KEY, name VARCHAR(20) NOT NULL, per FLOAT, email VARCHAR(30) UNIQUE NOT NULL);
+CREATE TABLE
+postgres=# INSERT INTO student VALUES(103, 'CCC', 80, 'b@gmail.com');
+INSERT 0 1
+postgres=# SELECT * FROM Student;
+ rno | name | per |    email
+-----+------+-----+-------------
+ 103 | CCC  |  80 | b@gmail.com
+(1 row)
+
+
+postgres=# INSERT INTO student(rno,name,per) VALUES(104, 'DDD', 90);
+ERROR:  null value in column "email" of relation "student" violates not-null constraint
+DETAIL:  Failing row contains (104, DDD, 90, null).
+postgres=# \D STUDENT;
+invalid command \D
+Try \? for help.
+postgres=# \d STUDENT;
+                     Table "public.student"
+ Column |         Type          | Collation | Nullable | Default
+--------+-----------------------+-----------+----------+---------
+ rno    | integer               |           | not null |
+ name   | character varying(20) |           | not null |
+ per    | double precision      |           |          |
+ email  | character varying(30) |           | not null |
+Indexes:
+    "student_pkey" PRIMARY KEY, btree (rno)
+    "student_email_key" UNIQUE CONSTRAINT, btree (email)
+
