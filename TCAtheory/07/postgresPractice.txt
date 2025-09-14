@@ -1,0 +1,117 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select * from student;
+ERROR:  relation "student" does not exist
+LINE 1: select * from student;
+                      ^
+tcadb16=# select * from students;
+ERROR:  relation "students" does not exist
+LINE 1: select * from students;
+                      ^
+tcadb16=# show tables;
+ERROR:  unrecognized configuration parameter "tables"
+tcadb16=# show table;
+ERROR:  syntax error at or near "table"
+LINE 1: show table;
+             ^
+tcadb16=# CREATE TABLE student(rno INT, name VARCHAR(20), per INT);
+CREATE TABLE
+tcadb16=# INSERT INTO student VALUES (101, 'AAA', 60);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+(1 row)
+
+
+tcadb16=# INSERT INTO student(rno,name) VALUES (102, 'AAA');
+INSERT 0 1
+tcadb16=# INSERT INTO student(rno,per) VALUES (103,90);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | AAA  |
+ 103 |      |  90
+(3 rows)
+
+
+tcadb16=# INSERT INTO student(name,per) VALUES ('CCC',95);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | AAA  |
+ 103 |      |  90
+     | CCC  |  95
+(4 rows)
+
+
+tcadb16=# INSERT INTO student VALUES (101, 'KKK', 80);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | AAA  |
+ 103 |      |  90
+     | CCC  |  95
+ 101 | KKK  |  80
+(5 rows)
+
+
+tcadb16=# DROP TABLE student;
+DROP TABLE
+tcadb16=# SHOW tcadb;
+ERROR:  unrecognized configuration parameter "tcadb"
+tcadb16=# CREATE TABLE student(rno int PRIMARY KEY, name varchar(20), per float);
+CREATE TABLE
+tcadb16=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+(0 rows)
+
+
+tcadb16=# INSERT INTO student VALUES (101, 'AAA', 60);
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES (101, 'AAA', 60);
+ERROR:  duplicate key value violates unique constraint "student_pkey"
+DETAIL:  Key (rno)=(101) already exists.
+tcadb16=# select * from students;
+ERROR:  relation "students" does not exist
+LINE 1: select * from students;
+                      ^
+tcadb16=# select * from student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+(1 row)
+
+
+tcadb16=# INSERT INTO student VALUES (102, 'BBB', 70);
+INSERT 0 1
+tcadb16=# INSERT INTO student(name,per) VALUES ('CCC', 70);
+ERROR:  null value in column "rno" of relation "student" violates not-null constraint
+DETAIL:  Failing row contains (null, CCC, 70).
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(rno int PRIMARY KEY, name varchar(20), per float, email VARCHAR(50) PRIMARY KEY);
+ERROR:  multiple primary keys for table "student" are not allowed
+LINE 1: ...Y, name varchar(20), per float, email VARCHAR(50) PRIMARY KE...
+                                                             ^
+tcadb16=#
