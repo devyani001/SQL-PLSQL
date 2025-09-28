@@ -1,0 +1,267 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select * from student;
+ERROR:  relation "student" does not exist
+LINE 1: select * from student;
+                      ^
+tcadb16=# select * from students;
+ERROR:  relation "students" does not exist
+LINE 1: select * from students;
+                      ^
+tcadb16=# SELECT * FROM Student;
+ERROR:  relation "student" does not exist
+LINE 1: SELECT * FROM Student;
+                      ^
+tcadb16=# CREATE TABLE student(rno INT PRIMARY KEY, name VARCHAR(20) NOT NULL, per FLOAT, email VARCHAR(30) UNIQUE NOT NULL);
+CREATE TABLE
+tcadb16=# SELECT * FROM Student;
+ rno | name | per | email
+-----+------+-----+-------
+(0 rows)
+
+
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(rno INT PRIMARY KEY, name VARCHAR(20) NOT NULL, per FLOAT, phone INT UNIQUE NOT NULL);
+CREATE TABLE
+tcadb16=# SELECT * FROM Student;
+ rno | name | per | phone
+-----+------+-----+-------
+(0 rows)
+
+
+tcadb16=# INSERT INTO student VALUES(101,'AAA',60,9579227402);
+ERROR:  integer out of range
+tcadb16=# INSERT INTO student VALUES(101,'AAA',60,957922);
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(102,'BBB',70,888822);
+INSERT 0 1
+tcadb16=# SELECT * FROM Student;
+ rno | name | per | phone
+-----+------+-----+--------
+ 101 | AAA  |  60 | 957922
+ 102 | BBB  |  70 | 888822
+(2 rows)
+
+
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(rno INT PRIMARY KEY, name VARCHAR(20) NOT NULL, per FLOAT);
+CREATE TABLE
+tcadb16=# INSERT INTO student VALUES(101,'AAA',60);
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(102,'BBB',70);
+INSERT 0 1
+tcadb16=# SELECT * FROM Student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  70
+(2 rows)
+
+
+tcadb16=# INSERT INTO student VALUES(103,'CCC',-80);
+INSERT 0 1
+tcadb16=# SELECT * FROM Student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  70
+ 103 | CCC  | -80
+(3 rows)
+
+
+tcadb16=# INSERT INTO student VALUES(103,'DDD',700);
+ERROR:  duplicate key value violates unique constraint "student_pkey"
+DETAIL:  Key (rno)=(103) already exists.
+tcadb16=# INSERT INTO student VALUES(104,'DDD',700);
+INSERT 0 1
+tcadb16=# SELECT * FROM Student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  70
+ 103 | CCC  | -80
+ 104 | DDD  | 700
+(4 rows)
+
+
+tcadb16=# INSERT INTO student(rno,name) VALUES(105,'EEE');
+INSERT 0 1
+tcadb16=# SELECT * FROM Student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  70
+ 103 | CCC  | -80
+ 104 | DDD  | 700
+ 105 | EEE  |
+(5 rows)
+
+
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(rno INT PRIMARY KEY, name VARCHAR(20) NOT NULL, per float CHECK( per>=0 AND per<=100 ));
+CREATE TABLE
+tcadb16=# INSERT INTO student VALUES(101,'AAA',60);
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(102,'BBB',-70);
+ERROR:  new row for relation "student" violates check constraint "student_per_check"
+DETAIL:  Failing row contains (102, BBB, -70).
+tcadb16=# \d student;
+                     Table "public.student"
+ Column |         Type          | Collation | Nullable | Default
+--------+-----------------------+-----------+----------+---------
+ rno    | integer               |           | not null |
+ name   | character varying(20) |           | not null |
+ per    | double precision      |           |          |
+Indexes:
+    "student_pkey" PRIMARY KEY, btree (rno)
+Check constraints:
+    "student_per_check" CHECK (per >= 0::double precision AND per <= 100::double precision)
+
+
+tcadb16=# select*from student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+(1 row)
+
+
+tcadb16=# INSERT INTO student VALUES(102,'BBB',700);
+ERROR:  new row for relation "student" violates check constraint "student_per_check"
+DETAIL:  Failing row contains (102, BBB, 700).
+tcadb16=# INSERT INTO student(rno,name) VALUES(105,'EEE');
+INSERT 0 1
+tcadb16=# SELECT * FROM Student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 105 | EEE  |
+(2 rows)
+
+
+--------------------------------------------------------------
+
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb;
+connection to server at "localhost" (::1), port 5432 failed: FATAL:  database "tcadb" does not exist
+Previous connection kept
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 105 | EEE  |
+(2 rows)
+
+
+tcadb16=# DROP TABLE student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(rno int PRIMARY KEY, name VARCHAR(50) NOT NULL, per float CHECK( per >=0 AND per <= 100), phno VARCHAR(50) CHECK(phno ~ '^[7-9]{1}[0-9]{2}$'));
+CREATE TABLE
+tcadb16=# INSERT INTO student VALUES (101, 'AAA', 60, '9999999999');
+ERROR:  new row for relation "student" violates check constraint "student_phno_check"
+DETAIL:  Failing row contains (101, AAA, 60, 9999999999).
+tcadb16=# INSERT INTO student VALUES (101, 'AAA', 60, '99999999');
+ERROR:  new row for relation "student" violates check constraint "student_phno_check"
+DETAIL:  Failing row contains (101, AAA, 60, 99999999).
+tcadb16=# DROP TABLE student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(rno int PRIMARY KEY, name VARCHAR(50) NOT NULL, per float CHECK( per >=0 AND per <= 100), phno VARCHAR(50) CHECK(phno VARCHAR(10) ~ '^[7-9]{1}[0-9]{2}$'));
+ERROR:  syntax error at or near "VARCHAR"
+LINE 1: ... >=0 AND per <= 100), phno VARCHAR(50) CHECK(phno VARCHAR(10...
+                                                             ^
+tcadb16=# CREATE TABLE student(rno int PRIMARY KEY, name VARCHAR(50) NOT NULL, per float CHECK( per >=0 AND per <= 100), phno VARCHAR(10) CHECK(phno ~ '^[7-9][0-9]{9}$'));
+CREATE TABLE
+tcadb16=# INSERT INTO student VALUES (101, 'AAA', 60, '9999999999');
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per |    phno
+-----+------+-----+------------
+ 101 | AAA  |  60 | 9999999999
+(1 row)
+
+
+tcadb16=# INSERT INTO student VALUES (102, 'bbb', 60, '89876765435');
+ERROR:  value too long for type character varying(10)
+tcadb16=# INSERT INTO student VALUES (102, 'bbb', 60, '8987676543');
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per |    phno
+-----+------+-----+------------
+ 101 | AAA  |  60 | 9999999999
+ 102 | bbb  |  60 | 8987676543
+(2 rows)
+
+
+tcadb16=# INSERT INTO student VALUES (103, 'ccc', 60, '7876765435');
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per |    phno
+-----+------+-----+------------
+ 101 | AAA  |  60 | 9999999999
+ 102 | bbb  |  60 | 8987676543
+ 103 | ccc  |  60 | 7876765435
+(3 rows)
+
+
+tcadb16=# INSERT INTO student VALUES (104, 'ddd', 60, '6999976543');
+ERROR:  new row for relation "student" violates check constraint "student_phno_check"
+DETAIL:  Failing row contains (104, ddd, 60, 6999976543).
+tcadb16=# INSERT INTO student VALUES (104, 'ddd', 60, '5999976543');
+ERROR:  new row for relation "student" violates check constraint "student_phno_check"
+DETAIL:  Failing row contains (104, ddd, 60, 5999976543).
+tcadb16=# INSERT INTO student VALUES (103, 'ccc', 60, '-7876765435');
+ERROR:  value too long for type character varying(10)
+tcadb16=#
+tcadb16=# INSERT INTO student VALUES (103, 'ccc', 60, 'sfswfse');
+ERROR:  new row for relation "student" violates check constraint "student_phno_check"
+DETAIL:  Failing row contains (103, ccc, 60, sfswfse).
+tcadb16=# INSERT INTO student VALUES (103, 'ccc', 60, '#@$#@#$');
+ERROR:  new row for relation "student" violates check constraint "student_phno_check"
+DETAIL:  Failing row contains (103, ccc, 60, #@$#@#$).
+tcadb16=#
+
+
+PostgreSQL
+------------
+CREATE TABLE student(
+    rno int PRIMARY KEY, 
+    name VARCHAR(50) NOT NULL, 
+    per float CHECK( per >=0 AND per <= 100), 
+    phno VARCHAR(10) CHECK(phno ~ '^[7-9][0-9]{9}$')
+);
+
+MySQL
+------------
+CREATE TABLE student(
+    rno int PRIMARY KEY, 
+    name VARCHAR(50) NOT NULL, 
+    per float CHECK( per >=0 AND per <= 100), 
+    phno VARCHAR(10) CHECK(phno REGXP '^[7-9][0-9]{9}$')
+);
