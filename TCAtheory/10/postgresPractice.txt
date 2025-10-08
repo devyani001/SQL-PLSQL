@@ -1,0 +1,285 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# CREATE DATABASE student;
+CREATE DATABASE
+postgres=# CREATE TABLE data_stu(id, name);
+ERROR:  syntax error at or near ";"
+LINE 1: CREATE TABLE data_stu(id, name);
+                                       ^
+postgres=# CREATE TABLE data_stu;
+ERROR:  syntax error at or near ";"
+LINE 1: CREATE TABLE data_stu;
+                             ^
+postgres=# CREATE TABLE data_stu(id INT PRIMARY KEY, name VARCHAR(10) CHECK ( name LIKE 'S%' OR name LIKE 'A%' OR name NOT LIKE 's%' OR name NOT LIKE 'a%' ) );
+CREATE TABLE
+postgres=# SELECT * FROM info_stu;
+ERROR:  relation "info_stu" does not exist
+LINE 1: SELECT * FROM info_stu;
+                      ^
+postgres=# SELECT * FROM data_stu;
+ id | name
+----+------
+(0 rows)
+
+
+postgres=# INSERT INTO data_stu VALUES( 1, 'Sachin' );
+INSERT 0 1
+postgres=# INSERT INTO data_stu VALUES( 1, 'Archana' );
+ERROR:  duplicate key value violates unique constraint "data_stu_pkey"
+DETAIL:  Key (id)=(1) already exists.
+postgres=# INSERT INTO data_stu VALUES( 2, 'Archana' );
+INSERT 0 1
+postgres=# INSERT INTO data_stu VALUES( 3, 'Suchita' );
+INSERT 0 1
+postgres=# INSERT INTO data_stu VALUES( 4, 'Ajay' );
+INSERT 0 1
+postgres=# INSERT INTO data_stu VALUES( 5, 'ajay' );
+INSERT 0 1
+postgres=# INSERT INTO data_stu VALUES( 6, 'sjay' );
+INSERT 0 1
+postgres=# SELECT * FROM data_stu;
+ id |  name
+----+---------
+  1 | Sachin
+  2 | Archana
+  3 | Suchita
+  4 | Ajay
+  5 | ajay
+  6 | sjay
+(6 rows)
+
+
+postgres=# INSERT INTO data_stu VALUES( 7, 'Devyani' );
+INSERT 0 1
+postgres=# SELECT * FROM data_stu;
+ id |  name
+----+---------
+  1 | Sachin
+  2 | Archana
+  3 | Suchita
+  4 | Ajay
+  5 | ajay
+  6 | sjay
+  7 | Devyani
+(7 rows)
+
+
+postgres=# DROP TABLE data_stu;
+DROP TABLE
+postgres=# CREATE TABLE data_stu(id INT PRIMARY KEY, name VARCHAR(10) CHECK (name ~'^['S' or 'A']') );
+ERROR:  syntax error at or near "S"
+LINE 1: ...NT PRIMARY KEY, name VARCHAR(10) CHECK (name ~'^['S' or 'A']...
+                                                             ^
+
+MY SOLUTION
+==================
+postgres=# CREATE TABLE data_stu(id INT PRIMARY KEY, name VARCHAR(10) CHECK (name ~'^[S or A]') );
+CREATE TABLE
+postgres=# INSERT INTO data_stu VALUES( 1, 'Archana' );
+INSERT 0 1
+postgres=# INSERT INTO data_stu VALUES( 2, 'Sachin' );
+INSERT 0 1
+postgres=# INSERT INTO data_stu VALUES( 7, 'Devyani' );
+ERROR:  new row for relation "data_stu" violates check constraint "data_stu_name_check"
+DETAIL:  Failing row contains (7, Devyani).
+postgres=# INSERT INTO data_stu VALUES( 6, 'sjay' );
+ERROR:  new row for relation "data_stu" violates check constraint "data_stu_name_check"
+DETAIL:  Failing row contains (6, sjay).
+postgres=# INSERT INTO data_stu VALUES( 3, 'ajay' );
+ERROR:  new row for relation "data_stu" violates check constraint "data_stu_name_check"
+DETAIL:  Failing row contains (3, ajay).
+postgres=# SELECT * FROM data_stu;
+ id |  name
+----+---------
+  1 | Archana
+  2 | Sachin
+(2 rows)
+
+SIR's SOLUTION
+======================
+1) CREATE TABLE data_stu(id INT PRIMARY KEY, name VARCHAR(10) CHECK (name ~'^[SA]') );
+
+2) mla asa record pahije starts with S,s,A,a
+   CREATE TABLE data_stu(id INT PRIMARY KEY, name VARCHAR(10) CHECK (name ~*'^[SA]') );
+   * --> case insensitive
+   THIS IS ONLY IN PLSQL NOT IN MySQL
+   so MySQL ky kraycha
+   CREATE TABLE data_stu(id INT PRIMARY KEY, name VARCHAR(10) CHECK (name ~'^[SAsa]') );
+
+--------------------------------------------------------------------------------------------------------------------
+
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# CREATE TABLE Student( rno INT PRIMARY KEY, name VARCHAR(20) NOT NULL, per float CHECK(per >= 0 AND per <= 0), phno VARCHAR(10) CHECK(phno ~ '^[7-9][0-9]{9}$') );
+ERROR:  relation "student" already exists
+postgres=# \c tcadb;
+connection to server at "localhost" (::1), port 5432 failed: FATAL:  database "tcadb" does not exist
+Previous connection kept
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# SELECT * FROM Student;
+ rno | name | per |    phno
+-----+------+-----+------------
+ 101 | AAA  |  60 | 9999999999
+ 102 | bbb  |  60 | 8987676543
+ 103 | ccc  |  60 | 7876765435
+(3 rows)
+
+
+tcadb16=# DROP TABLE Student;
+DROP TABLE
+tcadb16=# CREATE TABLE Student( rno INT PRIMARY KEY, name VARCHAR(20) NOT NULL, per float CHECK(per >= 0 AND per <= 0), phno VARCHAR(10) CHECK(phno ~ '^[7-9][0-9]{9}$') );
+CREATE TABLE
+tcadb16=# INSERT INTO Student VALUES(101,'AAA',60,7898765432);
+ERROR:  new row for relation "student" violates check constraint "student_per_check"
+DETAIL:  Failing row contains (101, AAA, 60, 7898765432).
+tcadb16=# DROP TABLE Student;
+DROP TABLE
+tcadb16=# CREATE TABLE Student( rno INT PRIMARY KEY, name VARCHAR(20) NOT NULL, per float CHECK(per >= 0 AND per <= 100), phno VARCHAR(10) CHECK(phno ~ '^[7-9][0-9]{9}$') );
+CREATE TABLE
+tcadb16=# SELECT * FROM Student;
+ rno | name | per | phno
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=# INSERT INTO Student VALUES(101,'AAA',60,7898765432);
+INSERT 0 1
+tcadb16=# INSERT INTO Student VALUES(102,'BBB',70,8898765432);
+INSERT 0 1
+tcadb16=# INSERT INTO Student VALUES(103,'CCC',80,6898765432);
+ERROR:  new row for relation "student" violates check constraint "student_phno_check"
+DETAIL:  Failing row contains (103, CCC, 80, 6898765432).
+tcadb16=# SELECT * FROM Student;
+ rno | name | per |    phno
+-----+------+-----+------------
+ 101 | AAA  |  60 | 7898765432
+ 102 | BBB  |  70 | 8898765432
+(2 rows)
+
+
+tcadb16=# INSERT INTO Student(rno,name,per) VALUES(103,'CCC',80);
+INSERT 0 1
+tcadb16=# SELECT * FROM Student;
+ rno | name | per |    phno
+-----+------+-----+------------
+ 101 | AAA  |  60 | 7898765432
+ 102 | BBB  |  70 | 8898765432
+ 103 | CCC  |  80 |
+(3 rows)
+
+ITHE NULL VALUE PN INSERT ZALI karn
+phno VARCHAR(10) CHECK(phno ~ '^[7-9][0-9]{9}$') ithe NOT NULL kuthe lihunch nhi ahe.
+------------------------------------------------------------------------------------------
+pn varchar madhe mobile no null nsla pahije. MHNUN
+phno VARCHAR(10) UNIQUE NOT NULL CHECK(phno ~ '^[7-9][0-9]{9}$') hi line ashi liha
+
+
+
+
+======================================================================================================
+DEFAULT KEYWORD
+-----------------
+--> While inserting a row/record if some field does not have value then u can specify its default values using DEFAULT keyword.
+--> can see default data like zero in below example.
+--> can modify using UPDATE command.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# SELECT * FROM Student;
+ rno | name | per |    phno
+-----+------+-----+------------
+ 101 | AAA  |  60 | 7898765432
+ 102 | BBB  |  70 | 8898765432
+ 103 | CCC  |  80 |
+(3 rows)
+
+
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=# CREATE TABLE Student(rno INT PRIMARY KEY, name VARCHAR(20), per float DEFAULT 0);
+CREATE TABLE
+tcadb16=# INSERT INTO Student VALUES(101, 'AAA', 60);
+INSERT 0 1
+tcadb16=# INSERT INTO Student(rno,name) VALUES(102, 'BBB');
+INSERT 0 1
+tcadb16=# SELECT * FROM Student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |   0
+(2 rows)
+
+
+tcadb16=# UPDATE Student set per = 78 WHERE rno = 102;
+UPDATE 1
+tcadb16=# SELECT * FROM Student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  78
+(2 rows)
+
+
+=====================================================================================================
+DEFAULT DATE & USER DATE
+
+
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=# CREATE TABLE Student(rno INT PRIMARY KEY, name VARCHAR(20), per float, reg_date DATE DEFAULT CUR_DATE);
+ERROR:  cannot use column reference in DEFAULT expression
+LINE 1: ...ame VARCHAR(20), per float, reg_date DATE DEFAULT CUR_DATE);
+                                                             ^
+tcadb16=# CREATE TABLE Student(rno INT PRIMARY KEY, name VARCHAR(20), per float, reg_date DATE DEFAULT CURRENT_DATE);
+CREATE TABLE
+tcadb16=# SELECT * FROM Student;
+ rno | name | per | reg_date
+-----+------+-----+----------
+(0 rows)
+
+
+tcadb16=# INSERT INTO Student(rno,name,per) VALUES(101, 'AAA', 60);
+INSERT 0 1
+tcadb16=# INSERT INTO Student(rno,name,per) VALUES(102, 'BBB', 70);
+INSERT 0 1
+tcadb16=# SELECT * FROM Student;
+ rno | name | per |  reg_date
+-----+------+-----+------------
+ 101 | AAA  |  60 | 2025-10-08
+ 102 | BBB  |  70 | 2025-10-08
+(2 rows)
+
+
+tcadb16=# INSERT INTO Student VALUES(103, 'CCC', 80, '2025-06-01');
+INSERT 0 1
+tcadb16=# SELECT * FROM Student;
+ rno | name | per |  reg_date
+-----+------+-----+------------
+ 101 | AAA  |  60 | 2025-10-08
+ 102 | BBB  |  70 | 2025-10-08
+ 103 | CCC  |  80 | 2025-06-01
+(3 rows)
+
+
+tcadb16=#
