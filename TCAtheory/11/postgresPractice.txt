@@ -1,0 +1,178 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# SELECT * FROM student;
+ rno | name | per |  reg_date
+-----+------+-----+------------
+ 101 | AAA  |  60 | 2025-10-08
+ 102 | BBB  |  70 | 2025-10-08
+ 103 | CCC  |  80 | 2025-06-01
+(3 rows)
+
+
+tcadb16=# DROP TABLE student;
+DROP TABLE
+tcadb16=# SELECT * FROM student;
+ERROR:  relation "student" does not exist
+LINE 1: SELECT * FROM student;
+                      ^
+tcadb16=# CREATE TABLE student(fname varchar(20), lname varchar);
+CREATE TABLE
+tcadb16=# DROP TABLE student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(fname varchar(20), lname varchar(20), per float, PRIMARY KEY(fname,lname));
+CREATE TABLE
+tcadb16=# INSERT INTO student('Sachin','dhane',60);n
+ERROR:  syntax error at or near "'Sachin'"
+LINE 1: INSERT INTO student('Sachin','dhane',60);
+                            ^
+tcadb16-# INSERT INTO student('Sachin','dhane',60);
+ERROR:  syntax error at or near "n"
+LINE 1: n
+        ^
+tcadb16=# INSERT INTO student('Sachin','dhane',60);
+ERROR:  syntax error at or near "'Sachin'"
+LINE 1: INSERT INTO student('Sachin','dhane',60);
+                            ^
+tcadb16=# INSERT INTO student('sachin','dhane',60);
+ERROR:  syntax error at or near "'sachin'"
+LINE 1: INSERT INTO student('sachin','dhane',60);
+                            ^
+tcadb16=# INSERT INTO student VALUES('Sachin','dhane',60);
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES('Sachin','tendulkar',99);
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES('ajay','dhane',60);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ fname  |   lname   | per
+--------+-----------+-----
+ Sachin | dhane     |  60
+ Sachin | tendulkar |  99
+ ajay   | dhane     |  60
+(3 rows)
+
+
+tcadb16=# INSERT INTO student('Sachin','dhane',55);
+ERROR:  syntax error at or near "'Sachin'"
+LINE 1: INSERT INTO student('Sachin','dhane',55);
+                            ^
+tcadb16=# INSERT INTO student VALUES('Sachin','dhane',55);
+ERROR:  duplicate key value violates unique constraint "student_pkey"
+DETAIL:  Key (fname, lname)=(Sachin, dhane) already exists.
+tcadb16=# DROP TABLE student;
+DROP TABLE
+tcadb16=#
+------------------------------------------------------------------------------------------
+
+
+tcadb16=# DROP TABLE student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(rno SERIAL, name varchar(20), per float);
+CREATE TABLE
+tcadb16=# INSERT INTO student(name,per) VALUES('sachin',55);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno |  name  | per
+-----+--------+-----
+   1 | sachin |  55
+(1 row)
+
+
+tcadb16=# INSERT INTO student(name,per) VALUES('BBB',70);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno |  name  | per
+-----+--------+-----
+   1 | sachin |  55
+   2 | BBB    |  70
+(2 rows)
+
+
+tcadb16=# INSERT INTO student VALUES(4,'sachin',55);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno |  name  | per
+-----+--------+-----
+   1 | sachin |  55
+   2 | BBB    |  70
+   4 | sachin |  55
+(3 rows)
+
+
+tcadb16=# INSERT INTO student(name,per) VALUES('ROHIT',60);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno |  name  | per
+-----+--------+-----
+   1 | sachin |  55
+   2 | BBB    |  70
+   4 | sachin |  55
+   3 | ROHIT  |  60
+(4 rows)
+
+
+tcadb16=# INSERT INTO student VALUES(4,'VIRAT',65);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno |  name  | per
+-----+--------+-----
+   1 | sachin |  55
+   2 | BBB    |  70
+   4 | sachin |  55
+   3 | ROHIT  |  60
+   4 | VIRAT  |  65
+(5 rows)
+
+
+tcadb16=#
+---------------------------------------------------------------------
+
+SEQUENCE
+---------
+
+tcadb16=# DROP TABLE student;
+DROP TABLE
+tcadb16=# CREATE SEQUENCE tcaseq START 101;
+CREATE SEQUENCE
+tcadb16=# CREATE TABLE student(rno INT PRIMARY KEY DEFAULT nextval('tcaseq'), name varchar(20), per float);
+CREATE TABLE
+tcadb16=# INSERT INTO student(name,per) VALUES('AAA',60);
+INSERT 0 1
+tcadb16=# INSERT INTO student(name,per) VALUES('BBB',70);
+INSERT 0 1
+tcadb16=# INSERT INTO student(name,per) VALUES('CCC',80);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  70
+ 103 | CCC  |  80
+(3 rows)
+
+
+tcadb16=# INSERT INTO student VALUES(110,'sachin',55);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno |  name  | per
+-----+--------+-----
+ 101 | AAA    |  60
+ 102 | BBB    |  70
+ 103 | CCC    |  80
+ 110 | sachin |  55
+(4 rows)
+
+
+tcadb16=#

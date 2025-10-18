@@ -1,0 +1,179 @@
+Enter password: **********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.43 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| college            |
+| companydb          |
+| information_schema |
+| mall               |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sakila             |
+| shopping           |
+| sppu               |
+| student            |
+| sys                |
+| world              |
+| xyz                |
++--------------------+
+14 rows in set (0.05 sec)
+
+mysql> use mydb;
+Database changed
+mysql> show tables;
+Empty set (0.04 sec)
+
+mysql> CREATE DATABASE tcadb16;
+Query OK, 1 row affected (0.04 sec)
+--------------------------------------------
+madhle number skip hoil unlike postgres.
+ani madhatly no pasunch auto increment start hoil.
+AUTO_INCREMENT is always better than SERIAL.
+
+
+mysql> use tcadb16;
+Database changed
+mysql> drop table student;
+ERROR 1051 (42S02): Unknown table 'tcadb16.student'
+mysql> CREATE TABLE student(rno int PRIMARY KEY AUTO_INCREMENT, name varchar(20) NOT NULL, per float);
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> INSERT INTO student(name,per)values('AAA',60);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO student(name,per)values('BBB',70);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO student(name,per)values('MSD',80);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO student(name,per)values('ROHIT',45);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO student(name,per)values('VIRAT',18);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO student(name,per)values('RUTURAJ',70);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO student(name,per)values('HARDIK',70);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM student;
++-----+---------+------+
+| rno | name    | per  |
++-----+---------+------+
+|   1 | AAA     |   60 |
+|   2 | BBB     |   70 |
+|   3 | MSD     |   80 |
+|   4 | ROHIT   |   45 |
+|   5 | VIRAT   |   18 |
+|   6 | RUTURAJ |   70 |
+|   7 | HARDIK  |   70 |
++-----+---------+------+
+7 rows in set (0.00 sec)
+
+mysql> INSERT INTO student values(9,'HARDIK',70);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO student(name,per)values('surya',80);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> SELECT * FROM student;
++-----+---------+------+
+| rno | name    | per  |
++-----+---------+------+
+|   1 | AAA     |   60 |
+|   2 | BBB     |   70 |
+|   3 | MSD     |   80 |
+|   4 | ROHIT   |   45 |
+|   5 | VIRAT   |   18 |
+|   6 | RUTURAJ |   70 |
+|   7 | HARDIK  |   70 |
+|   9 | HARDIK  |   70 |
+|  10 | surya   |   80 |
++-----+---------+------+
+9 rows in set (0.00 sec)
+
+mysql>
+------------------------------------------------------------
+sir can we start mysql in this roll starts form 101.
+
+
+mysql> drop table student;
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> CREATE TABLE student(rno int PRIMARY KEY AUTO_INCREMENT, name varchar(20) NOT NULL, per float) AUTO_INCREMENT=101;
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> SELECT * FROM student;
+Empty set (0.00 sec)
+
+mysql> INSERT INTO student(name,per)values('AAA',60);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO student(name,per)values('BBB',70);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO student values(7,'MSD',80);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO student(name,per)values('ROHIT',45);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO student(name,per)values('VIRAT',18);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> INSERT INTO student(name,per)values('RUTURAJ',70);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO student(name,per)values('HARDIK',70);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> SELECT * FROM student;
++-----+---------+------+
+| rno | name    | per  |
++-----+---------+------+
+|   7 | MSD     |   80 |
+| 101 | AAA     |   60 |
+| 102 | BBB     |   70 |
+| 103 | ROHIT   |   45 |
+| 104 | VIRAT   |   18 |
+| 105 | RUTURAJ |   70 |
+| 106 | HARDIK  |   70 |
++-----+---------+------+
+7 rows in set (0.00 sec)
+
+mysql> INSERT INTO student(name,per)values('BUMRAH',70);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> SELECT * FROM student;
++-----+---------+------+
+| rno | name    | per  |
++-----+---------+------+
+|   7 | MSD     |   80 |
+| 101 | AAA     |   60 |
+| 102 | BBB     |   70 |
+| 103 | ROHIT   |   45 |
+| 104 | VIRAT   |   18 |
+| 105 | RUTURAJ |   70 |
+| 106 | HARDIK  |   70 |
+| 107 | BUMRAH  |   70 |
++-----+---------+------+
+8 rows in set (0.00 sec)
+
+mysql>
