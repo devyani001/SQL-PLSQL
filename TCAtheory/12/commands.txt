@@ -1,0 +1,18 @@
+lecture 12 - ALTER TABLE commands
+----------------------------------
+
+1) UPDATE student SET per = 18 WHERE rno = 103;
+2) ALTER TABLE student ADD COLUMN phno VARCHAR(10) UNIQUE;
+3) ALTER TABLE student DROP COLUMN phno;
+4) ALTER TABLE student RENAME COLUMN phno TO whatsapp;
+5) ALTER TABLE student ALTER COLUMN whatsapp SET DEFAULT 'NA';
+6) ALTER TABLE student ALTER COLUMN whatsapp DROP DEFAULT;
+7) DELETE FROM student WHERE rno=105;
+8) ALTER TABLE student ALTER COLUMN name SET NOT NULL;
+9) ALTER TABLE student ADD CHECK(percentage>=0 AND percentage<=100);
+10) \d student;
+11) ALTER TABLE student ADD CONSTRAINT tca_pkey PRIMARY KEY(rno);
+12) ALTER TABLE student DROP CONSTRAINT student_phno_key;
+13) ALTER TABLE student DROP CONSTRAINT student_percentage_check;
+14) ALTER TABLE student DROP CONSTRAINT not null;
+15) alter table student RENAME TO std;
