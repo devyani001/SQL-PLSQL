@@ -1,0 +1,458 @@
+=======================
+lecture 13 - Date Type
+=======================
+
+AI + ML
+--------
+1) Linear Algebra
+2) Computational Geometry
+3) Physics
+4) Python
+
+after AI - Quantom..
+
+
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select * from student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         90 |
+ 104 | DDD  |         99 |
+ 105 | DDD  |        -99 |
+ 105 | DDD  |         60 |
+ 106 |      |         60 |
+(7 rows)
+
+
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(rno INT PRIMARY KEY, name VARCHAR(10), birth_date DATE,reg_date DATE NOT NULL DEFAULT CURRENT_DATE);
+CREATE TABLE
+tcadb16=# INSERT INTO student(rno,name,birth_date) values(101,'AAA','1947-08-15');
+INSERT 0 1
+tcadb16=# INSERT INTO student(rno,name,birth_date) values(102,'BBB','1980-08-15');
+INSERT 0 1
+tcadb16=# INSERT INTO student(rno,name,birth_date) values(103,'CCC','1990-05-16','2023-09-04');
+ERROR:  INSERT has more expressions than target columns
+LINE 1: ...no,name,birth_date) values(103,'CCC','1990-05-16','2023-09-0...
+                                                             ^
+tcadb16=# INSERT INTO student values(103,'CCC','1990-05-16','2023-09-04');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name | birth_date |  reg_date
+-----+------+------------+------------
+ 101 | AAA  | 1947-08-15 | 2025-11-13
+ 102 | BBB  | 1980-08-15 | 2025-11-13
+ 103 | CCC  | 1990-05-16 | 2023-09-04
+(3 rows)
+
+
+tcadb16=# select CURRENT_DATE;
+ current_date
+--------------
+ 2025-11-13
+(1 row)
+
+
+tcadb16=# select NOW();
+               now
+----------------------------------
+ 2025-11-13 11:12:25.640353+05:30
+(1 row)
+
+
+tcadb16=# select NOW()::date;
+    now
+------------
+ 2025-11-13
+(1 row)
+
+
+tcadb16=# select NOW()::TIME;
+       now
+-----------------
+ 11:13:29.417746
+(1 row)
+
+
+tcadb16=# select NOW()::TIME_ZONE;
+ERROR:  type "time_zone" does not exist
+LINE 1: select NOW()::TIME_ZONE;
+                      ^
+tcadb16=# select NOW()::TIMEZONE;
+ERROR:  type "timezone" does not exist
+LINE 1: select NOW()::TIMEZONE;
+                      ^
+tcadb16=# select NOW()::date;
+    now
+------------
+ 2025-11-13
+(1 row)
+
+
+tcadb16=# select CURRENT_DATE;
+ current_date
+--------------
+ 2025-11-13
+(1 row)
+
+
+tcadb16=# select TO_CHAR(CURRENT_DATE, 'dd-mm-yyyy');
+  to_char
+------------
+ 13-11-2025
+(1 row)
+
+
+tcadb16=# select TO_CHAR(CURRENT_DATE, 'dd/mm/yyyy');
+  to_char
+------------
+ 13/11/2025
+(1 row)
+
+
+tcadb16=# select * from student;
+ rno | name | birth_date |  reg_date
+-----+------+------------+------------
+ 101 | AAA  | 1947-08-15 | 2025-11-13
+ 102 | BBB  | 1980-08-15 | 2025-11-13
+ 103 | CCC  | 1990-05-16 | 2023-09-04
+(3 rows)
+
+
+tcadb16=# select rno,name, TO_CHAR(birth_date,dd/mm/yyyy), TO_CHAR(reg_date,dd/mm/yyyy);
+ERROR:  column "rno" does not exist
+LINE 1: select rno,name, TO_CHAR(birth_date,dd/mm/yyyy), TO_CHAR(reg...
+               ^
+tcadb16=# select rno,name, TO_CHAR(birth_date,dd/mm/yyyy), TO_CHAR(reg_date,dd/mm/yyyy) from student;
+ERROR:  column "dd" does not exist
+LINE 1: select rno,name, TO_CHAR(birth_date,dd/mm/yyyy), TO_CHAR(reg...
+                                            ^
+tcadb16=# select rno,name, TO_CHAR(birth_date,'dd/mm/yyyy'), TO_CHAR(reg_date,'dd/mm/yyyy') from student;
+ rno | name |  to_char   |  to_char
+-----+------+------------+------------
+ 101 | AAA  | 15/08/1947 | 13/11/2025
+ 102 | BBB  | 15/08/1980 | 13/11/2025
+ 103 | CCC  | 16/05/1990 | 04/09/2023
+(3 rows)
+
+
+tcadb16=# ALTER TABLE student RENAME COLUMN to_char TO birth_date;
+ERROR:  column "to_char" does not exist
+tcadb16=# ALTER TABLE student RENAME COLUMN to_char TO whatsapp;
+ERROR:  column "to_char" does not exist
+tcadb16=# SELECT rno AS rollnumber, name FROM STUDENT;
+ rollnumber | name
+------------+------
+        101 | AAA
+        102 | BBB
+        103 | CCC
+(3 rows)
+
+
+tcadb16=# select rno,name, TO_CHAR(birth_date,'dd/mm/yyyy') AS birth_day, TO_CHAR(reg_date,'dd/mm/yyyy') AS registration_date from student;
+ rno | name | birth_day  | registration_date
+-----+------+------------+-------------------
+ 101 | AAA  | 15/08/1947 | 13/11/2025
+ 102 | BBB  | 15/08/1980 | 13/11/2025
+ 103 | CCC  | 16/05/1990 | 04/09/2023
+(3 rows)
+
+
+tcadb16=# ALTER TABLE student RENAME COLUMN registration_date TO reg_date;
+ERROR:  column "registration_date" does not exist
+tcadb16=# ALTER TABLE student RENAME COLUMN rno TO whatsapp;
+ALTER TABLE
+tcadb16=# ALTER TABLE student RENAME COLUMN whatsapp TO rno;
+ALTER TABLE
+tcadb16=# ALTER TABLE student RENAME COLUMN birth_date TO rnoo;
+ALTER TABLE
+tcadb16=# select * from student;
+ rno | name |    rnoo    |  reg_date
+-----+------+------------+------------
+ 101 | AAA  | 1947-08-15 | 2025-11-13
+ 102 | BBB  | 1980-08-15 | 2025-11-13
+ 103 | CCC  | 1990-05-16 | 2023-09-04
+(3 rows)
+
+
+tcadb16=# ALTER TABLE student RENAME COLUMN rnoo TO birth_date ;
+ALTER TABLE
+tcadb16=# select * from student;
+ rno | name | birth_date |  reg_date
+-----+------+------------+------------
+ 101 | AAA  | 1947-08-15 | 2025-11-13
+ 102 | BBB  | 1980-08-15 | 2025-11-13
+ 103 | CCC  | 1990-05-16 | 2023-09-04
+(3 rows)
+
+
+tcadb16=# select rno,name, TO_CHAR(birth_date,'mon dd,yyyy'), TO_CHAR(reg_date,'mon dd,yyyy') from student;
+ rno | name |   to_char   |   to_char
+-----+------+-------------+-------------
+ 101 | AAA  | aug 15,1947 | nov 13,2025
+ 102 | BBB  | aug 15,1980 | nov 13,2025
+ 103 | CCC  | may 16,1990 | sep 04,2023
+(3 rows)
+
+
+tcadb16=# select rno,name, TO_CHAR(birth_date,'mon dd,yyyy') AS birth_date, TO_CHAR(reg_date,'mon dd,yyyy') AS reg_date from student;
+ rno | name | birth_date  |  reg_date
+-----+------+-------------+-------------
+ 101 | AAA  | aug 15,1947 | nov 13,2025
+ 102 | BBB  | aug 15,1980 | nov 13,2025
+ 103 | CCC  | may 16,1990 | sep 04,2023
+(3 rows)
+
+
+tcadb16=# select 2+3;
+ ?column?
+----------
+        5
+(1 row)
+
+
+tcadb16=# select 2+3,2*3,5679*67;
+ ?column? | ?column? | ?column?
+----------+----------+----------
+        5 |        6 |   380493
+(1 row)
+
+
+tcadb16=# select 2+3 AS addition,2*3,5679*67;
+ addition | ?column? | ?column?
+----------+----------+----------
+        5 |        6 |   380493
+(1 row)
+
+
+tcadb16=# select CURRENT_DATE;
+ current_date
+--------------
+ 2025-11-13
+(1 row)
+
+
+tcadb16=# SELECT name, birth_Date FROM STUDENT;
+ name | birth_date
+------+------------
+ AAA  | 1947-08-15
+ BBB  | 1980-08-15
+ CCC  | 1990-05-16
+(3 rows)
+
+
+tcadb16=# select name, (birth_date - current_date) AS yrs FROM STUDENT;
+ name |  yrs
+------+--------
+ AAA  | -28580
+ BBB  | -16526
+ CCC  | -12965
+(3 rows)
+
+
+tcadb16=# select name, (current_date - BIRTH_dATE) AS yrs FROM STUDENT;
+ name |  yrs
+------+-------
+ AAA  | 28580
+ BBB  | 16526
+ CCC  | 12965
+(3 rows)
+
+
+tcadb16=# ALTER TABLE student DROP COLUMN yrs;
+ERROR:  column "yrs" of relation "student" does not exist
+tcadb16=# ALTER TABLE student ALTER COLUMN DROP yrs;
+ERROR:  syntax error at or near "yrs"
+LINE 1: ALTER TABLE student ALTER COLUMN DROP yrs;
+                                              ^
+tcadb16=# ALTER TABLE student DROP COLUMN yrs;
+ERROR:  column "yrs" of relation "student" does not exist
+tcadb16=# select * from student;
+ rno | name | birth_date |  reg_date
+-----+------+------------+------------
+ 101 | AAA  | 1947-08-15 | 2025-11-13
+ 102 | BBB  | 1980-08-15 | 2025-11-13
+ 103 | CCC  | 1990-05-16 | 2023-09-04
+(3 rows)
+
+
+tcadb16=# select name,birth_date from student;
+ name | birth_date
+------+------------
+ AAA  | 1947-08-15
+ BBB  | 1980-08-15
+ CCC  | 1990-05-16
+(3 rows)
+
+
+tcadb16=# select name,birth_date, (CURRENT_DATE - birth_date) AS age from student;
+ name | birth_date |  age
+------+------------+-------
+ AAA  | 1947-08-15 | 28580
+ BBB  | 1980-08-15 | 16526
+ CCC  | 1990-05-16 | 12965
+(3 rows)
+
+
+tcadb16=# select name,birth_date, (CURRENT_DATE - birth_date)/365 AS age from student;
+ name | birth_date | age
+------+------------+-----
+ AAA  | 1947-08-15 |  78
+ BBB  | 1980-08-15 |  45
+ CCC  | 1990-05-16 |  35
+(3 rows)
+
+
+tcadb16=# select name,birth_date, (CURRENT_DATE - birth_date)/12 AS age from student;
+ name | birth_date | age
+------+------------+------
+ AAA  | 1947-08-15 | 2381
+ BBB  | 1980-08-15 | 1377
+ CCC  | 1990-05-16 | 1080
+(3 rows)
+
+
+tcadb16=# select name,birth_date, ((CURRENT_DATE - birth_date)/365)*12 AS age from student;
+ name | birth_date | age
+------+------------+-----
+ AAA  | 1947-08-15 | 936
+ BBB  | 1980-08-15 | 540
+ CCC  | 1990-05-16 | 420
+(3 rows)
+
+
+tcadb16=# select name,birth_date, ((CURRENT_DATE - birth_date)/30) AS age from student;
+ name | birth_date | age
+------+------------+-----
+ AAA  | 1947-08-15 | 952
+ BBB  | 1980-08-15 | 550
+ CCC  | 1990-05-16 | 432
+(3 rows)
+
+
+tcadb16=# select name,birth_date, (CURRENT_DATE - birth_date) AS age from student;
+ name | birth_date |  age
+------+------------+-------
+ AAA  | 1947-08-15 | 28580
+ BBB  | 1980-08-15 | 16526
+ CCC  | 1990-05-16 | 12965
+(3 rows)
+
+
+tcadb16=# select name,birth_date, (CURRENT_DATE - birth_date)/365 AS age from student;
+ name | birth_date | age
+------+------------+-----
+ AAA  | 1947-08-15 |  78
+ BBB  | 1980-08-15 |  45
+ CCC  | 1990-05-16 |  35
+(3 rows)
+
+
+tcadb16=# select name,birth_date, (CURRENT_DATE - birth_date)/365 * 12 AS age from student;
+ name | birth_date | age
+------+------------+-----
+ AAA  | 1947-08-15 | 936
+ BBB  | 1980-08-15 | 540
+ CCC  | 1990-05-16 | 420
+(3 rows)
+
+
+tcadb16=#  select name,birth_date, AGE(CURRENT_DATE,birth_date) AS age from student;
+ name | birth_date |           age
+------+------------+-------------------------
+ AAA  | 1947-08-15 | 78 years 2 mons 29 days
+ BBB  | 1980-08-15 | 45 years 2 mons 29 days
+ CCC  | 1990-05-16 | 35 years 5 mons 28 days
+(3 rows)
+
+
+tcadb16=# select name, birth_date FROM student;
+ name | birth_date
+------+------------
+ AAA  | 1947-08-15
+ BBB  | 1980-08-15
+ CCC  | 1990-05-16
+(3 rows)
+
+
+tcadb16=# select CURRENT_DATE;
+ current_date
+--------------
+ 2025-11-13
+(1 row)
+
+
+tcadb16=# select EXTRACT(DAY from CURRENT_dATE);
+ extract
+---------
+      13
+(1 row)
+
+
+tcadb16=# select EXTRACT(MONTH from CURRENT_dATE);
+ extract
+---------
+      11
+(1 row)
+
+
+tcadb16=# select EXTRACT(YEAR from CURRENT_dATE);
+ extract
+---------
+    2025
+(1 row)
+
+
+tcadb16=# select name,birth_date, EXTRACT(month from birth_Date) FROM STUDENT;
+ name | birth_date | extract
+------+------------+---------
+ AAA  | 1947-08-15 |       8
+ BBB  | 1980-08-15 |       8
+ CCC  | 1990-05-16 |       5
+(3 rows)
+
+
+tcadb16=# select rno,name,birth_date, EXTRACT(month from birth_Date) FROM STUDENT;
+ rno | name | birth_date | extract
+-----+------+------------+---------
+ 101 | AAA  | 1947-08-15 |       8
+ 102 | BBB  | 1980-08-15 |       8
+ 103 | CCC  | 1990-05-16 |       5
+(3 rows)
+
+
+tcadb16=# select rno,name,birth_date,EXTRACT(MONTH from BIRTH_DATE),EXTRACT(day from birth_date) from student;
+ rno | name | birth_date | extract | extract
+-----+------+------------+---------+---------
+ 101 | AAA  | 1947-08-15 |       8 |      15
+ 102 | BBB  | 1980-08-15 |       8 |      15
+ 103 | CCC  | 1990-05-16 |       5 |      16
+(3 rows)
+
+
+tcadb16=# select rno,name,birth_date,EXTRACT(MONTH from BIRTH_DATE) AS month,EXTRACT(day from birth_date) AS day from student;
+ rno | name | birth_date | month | day
+-----+------+------------+-------+-----
+ 101 | AAA  | 1947-08-15 |     8 |  15
+ 102 | BBB  | 1980-08-15 |     8 |  15
+ 103 | CCC  | 1990-05-16 |     5 |  16
+(3 rows)
+
+
+tcadb16=#

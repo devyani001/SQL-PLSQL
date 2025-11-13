@@ -1,0 +1,27 @@
+lecture 13 - Date Type commands
+----------------------------------
+
+1)  CREATE TABLE student(rno INT PRIMARY KEY, name VARCHAR(10), birth_date DATE,reg_date DATE NOT NULL DEFAULT CURRENT_DATE);
+2)  INSERT INTO student(rno,name,birth_date) values(101,'AAA','1947-08-15');
+3)  select CURRENT_DATE; -- 2025-11-13
+4)  select NOW();        -- 2025-11-13 11:12:25.640353+05:30
+5)  select NOW()::date;  -- 2025-11-13
+6)  select NOW()::TIME;  -- 11:13:29.417746
+7)  select TO_CHAR(CURRENT_DATE, 'dd-mm-yyyy');
+    select TO_CHAR(CURRENT_DATE, 'dd/mm/yyyy');
+8)  select rno,name, TO_CHAR(birth_date,'dd/mm/yyyy'), TO_CHAR(reg_date,'dd/mm/yyyy') from student;
+9)  select rno,name, TO_CHAR(birth_date,'mon dd,yyyy'), TO_CHAR(reg_date,'mon dd,yyyy') from student;
+10) select 2+3;
+11) select 2+3 AS addition,2*3,5679*67;
+     addition | ?column? | ?column?
+    ----------+----------+----------
+            5 |        6 |   380493
+12) select name,birth_date, (CURRENT_DATE - birth_date) AS age from student;
+13) select name,birth_date, (CURRENT_DATE - birth_date)/365 AS age from student;
+15) select name,birth_date, (CURRENT_DATE - birth_date)/365 * 12 AS age from student;
+16) select name,birth_date, AGE(CURRENT_DATE,birth_date) AS age from student;
+17) select CURRENT_DATE;
+18) select EXTRACT(DAY from CURRENT_dATE);
+19) select EXTRACT(MONTH from CURRENT_dATE);
+20) select EXTRACT(YEAR from CURRENT_dATE);
+21) select rno,name,birth_date,EXTRACT(MONTH from BIRTH_DATE) AS month,EXTRACT(day from birth_date) AS day from student;
