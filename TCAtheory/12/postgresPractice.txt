@@ -664,3 +664,102 @@ tcadb16=# select * from student;
  105 | DDD  |         60 |
  106 |      |         60 |
 (7 rows)
+
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# \d student;
+                               Table "public.student"
+   Column   |         Type          | Collation | Nullable |         Default
+------------+-----------------------+-----------+----------+-------------------------
+ rno        | integer               |           | not null |
+ name       | character varying(10) |           |          | NULL::character varying
+ percentage | double precision      |           |          |
+ whatsapp   | character varying(10) |           |          |
+
+
+tcadb16=# select * from student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         90 |
+ 104 | DDD  |         99 |
+ 105 | DDD  |        -99 |
+ 105 | DDD  |         60 |
+ 106 |      |         60 |
+(7 rows)
+
+
+tcadb16=# \d student;
+                               Table "public.student"
+   Column   |         Type          | Collation | Nullable |         Default
+------------+-----------------------+-----------+----------+-------------------------
+ rno        | integer               |           | not null |
+ name       | character varying(10) |           |          | NULL::character varying
+ percentage | double precision      |           |          |
+ whatsapp   | character varying(10) |           |          |
+
+
+tcadb16=# ALTER TABLE student ALTER COLUMN name TYPE VARCHAR(20);
+ALTER TABLE
+tcadb16=# \d student;
+                               Table "public.student"
+   Column   |         Type          | Collation | Nullable |         Default
+------------+-----------------------+-----------+----------+-------------------------
+ rno        | integer               |           | not null |
+ name       | character varying(20) |           |          | NULL::character varying
+ percentage | double precision      |           |          |
+ whatsapp   | character varying(10) |           |          |
+
+
+tcadb16=# ALTER TABLE student ALTER COLUMN percentage TYPE float;
+ALTER TABLE
+tcadb16=# \d student;
+                               Table "public.student"
+   Column   |         Type          | Collation | Nullable |         Default
+------------+-----------------------+-----------+----------+-------------------------
+ rno        | integer               |           | not null |
+ name       | character varying(20) |           |          | NULL::character varying
+ percentage | double precision      |           |          |
+ whatsapp   | character varying(10) |           |          |
+
+
+tcadb16=# ALTER TABLE student ALTER COLUMN percentage TYPE int;
+ALTER TABLE
+tcadb16=# \d student;
+                               Table "public.student"
+   Column   |         Type          | Collation | Nullable |         Default
+------------+-----------------------+-----------+----------+-------------------------
+ rno        | integer               |           | not null |
+ name       | character varying(20) |           |          | NULL::character varying
+ percentage | integer               |           |          |
+ whatsapp   | character varying(10) |           |          |
+
+
+tcadb16=# ALTER TABLE student ALTER COLUMN percentage TYPE float;
+ALTER TABLE
+tcadb16=# \d student;
+                               Table "public.student"
+   Column   |         Type          | Collation | Nullable |         Default
+------------+-----------------------+-----------+----------+-------------------------
+ rno        | integer               |           | not null |
+ name       | character varying(20) |           |          | NULL::character varying
+ percentage | double precision      |           |          |
+ whatsapp   | character varying(10) |           |          |
+
+
+tcadb16=# ALTER TABLE student ALTER COLUMN percentage TYPE int;
+ALTER TABLE
+tcadb16=#

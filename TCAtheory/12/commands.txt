@@ -16,3 +16,5 @@ lecture 12 - ALTER TABLE commands
 13) ALTER TABLE student DROP CONSTRAINT student_percentage_check;
 14) ALTER TABLE student DROP CONSTRAINT not null;
 15) alter table student RENAME TO std;
+16) ALTER TABLE student ALTER COLUMN name TYPE VARCHAR(20);
+17) ALTER TABLE student ALTER COLUMN percentage TYPE int;
