@@ -1,0 +1,408 @@
+============================
+Lecture 46 - Trigger
+============================
+
+--> Trigger is a action which gets called automatically when an event is occured, where event can be -
+    1. INSERT
+    2. DELETE
+    3. UPDATE
+
+Q. Why to uses Trigger
+-----------------------
+1. Enforce Business Rule
+    Ex : per should be 70 to 100
+2. Automatic Logs
+    - take input, auto data save in table
+3. Calculation of field
+    (101 AAA 60)    --INSERT -----> 101 AAA 60 First class
+4. Data deletion.
+
+
+CREATE OR REPLACE FUNCTION calc_grade()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+        if NEW.per >= 70 then
+            NEW.grade := 'Distinction';
+        elseif NEW.per >= 60 then
+            NEW.grade := 'First class';
+        elseif NEW.per >= 40 then
+            NEW.grade := 'Pass class';
+        else
+            NEW.grade := 'Fail';
+        end if;
+
+        return NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_students_grade
+BEFORE INSERT OR UPDATE
+ON students
+FOR EACH ROW
+EXECUTE FUNCTION calc_grade();
+
+=====================================================
+
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select * from student;
+ rno | name | birth_date |  reg_date
+-----+------+------------+------------
+ 101 | AAA  | 1947-08-15 | 2025-11-13
+ 102 | BBB  | 1980-08-15 | 2025-11-13
+ 103 | CCC  | 1990-05-16 | 2023-09-04
+(3 rows)
+
+
+tcadb16=# CREATE TABLE students(rno INT PRIMARY KEY, name VARCHAR(10), per FLOAT, grade VARCHAR(10));
+CREATE TABLE
+tcadb16=# select * from student;
+ rno | name | birth_date |  reg_date
+-----+------+------------+------------
+ 101 | AAA  | 1947-08-15 | 2025-11-13
+ 102 | BBB  | 1980-08-15 | 2025-11-13
+ 103 | CCC  | 1990-05-16 | 2023-09-04
+(3 rows)
+
+
+tcadb16=# select * from studentS;
+ rno | name | per | grade
+-----+------+-----+-------
+(0 rows)
+
+
+tcadb16=# INSERT into STUDENTS(rno,name,per,grade) values(101,'AAA',60);
+ERROR:  INSERT has more target columns than expressions
+LINE 1: INSERT into STUDENTS(rno,name,per,grade) values(101,'AAA',60...
+                                          ^
+tcadb16=# INSERT into STUDENTS(rno,name,per) values(101,'AAA',60);
+INSERT 0 1
+tcadb16=# select * from studentS;
+ rno | name | per | grade
+-----+------+-----+-------
+ 101 | AAA  |  60 |
+(1 row)
+
+
+tcadb16=# CREATE OR REPLACE FUNCTION calc_grade()
+tcadb16-# RETURNS TRIGGER
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$#         if NEW.per > = 70 then
+tcadb16$#             NEW.grade := 'Distinction';
+tcadb16$#         elseif NEW.per > = 60 then
+tcadb16$#             NEW.grade := 'First class';
+tcadb16$#         elseif NEW.per > = 40 then
+tcadb16$#             NEW.grade := 'Pass class';
+tcadb16$#         else
+tcadb16$#             NEW.grade := 'Fail';
+tcadb16$#         end if;
+tcadb16$#
+tcadb16$#         return NEW;
+tcadb16$# END;
+tcadb16$# $$;
+ERROR:  syntax error at or near "="
+LINE 6:         if NEW.per > = 70 then
+                             ^
+tcadb16=#
+tcadb16=# CREATE TRIGGER trg_students_grade
+tcadb16-# BEFORE INSERT OR UPDATE
+tcadb16-# ON students
+tcadb16-# FOR EACH ROW
+tcadb16-#
+tcadb16-# lk
+tcadb16-# ^X
+tcadb16-# CREATE OR REPLACE FUNCTION calc_grade()
+tcadb16-# RETURNS TRIGGER
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$#         if NEW.per >= 70 then
+tcadb16$#             NEW.grade := 'Distinction';
+tcadb16$#         elseif NEW.per >= 60 then
+tcadb16$#             NEW.grade := 'First class';
+tcadb16$#         elseif NEW.per >= 40 then
+tcadb16$#             NEW.grade := 'Pass class';
+tcadb16$#         else
+tcadb16$#             NEW.grade := 'Fail';
+tcadb16$#         end if;
+tcadb16$#
+tcadb16$#         return NEW;
+tcadb16$# END;
+tcadb16$# $$;
+ERROR:  syntax error at or near "lk"
+LINE 5: lk
+        ^
+tcadb16=#
+tcadb16=# CREATE TRIGGER trg_students_grade
+tcadb16-# BEFORE INSERT OR UPDATE
+tcadb16-# ON students
+tcadb16-# FOR EACH ROW
+tcadb16-# EXECUTE FUNCTION calc_grade();
+ERROR:  function calc_grade() does not exist
+tcadb16=# CREATE OR REPLACE FUNCTION calc_grade()
+tcadb16-# RETURNS TRIGGER
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$#         if NEW.per >= 70 then
+tcadb16$#             NEW.grade := 'Distinction';
+tcadb16$#         elseif NEW.per >= 60 then
+tcadb16$#             NEW.grade := 'First class';
+tcadb16$#         elseif NEW.per >= 40 then
+tcadb16$#             NEW.grade := 'Pass class';
+tcadb16$#         else
+tcadb16$#             NEW.grade := 'Fail';
+tcadb16$#         end if;
+tcadb16$#
+tcadb16$#         return NEW;
+tcadb16$# END;
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=#
+tcadb16=# CREATE TRIGGER trg_students_grade
+tcadb16-# BEFORE INSERT OR UPDATE
+tcadb16-# ON students
+tcadb16-# FOR EACH ROW
+tcadb16-# EXECUTE FUNCTION calc_grade();
+CREATE TRIGGER
+tcadb16=# select * from student;
+ rno | name | birth_date |  reg_date
+-----+------+------------+------------
+ 101 | AAA  | 1947-08-15 | 2025-11-13
+ 102 | BBB  | 1980-08-15 | 2025-11-13
+ 103 | CCC  | 1990-05-16 | 2023-09-04
+(3 rows)
+
+
+tcadb16=# select * from students;
+ rno | name | per | grade
+-----+------+-----+-------
+ 101 | AAA  |  60 |
+(1 row)
+
+
+tcadb16=# insert into students(rno,name,per) values(102,'BBB',70);
+ERROR:  value too long for type character varying(10)
+CONTEXT:  PL/pgSQL assignment "NEW.grade := 'Distinction'"
+PL/pgSQL function calc_grade() line 4 at assignment
+tcadb16=# insert into students(rno,name,per) values(102,'B',70);
+ERROR:  value too long for type character varying(10)
+CONTEXT:  PL/pgSQL assignment "NEW.grade := 'Distinction'"
+PL/pgSQL function calc_grade() line 4 at assignment
+tcadb16=# ALTER TABLE students
+tcadb16-# ALTER COLUMN grade TYPE VARCHAR(20);
+ALTER TABLE
+tcadb16=# INSERT INTO students(rno, name, per) VALUES (102, 'BBB', 70);
+ERROR:  value too long for type character varying(10)
+CONTEXT:  PL/pgSQL assignment "NEW.grade := 'Distinction'"
+PL/pgSQL function calc_grade() line 4 at assignment
+tcadb16=# IF NEW.per >= 70 THEN
+tcadb16-#     NEW.grade := 'Distn';
+ERROR:  syntax error at or near "IF"
+LINE 1: IF NEW.per >= 70 THEN
+        ^
+tcadb16=# \d students;
+                     Table "public.students"
+ Column |         Type          | Collation | Nullable | Default
+--------+-----------------------+-----------+----------+---------
+ rno    | integer               |           | not null |
+ name   | character varying(10) |           |          |
+ per    | double precision      |           |          |
+ grade  | character varying(20) |           |          |
+Indexes:
+    "students_pkey" PRIMARY KEY, btree (rno)
+Triggers:
+    trg_students_grade BEFORE INSERT OR UPDATE ON students FOR EACH ROW EXECUTE FUNCTION calc_grade()
+
+
+tcadb16=# INSERT INTO students(rno, name, per) VALUES (102, 'BBB', 70);
+ERROR:  value too long for type character varying(10)
+CONTEXT:  PL/pgSQL assignment "NEW.grade := 'Distinction'"
+PL/pgSQL function calc_grade() line 4 at assignment
+tcadb16=# CREATE OR REPLACE FUNCTION calc_grade()
+tcadb16-# RETURNS TRIGGER
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$#     IF NEW.per >= 70 THEN
+tcadb16$#         NEW.grade := 'Distinction';
+tcadb16$#     ELSIF NEW.per >= 60 THEN
+tcadb16$#         NEW.grade := 'First class';
+tcadb16$#     ELSIF NEW.per >= 40 THEN
+tcadb16$#         NEW.grade := 'Pass class';
+tcadb16$#     ELSE
+tcadb16$#         NEW.grade := 'Fail';
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     RETURN NEW;
+tcadb16$# END;
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# INSERT INTO students(rno, name, per) VALUES (102, 'BBB', 70);
+INSERT 0 1
+tcadb16=# SELECT * FROM students;
+ rno | name | per |    grade
+-----+------+-----+-------------
+ 101 | AAA  |  60 |
+ 102 | BBB  |  70 | Distinction
+(2 rows)
+
+
+tcadb16=# INSERT INTO students(rno, name, per) VALUES (103, 'CCC', 30);
+INSERT 0 1
+tcadb16=# SELECT * FROM students;
+ rno | name | per |    grade
+-----+------+-----+-------------
+ 101 | AAA  |  60 |
+ 102 | BBB  |  70 | Distinction
+ 103 | CCC  |  30 | Fail
+(3 rows)
+
+
+tcadb16=# \C STUDENTS;
+Title is "STUDENTS".
+tcadb16=# \D STUDENTS;
+invalid command \D
+Try \? for help.
+tcadb16=# \d students;
+                     Table "public.students"
+ Column |         Type          | Collation | Nullable | Default
+--------+-----------------------+-----------+----------+---------
+ rno    | integer               |           | not null |
+ name   | character varying(10) |           |          |
+ per    | double precision      |           |          |
+ grade  | character varying(20) |           |          |
+Indexes:
+    "students_pkey" PRIMARY KEY, btree (rno)
+Triggers:
+    trg_students_grade BEFORE INSERT OR UPDATE ON students FOR EACH ROW EXECUTE FUNCTION calc_grade()
+
+
+tcadb16=# DROP TRIGGER trg_student_grade ON students;
+ERROR:  trigger "trg_student_grade" for table "students" does not exist
+tcadb16=# DROP TRIGGER trg_student_grade ON student;
+ERROR:  trigger "trg_student_grade" for table "student" does not exist
+tcadb16=# DROP TRIGGER trg_students_grade ON students;
+DROP TRIGGER
+tcadb16=#
+tcadb16=# CREATE OR REPLACE FUNCTION calc_grade()
+tcadb16-# RETURNS TRIGGER
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$#         if NEW.per >= 70 then
+tcadb16$#             NEW.grade := 'Distinction';
+tcadb16$#         elseif NEW.per >= 60 then
+tcadb16$#             NEW.grade := 'First class';
+tcadb16$#         elseif NEW.per >= 40 then
+tcadb16$#             NEW.grade := 'Pass class';
+tcadb16$#         else
+tcadb16$#             NEW.grade := 'Fail';
+tcadb16$#         end if;
+tcadb16$#
+tcadb16$#         return NEW;
+tcadb16$# END;
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=#
+tcadb16=# CREATE TRIGGER trg_students_grade
+tcadb16-# BEFORE INSERT OR UPDATE
+tcadb16-# ON students
+tcadb16-# FOR EACH ROW
+tcadb16-# EXECUTE FUNCTION calc_grade();
+CREATE TRIGGER
+tcadb16=# select * from students;
+            STUDENTS
+ rno | name | per |    grade
+-----+------+-----+-------------
+ 101 | AAA  |  60 |
+ 102 | BBB  |  70 | Distinction
+ 103 | CCC  |  30 | Fail
+(3 rows)
+
+
+tcadb16=# UPDATE Students set per = 45 WHERE rno = 103;
+UPDATE 1
+tcadb16=# select * from students;
+            STUDENTS
+ rno | name | per |    grade
+-----+------+-----+-------------
+ 101 | AAA  |  60 |
+ 102 | BBB  |  70 | Distinction
+ 103 | CCC  |  45 | Pass class
+(3 rows)
+
+
+tcadb16=# DISABLE TRIGGER trg_students_grade ON students;
+ERROR:  syntax error at or near "DISABLE"
+LINE 1: DISABLE TRIGGER trg_students_grade ON students;
+        ^
+tcadb16=# ALTER TABLE students DISABLE TRIGGER ALL;
+ALTER TABLE
+tcadb16=# select * from students;
+            STUDENTS
+ rno | name | per |    grade
+-----+------+-----+-------------
+ 101 | AAA  |  60 |
+ 102 | BBB  |  70 | Distinction
+ 103 | CCC  |  45 | Pass class
+(3 rows)
+
+
+tcadb16=# INSERT INTO students(rno, name, per) VALUES (104, 'DDD', 99);
+INSERT 0 1
+tcadb16=# select * from students;
+            STUDENTS
+ rno | name | per |    grade
+-----+------+-----+-------------
+ 101 | AAA  |  60 |
+ 102 | BBB  |  70 | Distinction
+ 103 | CCC  |  45 | Pass class
+ 104 | DDD  |  99 |
+(4 rows)
+
+
+tcadb16=# ALTER TABLE students ENABLE TRIGGER ALL;
+ALTER TABLE
+tcadb16=# select * from students;
+            STUDENTS
+ rno | name | per |    grade
+-----+------+-----+-------------
+ 101 | AAA  |  60 |
+ 102 | BBB  |  70 | Distinction
+ 103 | CCC  |  45 | Pass class
+ 104 | DDD  |  99 |
+(4 rows)
+
+
+tcadb16=# INSERT INTO students(rno, name, per) VALUES (105, 'EEE', 100);
+INSERT 0 1
+tcadb16=# select * from students;
+            STUDENTS
+ rno | name | per |    grade
+-----+------+-----+-------------
+ 101 | AAA  |  60 |
+ 102 | BBB  |  70 | Distinction
+ 103 | CCC  |  45 | Pass class
+ 104 | DDD  |  99 |
+ 105 | EEE  | 100 | Distinction
+(5 rows)
+
+
+tcadb16=#

@@ -1,0 +1,7 @@
+
+
+CREATE TRIGGER trg_students_grade
+BEFORE INSERT OR UPDATE
+ON students
+FOR EACH ROW
+EXECUTE FUNCTION calc_grade();

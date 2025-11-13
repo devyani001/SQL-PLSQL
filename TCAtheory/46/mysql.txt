@@ -1,0 +1,447 @@
+DELIMITER $$
+
+CREATE TRIGGER trg_students_grade_insert
+BEFORE INSERT
+ON students
+FOR EACH ROW
+BEGIN
+        if NEW.per >= 70 then
+           SET NEW.grade = 'Distinction';
+        elseif NEW.per >= 60 then
+            SET NEW.grade = 'First class';
+        elseif NEW.per >= 40 then
+            SET NEW.grade = 'Pass class';
+        else
+            SET NEW.grade = 'Fail';
+        end if;
+END $$
+
+CREATE TRIGGER trg_students_grade_update
+BEFORE UPDATE
+ON students
+FOR EACH ROW
+BEGIN
+        if NEW.per >= 70 then
+           SET NEW.grade = 'Distinction';
+        elseif NEW.per >= 60 then
+            SET NEW.grade = 'First class';
+        elseif NEW.per >= 40 then
+            SET NEW.grade = 'Pass class';
+        else
+            SET NEW.grade = 'Fail';
+        end if;
+    
+END $$
+
+DELIMITER;
+
+
+
+
+
+
+
+=========================================================
+Enter password: **********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.43 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| banking            |
+| college            |
+| collegedb          |
+| companydb          |
+| geodb              |
+| information_schema |
+| mall               |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sakila             |
+| shopping           |
+| sppu               |
+| student            |
+| sys                |
+| tcadb16            |
+| world              |
+| xyz                |
++--------------------+
+18 rows in set (0.05 sec)
+
+mysql> create database trgg;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> create table students(rno INT PRIMARY KEY,name VARCHAR(20),per FLOAT,grade VARCHAR(20));
+ERROR 1046 (3D000): No database selected
+mysql> USE TRGG;
+Database changed
+mysql> create table students(rno INT PRIMARY KEY,name VARCHAR(20),per FLOAT,grade VARCHAR(20));
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> DELEMETER $$
+    -> CREATE TRIGGER trg_students_grade_insert
+    -> BEFORE INSERT
+    -> ON students
+    -> FOR EACH ROW
+    -> BEGIN
+    ->         if NEW.per >= 70 then
+    ->             NEW.grade := 'Distinction';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DELEMETER $$
+CREATE TRIGGER trg_students_grade_insert
+BEFORE INSERT
+ON students
+' at line 1
+mysql>         elseif NEW.per >= 60 then
+    ->             NEW.grade := 'First class';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'elseif NEW.per >= 60 then
+            NEW.grade := 'First class'' at line 1
+mysql>         elseif NEW.per >= 40 then
+    ->             NEW.grade := 'Pass class';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'elseif NEW.per >= 40 then
+            NEW.grade := 'Pass class'' at line 1
+mysql>         else
+    ->             NEW.grade := 'Fail';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'else
+            NEW.grade := 'Fail'' at line 1
+mysql>         end if;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end if' at line 1
+mysql>
+mysql> END $$
+    -> DELEMETER;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'END $$
+DELEMETER' at line 1
+mysql> DELEMETER $$
+    -> CREATE TRIGGER trg_students_grade_insert
+    -> BEFORE INSERT
+    -> ON students
+    -> FOR EACH ROW
+    -> BEGIN
+    ->         if NEW.per >= 70 then
+    ->            SET NEW.grade = 'Distinction';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DELEMETER $$
+CREATE TRIGGER trg_students_grade_insert
+BEFORE INSERT
+ON students
+' at line 1
+mysql>         elseif NEW.per >= 60 then
+    ->             SET NEW.grade = 'First class';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'elseif NEW.per >= 60 then
+            SET NEW.grade = 'First class'' at line 1
+mysql>         elseif NEW.per >= 40 then
+    ->             SET NEW.grade = 'Pass class';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'elseif NEW.per >= 40 then
+            SET NEW.grade = 'Pass class'' at line 1
+mysql>         else
+    ->             SET NEW.grade = 'Fail';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'else
+            SET NEW.grade = 'Fail'' at line 1
+mysql>         end if;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end if' at line 1
+mysql>
+mysql> END $$
+    -> DELEMETER;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'END $$
+DELEMETER' at line 1
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE TRIGGER trg_students_grade_insert
+    -> BEFORE INSERT
+    -> ON students
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF NEW.per >= 70 THEN
+    ->         SET NEW.grade = 'Distinction';
+    ->     ELSEIF NEW.per >= 60 THEN
+    ->         SET NEW.grade = 'First class';
+    ->     ELSEIF NEW.per >= 40 THEN
+    ->         SET NEW.grade = 'Pass class';
+    ->     ELSE
+    ->         SET NEW.grade = 'Fail';
+    ->     END IF;
+    -> END$$
+Query OK, 0 rows affected (0.05 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql>
+mysql> select * from students;
+Empty set (0.00 sec)
+
+mysql> insert into students(rno,name,per) values(101,'AAA',60);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from students;
++-----+------+------+-------------+
+| rno | name | per  | grade       |
++-----+------+------+-------------+
+| 101 | AAA  |   60 | First class |
++-----+------+------+-------------+
+1 row in set (0.00 sec)
+
+mysql> drop trigger trg_students_grade_insert;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into students(rno,name,per) values(102,'BBB',60);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from students;
++-----+------+------+-------------+
+| rno | name | per  | grade       |
++-----+------+------+-------------+
+| 101 | AAA  |   60 | First class |
+| 102 | BBB  |   60 | NULL        |
++-----+------+------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE TRIGGER trg_students_grade_insert
+    -> BEFORE INSERT
+    -> ON students
+    -> FOR EACH ROW
+    -> BEGIN
+    ->         if NEW.per >= 70 then
+    ->            SET NEW.grade = 'Distinction';
+    ->         elseif NEW.per >= 60 then
+    ->             SET NEW.grade = 'First class';
+    ->         elseif NEW.per >= 40 then
+    ->             SET NEW.grade = 'Pass class';
+    ->         else
+    ->             SET NEW.grade = 'Fail';
+    ->         end if;
+    -> END $$
+Query OK, 0 rows affected (0.04 sec)
+
+mysql>
+mysql> CREATE TRIGGER trg_students_grade_update
+    -> BEFORE UPDATE
+    -> ON students
+    -> FOR EACH ROW
+    -> BEGIN
+    ->         if NEW.per >= 70 then
+    ->            SET NEW.grade = 'Distinction';
+    ->         elseif NEW.per >= 60 then
+    ->             SET NEW.grade = 'First class';
+    ->         elseif NEW.per >= 40 then
+    ->             SET NEW.grade = 'Pass class';
+    ->         else
+    ->             SET NEW.grade = 'Fail';
+    ->         end if;
+    ->
+    -> END $$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER;
+    -> select * from students;
+    -> ^X
+    ->
+    -> DELIMITER $$
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DELIMITER;select * from students;
+
+
+DELIMITER' at line 1
+mysql>
+mysql> CREATE TRIGGER trg_students_grade_insert
+    -> BEFORE INSERT
+    -> ON students
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF NEW.per >= 70 THEN
+    ->         SET NEW.grade = 'Distinction';
+    ->     ELSEIF NEW.per >= 60 THEN
+    ->         SET NEW.grade = 'First class';
+    ->     ELSEIF NEW.per >= 40 THEN
+    ->         SET NEW.grade = 'Pass class';
+    ->     ELSE
+    ->         SET NEW.grade = 'Fail';
+    ->     END IF;
+    -> END $$
+ERROR 1359 (HY000): Trigger already exists
+mysql>
+mysql> CREATE TRIGGER trg_students_grade_update
+    -> BEFORE UPDATE
+    -> ON students
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF NEW.per >= 70 THEN
+    ->         SET NEW.grade = 'Distinction';
+    ->     ELSEIF NEW.per >= 60 THEN
+    ->         SET NEW.grade = 'First class';
+    ->     ELSEIF NEW.per >= 40 THEN
+    ->         SET NEW.grade = 'Pass class';
+    ->     ELSE
+    ->         SET NEW.grade = 'Fail';
+    ->     END IF;
+    -> END $$
+ERROR 1359 (HY000): Trigger already exists
+mysql>
+mysql> DELIMITER ;
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE TRIGGER trg_students_grade_insert
+    -> BEFORE INSERT
+    -> ON students
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF NEW.per >= 70 THEN
+    ->         SET NEW.grade = 'Distinction';
+    ->     ELSEIF NEW.per >= 60 THEN
+    ->         SET NEW.grade = 'First class';
+    ->     ELSEIF NEW.per >= 40 THEN
+    ->         SET NEW.grade = 'Pass class';
+    ->     ELSE
+    ->         SET NEW.grade = 'Fail';
+    ->     END IF;
+    -> END $$
+ERROR 1359 (HY000): Trigger already exists
+mysql>
+mysql> CREATE TRIGGER trg_students_grade_update
+    -> BEFORE UPDATE
+    -> ON students
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF NEW.per >= 70 THEN
+    ->         SET NEW.grade = 'Distinction';
+    ->     ELSEIF NEW.per >= 60 THEN
+    ->         SET NEW.grade = 'First class';
+    ->     ELSEIF NEW.per >= 40 THEN
+    ->         SET NEW.grade = 'Pass class';
+    ->     ELSE
+    ->         SET NEW.grade = 'Fail';
+    ->     END IF;
+    -> END $$
+ERROR 1359 (HY000): Trigger already exists
+mysql>
+mysql> DELIMITER ;
+mysql> drop trigger trg_students_grade_insert;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> drop trigger trg_students_grade_update;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE TRIGGER trg_students_grade_insert
+    -> BEFORE INSERT
+    -> ON students
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF NEW.per >= 70 THEN
+    ->         SET NEW.grade = 'Distinction';
+    ->     ELSEIF NEW.per >= 60 THEN
+    ->         SET NEW.grade = 'First class';
+    ->     ELSEIF NEW.per >= 40 THEN
+    ->         SET NEW.grade = 'Pass class';
+    ->     ELSE
+    ->         SET NEW.grade = 'Fail';
+    ->     END IF;
+    -> END $$
+Query OK, 0 rows affected (0.04 sec)
+
+mysql>
+mysql> CREATE TRIGGER trg_students_grade_update
+    -> BEFORE UPDATE
+    -> ON students
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF NEW.per >= 70 THEN
+    ->         SET NEW.grade = 'Distinction';
+    ->     ELSEIF NEW.per >= 60 THEN
+    ->         SET NEW.grade = 'First class';
+    ->     ELSEIF NEW.per >= 40 THEN
+    ->         SET NEW.grade = 'Pass class';
+    ->     ELSE
+    ->         SET NEW.grade = 'Fail';
+    ->     END IF;
+    -> END $$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> select * from students;
++-----+------+------+-------------+
+| rno | name | per  | grade       |
++-----+------+------+-------------+
+| 101 | AAA  |   60 | First class |
+| 102 | BBB  |   60 | NULL        |
++-----+------+------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> update students set per = 20 where rno=102;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from students;
++-----+------+------+-------------+
+| rno | name | per  | grade       |
++-----+------+------+-------------+
+| 101 | AAA  |   60 | First class |
+| 102 | BBB  |   20 | Fail        |
++-----+------+------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> insert into students(rno,name,per) values(103,'CCC',46);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from students;
++-----+------+------+-------------+
+| rno | name | per  | grade       |
++-----+------+------+-------------+
+| 101 | AAA  |   60 | First class |
+| 102 | BBB  |   20 | Fail        |
+| 103 | CCC  |   46 | Pass class  |
++-----+------+------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> SET @disable_triggers = TRUE;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from students;
++-----+------+------+-------------+
+| rno | name | per  | grade       |
++-----+------+------+-------------+
+| 101 | AAA  |   60 | First class |
+| 102 | BBB  |   20 | Fail        |
+| 103 | CCC  |   46 | Pass class  |
++-----+------+------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> insert into students(rno,name,per) values(104,'DDD',90);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from students;
++-----+------+------+-------------+
+| rno | name | per  | grade       |
++-----+------+------+-------------+
+| 101 | AAA  |   60 | First class |
+| 102 | BBB  |   20 | Fail        |
+| 103 | CCC  |   46 | Pass class  |
+| 104 | DDD  |   90 | Distinction |
++-----+------+------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> SET @ans = 3;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select @ans;
++------+
+| @ans |
++------+
+|    3 |
++------+
+1 row in set (0.00 sec)
+
+mysql>
