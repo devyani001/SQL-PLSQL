@@ -1,0 +1,667 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(rno int, name varchar(10), per float);
+CREATE TABLE
+tcadb16=# INSERT INTO student VALUES(101,"AAA",60);
+ERROR:  column "AAA" does not exist
+LINE 1: INSERT INTO student VALUES(101,"AAA",60);
+                                       ^
+tcadb16=# INSERT INTO student VALUES(101,'AAA',60);
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(102,'BBB',70);
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(103,'CCC',80);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  70
+ 103 | CCC  |  80
+(3 rows)
+
+
+tcadb16=# UPDATE student SET per = 18 WHERE rno = 103;
+UPDATE 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  70
+ 103 | CCC  |  18
+(3 rows)
+
+
+tcadb16=# ALTER TABLE student ADD COLUMN phno VARCHAR(10) UNIQUE;
+ALTER TABLE
+tcadb16=# SELECT * FROM student;
+ rno | name | per | phno
+-----+------+-----+------
+ 101 | AAA  |  60 |
+ 102 | BBB  |  70 |
+ 103 | CCC  |  18 |
+(3 rows)
+
+
+tcadb16=# INSERT INTO student VALUES(104,'DDD',90,4444444444);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per |    phno
+-----+------+-----+------------
+ 101 | AAA  |  60 |
+ 102 | BBB  |  70 |
+ 103 | CCC  |  18 |
+ 104 | DDD  |  90 | 4444444444
+(4 rows)
+
+
+tcadb16=# UPDATE student SET phno = 9579227402 WHERE rno = 101;
+UPDATE 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per |    phno
+-----+------+-----+------------
+ 102 | BBB  |  70 |
+ 103 | CCC  |  18 |
+ 104 | DDD  |  90 | 4444444444
+ 101 | AAA  |  60 | 9579227402
+(4 rows)
+
+
+tcadb16=# UPDATE student SET phno = '2222222222' WHERE rno = 102;
+UPDATE 1
+tcadb16=# UPDATE student SET phno = '3333333333' WHERE rno = 103;
+UPDATE 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per |    phno
+-----+------+-----+------------
+ 104 | DDD  |  90 | 4444444444
+ 101 | AAA  |  60 | 9579227402
+ 102 | BBB  |  70 | 2222222222
+ 103 | CCC  |  18 | 3333333333
+(4 rows)
+
+
+tcadb16=# UPDATE student SET phno = '4444444444' WHERE rno = 104;
+UPDATE 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per |    phno
+-----+------+-----+------------
+ 101 | AAA  |  60 | 9579227402
+ 102 | BBB  |  70 | 2222222222
+ 103 | CCC  |  18 | 3333333333
+ 104 | DDD  |  90 | 4444444444
+(4 rows)
+
+
+tcadb16=# UPDATE student SET phno = '1111111111' WHERE rno = 101;
+UPDATE 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per |    phno
+-----+------+-----+------------
+ 102 | BBB  |  70 | 2222222222
+ 103 | CCC  |  18 | 3333333333
+ 104 | DDD  |  90 | 4444444444
+ 101 | AAA  |  60 | 1111111111
+(4 rows)
+
+
+tcadb16=# UPDATE student SET phno = '2222222222' WHERE rno = 102;
+UPDATE 1
+tcadb16=# UPDATE student SET phno = '3333333333' WHERE rno = 103;
+UPDATE 1
+tcadb16=# UPDATE student SET phno = '4444444444' WHERE rno = 104;
+UPDATE 1
+tcadb16=# SELECT * FROM student;
+ rno | name | per |    phno
+-----+------+-----+------------
+ 101 | AAA  |  60 | 1111111111
+ 102 | BBB  |  70 | 2222222222
+ 103 | CCC  |  18 | 3333333333
+ 104 | DDD  |  90 | 4444444444
+(4 rows)
+
+
+tcadb16=# ALTER TABLE student DROP COLUMN phno;
+ALTER TABLE
+tcadb16=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  70
+ 103 | CCC  |  18
+ 104 | DDD  |  90
+(4 rows)
+
+
+tcadb16=# ALTER TABLE student ADD COLUMN phno VARCHAR(10) UNIQUE;
+ALTER TABLE
+tcadb16=# ALTER TABLE student RENAME COLUMN phno TO whatsapp
+tcadb16-# SELECT * FROM student;
+ERROR:  syntax error at or near "SELECT"
+LINE 2: SELECT * FROM student;
+        ^
+tcadb16=# SELECT * FROM student;
+ rno | name | per | phno
+-----+------+-----+------
+ 101 | AAA  |  60 |
+ 102 | BBB  |  70 |
+ 103 | CCC  |  18 |
+ 104 | DDD  |  90 |
+(4 rows)
+
+
+tcadb16=# ALTER TABLE student RENAME COLUMN phno TO whatsapp;
+ALTER TABLE
+tcadb16=# SELECT * FROM student;
+ rno | name | per | whatsapp
+-----+------+-----+----------
+ 101 | AAA  |  60 |
+ 102 | BBB  |  70 |
+ 103 | CCC  |  18 |
+ 104 | DDD  |  90 |
+(4 rows)
+
+
+tcadb16=# ALTER TABLE student RENAME COLUMN per TO percentage;
+ALTER TABLE
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         18 |
+ 104 | DDD  |         90 |
+(4 rows)
+
+
+tcadb16=# INSERT INTO student VALUES(105,'EEE',100);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         18 |
+ 104 | DDD  |         90 |
+ 105 | EEE  |        100 |
+(5 rows)
+
+
+tcadb16=# ALTER TABLE student ALTER COLUMN whatsapp SET DEFAULT 'NA';
+ALTER TABLE
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         18 |
+ 104 | DDD  |         90 |
+ 105 | EEE  |        100 |
+(5 rows)
+
+
+tcadb16=# INSERT INTO student VALUES(106,'FFF',97);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         18 |
+ 104 | DDD  |         90 |
+ 105 | EEE  |        100 |
+ 106 | FFF  |         97 | NA
+(6 rows)
+
+
+tcadb16=# INSERT INTO student VALUES(107,'GGG','9999999999');
+ERROR:  duplicate key value violates unique constraint "student_phno_key"
+DETAIL:  Key (whatsapp)=(NA) already exists.
+tcadb16=# INSERT INTO student VALUES(107,'GGG','9999998999');
+ERROR:  duplicate key value violates unique constraint "student_phno_key"
+DETAIL:  Key (whatsapp)=(NA) already exists.
+tcadb16=# INSERT INTO student VALUES(107,'GGG',88,'9999998999');
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage |  whatsapp
+-----+------+------------+------------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         18 |
+ 104 | DDD  |         90 |
+ 105 | EEE  |        100 |
+ 106 | FFF  |         97 | NA
+ 107 | GGG  |         88 | 9999998999
+(7 rows)
+
+
+tcadb16=# ALTER TABLE student ALTER COLUMN whatsapp DROP DEFAULT;
+ALTER TABLE
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage |  whatsapp
+-----+------+------------+------------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         18 |
+ 104 | DDD  |         90 |
+ 105 | EEE  |        100 |
+ 106 | FFF  |         97 | NA
+ 107 | GGG  |         88 | 9999998999
+(7 rows)
+
+
+tcadb16=# INSERT INTO student VALUES(108,'HHH',99);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage |  whatsapp
+-----+------+------------+------------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         18 |
+ 104 | DDD  |         90 |
+ 105 | EEE  |        100 |
+ 106 | FFF  |         97 | NA
+ 107 | GGG  |         88 | 9999998999
+ 108 | HHH  |         99 |
+(8 rows)
+
+
+tcadb16=# DELETE FROM student WHERE rno>=104;
+DELETE 5
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         18 |
+(3 rows)
+
+
+tcadb16=# UPDATE TABLE student SET percentage = 90 WHERE rno = 103;
+ERROR:  syntax error at or near "TABLE"
+LINE 1: UPDATE TABLE student SET percentage = 90 WHERE rno = 103;
+               ^
+tcadb16=# UPDATE student SET percentage = 90 WHERE rno = 103;
+UPDATE 1
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         90 |
+(3 rows)
+
+
+tcadb16=# INSERT INTO student(rno,percentage) VALUES(101,99);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         90 |
+ 101 |      |         99 |
+(4 rows)
+
+
+tcadb16=# ALTER TABLE student ALTER COLUMN name SET NOT NULL;
+ERROR:  column "name" of relation "student" contains null values
+tcadb16=# UPDATE student set name='DDD' where per = 99;
+ERROR:  column "per" does not exist
+LINE 1: UPDATE student set name='DDD' where per = 99;
+                                            ^
+tcadb16=# UPDATE student set name='DDD' where percentage = 99;
+UPDATE 1
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         90 |
+ 101 | DDD  |         99 |
+(4 rows)
+
+
+tcadb16=# ALTER TABLE student ALTER COLUMN name SET NOT NULL;
+ALTER TABLE
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         90 |
+ 101 | DDD  |         99 |
+(4 rows)
+
+
+tcadb16=# INSERT INTO student(rno,percentage) VALUES(105,99);
+ERROR:  null value in column "name" of relation "student" violates not-null constraint
+DETAIL:  Failing row contains (105, null, 99, null).
+tcadb16=# INSERT INTO student(rno,name,percentage) VALUES(105,'EEE',-99);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         90 |
+ 101 | DDD  |         99 |
+ 105 | EEE  |        -99 |
+(5 rows)
+
+
+tcadb16=# delete from student where rno=105;
+DELETE 1
+tcadb16=# ALTER TABLE student ADD CHECK(percentage>=0 AND percentage<=100);
+ALTER TABLE
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         90 |
+ 101 | DDD  |         99 |
+(4 rows)
+
+
+tcadb16=# INSERT INTO student(rno,name,percentage) VALUES(105,'EEE',-99);
+ERROR:  new row for relation "student" violates check constraint "student_percentage_check"
+DETAIL:  Failing row contains (105, EEE, -99, null).
+tcadb16=# \d student;
+                       Table "public.student"
+   Column   |         Type          | Collation | Nullable | Default
+------------+-----------------------+-----------+----------+---------
+ rno        | integer               |           |          |
+ name       | character varying(10) |           | not null |
+ percentage | double precision      |           |          |
+ whatsapp   | character varying(10) |           |          |
+Indexes:
+    "student_phno_key" UNIQUE CONSTRAINT, btree (whatsapp)
+Check constraints:
+    "student_percentage_check" CHECK (percentage >= 0::double precision AND percentage <= 100::double precision)
+
+
+tcadb16=# UPDATE STUDENT SET RNO=104 WHERE NAME='DDD';
+UPDATE 1
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         90 |
+ 104 | DDD  |         99 |
+(4 rows)
+
+
+tcadb16=# \d student;
+                       Table "public.student"
+   Column   |         Type          | Collation | Nullable | Default
+------------+-----------------------+-----------+----------+---------
+ rno        | integer               |           |          |
+ name       | character varying(10) |           | not null |
+ percentage | double precision      |           |          |
+ whatsapp   | character varying(10) |           |          |
+Indexes:
+    "student_phno_key" UNIQUE CONSTRAINT, btree (whatsapp)
+Check constraints:
+    "student_percentage_check" CHECK (percentage >= 0::double precision AND percentage <= 100::double precision)
+
+
+tcadb16=# CREATE TABLE emp(eid int primary key, ename varchar(10));
+CREATE TABLE
+tcadb16=# \d emp;
+                       Table "public.emp"
+ Column |         Type          | Collation | Nullable | Default
+--------+-----------------------+-----------+----------+---------
+ eid    | integer               |           | not null |
+ ename  | character varying(10) |           |          |
+Indexes:
+    "emp_pkey" PRIMARY KEY, btree (eid)
+
+
+tcadb16=# ALTER TABLE student ADD CONSTRAINT tca_pkey rno PRIMARY KEY(rno);
+ERROR:  syntax error at or near "rno"
+LINE 1: ALTER TABLE student ADD CONSTRAINT tca_pkey rno PRIMARY KEY(...
+                                                    ^
+tcadb16=# ALTER TABLE student ADD CONSTRAINT tca_pkey PRIMARY KEY(rno);
+ALTER TABLE
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         90 |
+ 104 | DDD  |         99 |
+(4 rows)
+
+
+tcadb16=# \d student;
+                       Table "public.student"
+   Column   |         Type          | Collation | Nullable | Default
+------------+-----------------------+-----------+----------+---------
+ rno        | integer               |           | not null |
+ name       | character varying(10) |           | not null |
+ percentage | double precision      |           |          |
+ whatsapp   | character varying(10) |           |          |
+Indexes:
+    "tca_pkey" PRIMARY KEY, btree (rno)
+    "student_phno_key" UNIQUE CONSTRAINT, btree (whatsapp)
+Check constraints:
+    "student_percentage_check" CHECK (percentage >= 0::double precision AND percentage <= 100::double precision)
+
+
+tcadb16=# ALTER TABLE student DROP CONSTRAINT student_phno_key;
+ALTER TABLE
+tcadb16=# \d student;
+                       Table "public.student"
+   Column   |         Type          | Collation | Nullable | Default
+------------+-----------------------+-----------+----------+---------
+ rno        | integer               |           | not null |
+ name       | character varying(10) |           | not null |
+ percentage | double precision      |           |          |
+ whatsapp   | character varying(10) |           |          |
+Indexes:
+    "tca_pkey" PRIMARY KEY, btree (rno)
+Check constraints:
+    "student_percentage_check" CHECK (percentage >= 0::double precision AND percentage <= 100::double precision)
+
+
+tcadb16=# ALTER TABLE student DROP CONSTRAINT student_percentage_check;
+ALTER TABLE
+tcadb16=# \d student;
+                       Table "public.student"
+   Column   |         Type          | Collation | Nullable | Default
+------------+-----------------------+-----------+----------+---------
+ rno        | integer               |           | not null |
+ name       | character varying(10) |           | not null |
+ percentage | double precision      |           |          |
+ whatsapp   | character varying(10) |           |          |
+Indexes:
+    "tca_pkey" PRIMARY KEY, btree (rno)
+
+
+tcadb16=# insert into student values(104,'DDD',-99);
+ERROR:  duplicate key value violates unique constraint "tca_pkey"
+DETAIL:  Key (rno)=(104) already exists.
+tcadb16=# insert into student values(105,'DDD',-99);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         90 |
+ 104 | DDD  |         99 |
+ 105 | DDD  |        -99 |
+(5 rows)
+
+
+tcadb16=# insert into student values(105,'DDD',60);
+ERROR:  duplicate key value violates unique constraint "tca_pkey"
+DETAIL:  Key (rno)=(105) already exists.
+tcadb16=# ALTER TABLE student DROP CONSTRAIN tca_pkey;
+ERROR:  syntax error at or near "tca_pkey"
+LINE 1: ALTER TABLE student DROP CONSTRAIN tca_pkey;
+                                           ^
+tcadb16=# ALTER TABLE student DROP CONSTRAINT tca_pkey;
+ALTER TABLE
+tcadb16=# \d student;
+                       Table "public.student"
+   Column   |         Type          | Collation | Nullable | Default
+------------+-----------------------+-----------+----------+---------
+ rno        | integer               |           | not null |
+ name       | character varying(10) |           | not null |
+ percentage | double precision      |           |          |
+ whatsapp   | character varying(10) |           |          |
+
+
+tcadb16=# insert into student values(105,'DDD',60);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         90 |
+ 104 | DDD  |         99 |
+ 105 | DDD  |        -99 |
+ 105 | DDD  |         60 |
+(6 rows)
+
+
+tcadb16=# \d student;
+                       Table "public.student"
+   Column   |         Type          | Collation | Nullable | Default
+------------+-----------------------+-----------+----------+---------
+ rno        | integer               |           | not null |
+ name       | character varying(10) |           | not null |
+ percentage | double precision      |           |          |
+ whatsapp   | character varying(10) |           |          |
+
+
+tcadb16=# ALTER TABLE student DROP CONSTRAINT not null;
+ERROR:  syntax error at or near "not"
+LINE 1: ALTER TABLE student DROP CONSTRAINT not null;
+                                            ^
+tcadb16=# ALTER TABLE student ALTER COLUMN name SET DEFAULT NULL;
+ALTER TABLE
+tcadb16=# \d student;
+                               Table "public.student"
+   Column   |         Type          | Collation | Nullable |         Default
+------------+-----------------------+-----------+----------+-------------------------
+ rno        | integer               |           | not null |
+ name       | character varying(10) |           | not null | NULL::character varying
+ percentage | double precision      |           |          |
+ whatsapp   | character varying(10) |           |          |
+
+
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         90 |
+ 104 | DDD  |         99 |
+ 105 | DDD  |        -99 |
+ 105 | DDD  |         60 |
+(6 rows)
+
+
+tcadb16=# insert into student(rno,percentage) values(106,60);
+ERROR:  null value in column "name" of relation "student" violates not-null constraint
+DETAIL:  Failing row contains (106, null, 60, null).
+tcadb16=# ALTER TABLE student ALTER COLUMN name DROP NOT NULL;
+ALTER TABLE
+tcadb16=# \d student;
+                               Table "public.student"
+   Column   |         Type          | Collation | Nullable |         Default
+------------+-----------------------+-----------+----------+-------------------------
+ rno        | integer               |           | not null |
+ name       | character varying(10) |           |          | NULL::character varying
+ percentage | double precision      |           |          |
+ whatsapp   | character varying(10) |           |          |
+
+
+tcadb16=# insert into student(rno,percentage) values(106,60);
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         90 |
+ 104 | DDD  |         99 |
+ 105 | DDD  |        -99 |
+ 105 | DDD  |         60 |
+ 106 |      |         60 |
+(7 rows)
+
+
+tcadb16=# select * from student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         90 |
+ 104 | DDD  |         99 |
+ 105 | DDD  |        -99 |
+ 105 | DDD  |         60 |
+ 106 |      |         60 |
+(7 rows)
+
+
+tcadb16=# alter table student RENAME  TO std;
+ALTER TABLE
+tcadb16=# select * from student;
+ERROR:  relation "student" does not exist
+LINE 1: select * from student;
+                      ^
+tcadb16=# select * from std;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         90 |
+ 104 | DDD  |         99 |
+ 105 | DDD  |        -99 |
+ 105 | DDD  |         60 |
+ 106 |      |         60 |
+(7 rows)
+
+
+tcadb16=# alter table student std RENAME TO student;
+ERROR:  syntax error at or near "std"
+LINE 1: alter table student std RENAME TO student;
+                            ^
+tcadb16=# select * from student;
+ERROR:  relation "student" does not exist
+LINE 1: select * from student;
+                      ^
+tcadb16=# alter table std RENAME TO student;
+ALTER TABLE
+tcadb16=# select * from student;
+ rno | name | percentage | whatsapp
+-----+------+------------+----------
+ 101 | AAA  |         60 |
+ 102 | BBB  |         70 |
+ 103 | CCC  |         90 |
+ 104 | DDD  |         99 |
+ 105 | DDD  |        -99 |
+ 105 | DDD  |         60 |
+ 106 |      |         60 |
+(7 rows)
+
