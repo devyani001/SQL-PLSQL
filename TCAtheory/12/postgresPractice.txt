@@ -664,4 +664,3 @@ tcadb16=# select * from student;
  105 | DDD  |         60 |
  106 |      |         60 |
 (7 rows)
-
