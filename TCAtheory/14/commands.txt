@@ -1,0 +1,32 @@
+lecture 14 - Time Data Type commands
+-------------------------------------
+
+1)  CREATE TABLE session(sid INT PRIMARY KEY, session_name VARCHAR(20), start_at TIME NOT NULL, end_at TIME NOT NULL);
+2)  INSERT INTO session values(101,'SQL-PLSQL','20:00:00','21:00:00');
+3)  select LOCALTIME;       -- 12:38:00.167969
+4)  select LOCALTIME(0);    -- 12:38:11
+5)  select LOCALTIME::TIME; -- 12:47:34.421797
+6)  select EXTRACT(HOURS from LOCALTIME);   -- 12
+7)  select EXTRACT(HOURS from LOCALTIME) AS hours;
+8)  select EXTRACT(MILLISECONDS from LOCALTIME) AS ms;
+9)  select LOCALTIME+'02:00:00';
+    ?column?
+    -----------------
+    14:49:58.846469
+    (1 row)
+10) select LOCALTIME + INTERVAL '2 HOURS';
+    select LOCALTIME + INTERVAL '2 HOURS' AS duration;
+    duration
+    -----------------
+    14:51:14.737284
+    (1 row)
+11) select LOCALTIME(0) + INTERVAL '2 HOURS' AS duration;
+    duration
+    ----------
+    14:51:36
+    (1 row)
+12) CREATE TABLE registration(ts TIMESTAMP PRIMARY KEY, name VARCHAR(10), phno VARCHAR(10));
+13) INSERT INTO registration values(now(),'AAA','9988776655');
+14) mysql      - CREATE TABLE registration(ts TIMESTAMPZ PRIMARY KEY, name VARCHAR(10), phno VARCHAR(10));
+    postgresql - CREATE TABLE registration(ts TIMESTAMP with time zone PRIMARY KEY, name VARCHAR(10), phno VARCHAR(10));
+15) INSERT INTO registration values(now(),'AAA','9988776655');
