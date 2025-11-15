@@ -1,0 +1,62 @@
+=========================
+VARCHAR vs CHAR vs Text
+=========================
+
+fname varchar(5)
+------------------
+--> Student name can be of maximum length 5
+--> Ex: 'AAA', 'A','ABCDE'
+--> Ex: 'Sachin' ==> Error
+--> Whatsapp-Status varchar(139)
+
+fname char(5)
+---------------
+--> Student name is always of exact length 5
+--> Ex: 'AAA'=>'AAA  ', 'A' => 'A    ','ABCDE'=>'ABCDE'
+--> Ex: 'Sachin' ==> Error
+
+grade char
+-----------
+--> Grade is always of exact length 1 i.e you are allowed to store only one character
+-->Ex: 'A','B'
+
+
+feeddback text
+address   text
+--------------------
+--> you can store any no. of characters.
+--> feedback or address will be on any length.
+
+
+===========
+Numeric
+===========
+
+NUMERIC(precision, scale)
+
+CREATE TABLE customer(
+	rno int primary key,
+	name varchar(10),
+	balance NUMERIC(7,2)
+);
+
+prinft("%7.2f")
+
+1820.4792 ==> 1820.48
+1820.4721 ==> 1820.47
+
+
+BOOLEAN
+---------
+--> YES / NO
+
+num int        --> 0,1,2,3,4,-1,-2,...
+status boolean --> t,f
+
+ 't' can be true,t,y,yes,1
+ 'f' can be false,f,n,no,0
+
+NOTE :
+-------
+pkt true,false --> la without quotes madhe lihaych
+bki 'yes','1','n','t' --> la quotes madhe lihaych

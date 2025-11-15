@@ -1,0 +1,269 @@
+Server [localhost]:
+Database [postgres]: tcadb16
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (14.2)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+tcadb16=# CREATE TABLE student(
+tcadb16(# rno int primary key,
+tcadb16(# fname varchar(5),
+tcadb16(# lname char(5),
+tcadb16(# feedback text
+tcadb16(# );
+ERROR:  relation "student" already exists
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(
+tcadb16(# rno int primary key,
+tcadb16(# fname varchar(5),
+tcadb16(# lname char(5),
+tcadb16(# feedback text
+tcadb16(# );
+CREATE TABLE
+tcadb16=# select * froms student;
+ERROR:  syntax error at or near "froms"
+LINE 1: select * froms student;
+                 ^
+tcadb16=# select * from student;
+ rno | fname | lname | feedback
+-----+-------+-------+----------
+(0 rows)
+
+
+tcadb16=# insert into student values(101,'AAA','aaa',"Very Good Class");
+ERROR:  column "Very Good Class" does not exist
+LINE 1: insert into student values(101,'AAA','aaa',"Very Good Class"...
+                                                   ^
+tcadb16=# insert into student values(101,'AAA','aaa','Very Good Class');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | fname | lname |    feedback
+-----+-------+-------+-----------------
+ 101 | AAA   | aaa   | Very Good Class
+(1 row)
+
+
+tcadb16=# insert into student values(102,'BBB','bb','Very Goooooooooooooooooooooooooooood Class');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | fname | lname |                  feedback
+-----+-------+-------+--------------------------------------------
+ 101 | AAA   | aaa   | Very Good Class
+ 102 | BBB   | bb    | Very Goooooooooooooooooooooooooooood Class
+(2 rows)
+
+
+tcadb16=# insert into student values(103,'AAAAAA','aaa',"Very Good Class");
+ERROR:  column "Very Good Class" does not exist
+LINE 1: insert into student values(103,'AAAAAA','aaa',"Very Good Cla...
+                                                      ^
+tcadb16=# insert into student values(103,'AAAAAA','aaa','Very Good Class');
+ERROR:  value too long for type character varying(5)
+tcadb16=# insert into student values(103,'AAA','aaaaaa','Very Good Class');
+ERROR:  value too long for type character(5)
+tcadb16=# CREATE TABLE customer(
+tcadb16(# rno int primary key,
+tcadb16(# name varchar(10).
+tcadb16(# balance NUMERIC(7,2)
+tcadb16(# );
+ERROR:  syntax error at or near "."
+LINE 3: name varchar(10).
+                        ^
+tcadb16=# CREATE TABLE customer(
+tcadb16(# rno int primary key,
+tcadb16(# name varchar(10),
+tcadb16(# balance NUMERIC(7,2)
+tcadb16(# );
+CREATE TABLE
+tcadb16=# insert into customer values(101,'AAA',1123.45);
+INSERT 0 1
+tcadb16=# insert into customer values(102,'BBB',11.4567);
+INSERT 0 1
+tcadb16=# select * from customer;
+ rno | name | balance
+-----+------+---------
+ 101 | AAA  | 1123.45
+ 102 | BBB  |   11.46
+(2 rows)
+
+
+tcadb16=# insert into customer values(103,'CCC',11.4585);
+INSERT 0 1
+tcadb16=# select * from customer;
+ rno | name | balance
+-----+------+---------
+ 101 | AAA  | 1123.45
+ 102 | BBB  |   11.46
+ 103 | CCC  |   11.46
+(3 rows)
+
+
+tcadb16=# insert into customer values(104,'DDD', 11);
+INSERT 0 1
+tcadb16=# select * from customer;
+ rno | name | balance
+-----+------+---------
+ 101 | AAA  | 1123.45
+ 102 | BBB  |   11.46
+ 103 | CCC  |   11.46
+ 104 | DDD  |   11.00
+(4 rows)
+
+
+tcadb16=# insert into customer values(105,'EEE',1297361241234293.4585);
+ERROR:  numeric field overflow
+DETAIL:  A field with precision 7, scale 2 must round to an absolute value less than 10^5.
+tcadb16=# CREATE TABLE person(
+tcadb16(# pno int primary key,
+tcadb16(# pname varchar(10),
+tcadb16(# married BOOLEAN
+tcadb16(# );
+CREATE TABLE
+tcadb16=# select * from person;
+ pno | pname | married
+-----+-------+---------
+(0 rows)
+
+
+tcadb16=# \d
+              List of relations
+ Schema |     Name     |   Type   |  Owner
+--------+--------------+----------+----------
+ public | customer     | table    | postgres
+ public | emp          | table    | postgres
+ public | person       | table    | postgres
+ public | registration | table    | postgres
+ public | session      | table    | postgres
+ public | student      | table    | postgres
+ public | tcaseq       | sequence | postgres
+(7 rows)
+
+
+tcadb16=# \d person;
+                      Table "public.person"
+ Column  |         Type          | Collation | Nullable | Default
+---------+-----------------------+-----------+----------+---------
+ pno     | integer               |           | not null |
+ pname   | character varying(10) |           |          |
+ married | boolean               |           |          |
+Indexes:
+    "person_pkey" PRIMARY KEY, btree (pno)
+
+
+tcadb16=# insert into person values(101,'Rohit',true);
+INSERT 0 1
+tcadb16=# insert into person values(102,'Rishab',false);
+INSERT 0 1
+tcadb16=# insert into person values(103,'Virat','yes');
+INSERT 0 1
+tcadb16=# insert into person values(104,'MSD','1');
+INSERT 0 1
+tcadb16=# insert into person values(105,'Ishan','n');
+INSERT 0 1
+tcadb16=# select * from person;
+ pno | pname  | married
+-----+--------+---------
+ 101 | Rohit  | t
+ 102 | Rishab | f
+ 103 | Virat  | t
+ 104 | MSD    | t
+ 105 | Ishan  | f
+(5 rows)
+
+
+tcadb16=# select * from person WHERE pno=103;
+ pno | pname | married
+-----+-------+---------
+ 103 | Virat | t
+(1 row)
+
+
+tcadb16=# select * from person WHERE pname='Virat';
+ pno | pname | married
+-----+-------+---------
+ 103 | Virat | t
+(1 row)
+
+
+tcadb16=# select * from person WHERE married='t';
+ pno | pname | married
+-----+-------+---------
+ 101 | Rohit | t
+ 103 | Virat | t
+ 104 | MSD   | t
+(3 rows)
+
+
+tcadb16=# select * from person WHERE married='f';
+ pno | pname  | married
+-----+--------+---------
+ 102 | Rishab | f
+ 105 | Ishan  | f
+(2 rows)
+
+
+tcadb16=# select * from person;
+ pno | pname  | married
+-----+--------+---------
+ 101 | Rohit  | t
+ 102 | Rishab | f
+ 103 | Virat  | t
+ 104 | MSD    | t
+ 105 | Ishan  | f
+(5 rows)
+
+
+tcadb16=# select * from person WHERE married='t';
+ pno | pname | married
+-----+-------+---------
+ 101 | Rohit | t
+ 103 | Virat | t
+ 104 | MSD   | t
+(3 rows)
+
+
+tcadb16=# select * from person WHERE married;
+ pno | pname | married
+-----+-------+---------
+ 101 | Rohit | t
+ 103 | Virat | t
+ 104 | MSD   | t
+(3 rows)
+
+
+tcadb16=# select * from person WHERE NOT married;
+ pno | pname  | married
+-----+--------+---------
+ 102 | Rishab | f
+ 105 | Ishan  | f
+(2 rows)
+
+
+tcadb16=# select pnae from person WHERE NOT married;
+ERROR:  column "pnae" does not exist
+LINE 1: select pnae from person WHERE NOT married;
+               ^
+HINT:  Perhaps you meant to reference the column "person.pname".
+tcadb16=# select pname from person WHERE NOT married;
+ pname
+--------
+ Rishab
+ Ishan
+(2 rows)
+
+
+tcadb16=# select * from person WHERE NOT married;
+ pno | pname  | married
+-----+--------+---------
+ 102 | Rishab | f
+ 105 | Ishan  | f
+(2 rows)
+
+
+tcadb16=#
