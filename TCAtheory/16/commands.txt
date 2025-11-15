@@ -1,0 +1,37 @@
+===========================
+What DDL and DML in SQL ?
+===========================
+
+DDL
+----
+--> Data Defination(Define) Language
+--> DLL Commnads/statements means ashe SQL jychamule tumhi kahi goshti DEFINE karu shakata.
+
+EX:
+	
+CREATE :  Creating database, table, schema, view.
+DROP   :  Dropped database, table, view.
+ALTER  
+RENAME
+TRUNCATE 
+
+
+DML
+---
+--> Data Manipulation Language
+
+EX:
+SELECT
+INSERT
+UPDATE
+DELETE
+--------------------------------------------
+
+INSERT
+-------
+--> To insert one or more records into the table
+ 
+ 
+ML - (derivation,trigonometry,integration)
+
+--> INSERT la multiple records ka dyayche use excel file concept at 30min lec 16.

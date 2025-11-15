@@ -1,0 +1,223 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select * from student;
+ rno | fname | lname |                      feedback
+-----+-------+-------+----------------------------------------------------
+ 101 | AAA   | aaa   | Very Good Class
+ 102 | BBB   | bb    | Very Goooooooooooooooooooooooooooooooooooood Class
+(2 rows)
+
+
+tcadb16=# DROP TABLE student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(rno int primary key, name VARCHAR(10), city VARCHAR(10));
+CREATE TABLE
+tcadb16=# SELECT * FROM student;
+ rno | name | city
+-----+------+------
+(0 rows)
+
+
+tcadb16=# INSERT INTO student VALUES(101,'AAA','PUNE');
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(102,'BBB','MUMBAI');
+INSERT 0 1
+tcadb16=# SELECT * FROM student;
+ rno | name |  city
+-----+------+--------
+ 101 | AAA  | PUNE
+ 102 | BBB  | MUMBAI
+(2 rows)
+
+
+tcadb16=# INSERT INTO student VALUES(103,'CCC','MUMBAI'),(104,'DDD','SATARA'),(105,'EEE','PUNE');
+INSERT 0 3
+tcadb16=# SELECT * FROM student;
+ rno | name |  city
+-----+------+--------
+ 101 | AAA  | PUNE
+ 102 | BBB  | MUMBAI
+ 103 | CCC  | MUMBAI
+ 104 | DDD  | SATARA
+ 105 | EEE  | PUNE
+(5 rows)
+
+
+tcadb16=#
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# CREATE TABLE student(rno serial primary key, name varchar(10), city varchar(10));
+ERROR:  relation "student" already exists
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(rno serial primary key, name varchar(10), city varchar(10));
+CREATE TABLE
+tcadb16=# select * from student;
+ rno | name | city
+-----+------+------
+(0 rows)
+
+
+tcadb16=# insert into student(name,per) values('AAA','PUNE');
+ERROR:  column "per" of relation "student" does not exist
+LINE 1: insert into student(name,per) values('AAA','PUNE');
+                                 ^
+tcadb16=# insert into student(name,city) values('AAA','PUNE');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name | city
+-----+------+------
+   1 | AAA  | PUNE
+(1 row)
+
+
+tcadb16=# insert into student(name,per) values('BBB','MUMBAI');
+ERROR:  column "per" of relation "student" does not exist
+LINE 1: insert into student(name,per) values('BBB','MUMBAI');
+                                 ^
+tcadb16=# insert into student(name,city) values('BBB','MUMBAI');
+INSERT 0 1
+tcadb16=# insert into student(name,city) values('sachin','DELHI') RETURNING rno;
+ rno
+-----
+   3
+(1 row)
+
+
+INSERT 0 1
+tcadb16=# select * from student;
+ rno |  name  |  city
+-----+--------+--------
+   1 | AAA    | PUNE
+   2 | BBB    | MUMBAI
+   3 | sachin | DELHI
+(3 rows)
+
+
+tcadb16=# insert into student(name,city) values('ZZZ','BANGLORE') RETURNING rno;
+ rno
+-----
+   4
+(1 row)
+
+
+INSERT 0 1
+tcadb16=# select * from student;
+ rno |  name  |   city
+-----+--------+----------
+   1 | AAA    | PUNE
+   2 | BBB    | MUMBAI
+   3 | sachin | DELHI
+   4 | ZZZ    | BANGLORE
+(4 rows)
+
+
+tcadb16=# insert into student(name,city) values('PPPP','PANJI'),('QQQ','SOLAPUR') RETURNING rno;
+ rno
+-----
+   5
+   6
+(2 rows)
+
+
+INSERT 0 2
+tcadb16=# select * from student;
+ rno |  name  |   city
+-----+--------+----------
+   1 | AAA    | PUNE
+   2 | BBB    | MUMBAI
+   3 | sachin | DELHI
+   4 | ZZZ    | BANGLORE
+   5 | PPPP   | PANJI
+   6 | QQQ    | SOLAPUR
+(6 rows)
+
+
+tcadb16=# insert into student(name,city) values('RRR','nagar') RETURNING rno;
+ rno
+-----
+   7
+(1 row)
+
+
+INSERT 0 1
+tcadb16=# select * from student;
+ rno |  name  |   city
+-----+--------+----------
+   1 | AAA    | PUNE
+   2 | BBB    | MUMBAI
+   3 | sachin | DELHI
+   4 | ZZZ    | BANGLORE
+   5 | PPPP   | PANJI
+   6 | QQQ    | SOLAPUR
+   7 | RRR    | nagar
+(7 rows)
+
+
+tcadb16=# insert into student(name,city) values('ggg','satara') RETURNING rno,name;
+ rno | name
+-----+------
+   8 | ggg
+(1 row)
+
+
+INSERT 0 1
+tcadb16=# select * from student;
+ rno |  name  |   city
+-----+--------+----------
+   1 | AAA    | PUNE
+   2 | BBB    | MUMBAI
+   3 | sachin | DELHI
+   4 | ZZZ    | BANGLORE
+   5 | PPPP   | PANJI
+   6 | QQQ    | SOLAPUR
+   7 | RRR    | nagar
+   8 | ggg    | satara
+(8 rows)
+
+
+tcadb16=# insert into student(name,city) values('jjj','kolhapur') RETURNING rno+100;
+ ?column?
+----------
+      109
+(1 row)
+
+
+INSERT 0 1
+tcadb16=# select * from student;
+ rno |  name  |   city
+-----+--------+----------
+   1 | AAA    | PUNE
+   2 | BBB    | MUMBAI
+   3 | sachin | DELHI
+   4 | ZZZ    | BANGLORE
+   5 | PPPP   | PANJI
+   6 | QQQ    | SOLAPUR
+   7 | RRR    | nagar
+   8 | ggg    | satara
+   9 | jjj    | kolhapur
+(9 rows)
+
+
+tcadb16=# insert into student(name,city) values('kkk','konkan') RETURNING rno+100 as id;
+ id
+-----
+ 110
+(1 row)
+
+
+INSERT 0 1
+tcadb16=#
