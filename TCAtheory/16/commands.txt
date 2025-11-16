@@ -5,7 +5,7 @@ What DDL and DML in SQL ?
 DDL
 ----
 --> Data Defination(Define) Language
---> DLL Commnads/statements means ashe SQL jychamule tumhi kahi goshti DEFINE karu shakata.
+--> DLL Commnads/statements means ashe SQL jychamule tumhi kahi goshti DEFINE karu shakata. 
 
 EX:
 	
