@@ -1,0 +1,72 @@
+=====================================
+SELECT vs AS vs DISTINCT vs ORDER BY
+=====================================
+
+SELECT
+-------
+--> Used to display result
+
+
+AS
+---
+--> Temp. alias for column name or Table name
+
+DISTINCT
+---------
+CREATE TABLE student( 
+       rno int primary key, 
+       name varchar(10), 
+       city varchar(10) 
+); 
+
+
+insert into student values(101,'AAA','PUNE'); 
+insert into student values(102,'BBB','MUMBAI'); 
+insert into student values(103,'CCC','MUMBAI'),(104,'DDD','SATARA'),(105,'EEE','PUNE'); 
+
+
+ORDER BY
+----------
+--> Used to get Result of SELECT query in sorted form
+--> ASC : Ascending 
+--> DESC: Descending
+--> by default Ascending
+--> LIMIT 2
+--> OFFSET
+
+
+CREATE TABLE student( 
+       rno int PRIMARY KEY, 
+       name varchar(10), 
+       per float 
+); 
+
+INSERT INTO student VALUES(101,'Virat', 60); 
+INSERT INTO student VALUES(102,'Rohit', 80); 
+INSERT INTO student VALUES(103,'Msd', 70); 
+INSERT INTO student(rno,name) VALUES(104,'Surya'); 
+INSERT INTO student VALUES(105,'Ishan',75); 
+INSERT INTO student(rno,name) VALUES(106,'Sanju'); 
+
+
+FAMOUS INTERVIEW QUESTION
+==========================
+Q. Find nth Topper
+Q. Find salary of nth employee
+-------------------------------
+Q.find 3rd topper in student table :
+
+(KDHICH HI QUERY INTERVIEW MADHE VAPRAYCHI NHI)
+
+SELECT * FROM student ORDER BY per DESC NULLS LAST LIMIT 1 OFFSET 2;
+ rno | name | per
+-----+------+-----
+ 103 | Msd  |  70
+
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST LIMIT 3 OFFSET 2;
+ rno | name  | per
+-----+-------+-----
+ 103 | Msd   |  70
+ 101 | Virat |  60
+ 104 | Surya |
+(3 rows)

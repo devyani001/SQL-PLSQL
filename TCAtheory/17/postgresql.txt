@@ -1,0 +1,883 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# select * from student;
+ rno | name | per  | phno
+-----+------+------+-------
+ 101 | AAA  | 60.7 | devil
+(1 row)
+
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select * from student;
+ rno |  name  |   city
+-----+--------+----------
+   1 | AAA    | PUNE
+   2 | BBB    | MUMBAI
+   3 | sachin | DELHI
+   4 | ZZZ    | BANGLORE
+   5 | PPPP   | PANJI
+   6 | QQQ    | SOLAPUR
+   7 | RRR    | nagar
+   8 | ggg    | satara
+   9 | jjj    | kolhapur
+  10 | kkk    | konkan
+(10 rows)
+
+
+tcadb16=# select now();
+               now
+----------------------------------
+ 2025-11-16 10:45:44.310076+05:30
+(1 row)
+
+
+tcadb16=# select now()::date;
+    now
+------------
+ 2025-11-16
+(1 row)
+
+
+tcadb16=# select 2+ 3;
+ ?column?
+----------
+        5
+(1 row)
+
+
+tcadb16=# select 2* 3;
+ ?column?
+----------
+        6
+(1 row)
+
+
+tcadb16=# select 2- 3;
+ ?column?
+----------
+       -1
+(1 row)
+
+
+tcadb16=# select length('tca');
+ length
+--------
+      3
+(1 row)
+
+
+tcadb16=# select length('india');
+ length
+--------
+      5
+(1 row)
+
+
+tcadb16=# select name from student,length(name) from student;
+ERROR:  syntax error at or near "from"
+LINE 1: select name from student,length(name) from student;
+                                              ^
+tcadb16=# select name,length(name) from student;
+  name  | length
+--------+--------
+ AAA    |      3
+ BBB    |      3
+ sachin |      6
+ ZZZ    |      3
+ PPPP   |      4
+ QQQ    |      3
+ RRR    |      3
+ ggg    |      3
+ jjj    |      3
+ kkk    |      3
+(10 rows)
+
+
+tcadb16=# select * from student;
+ rno |  name  |   city
+-----+--------+----------
+   1 | AAA    | PUNE
+   2 | BBB    | MUMBAI
+   3 | sachin | DELHI
+   4 | ZZZ    | BANGLORE
+   5 | PPPP   | PANJI
+   6 | QQQ    | SOLAPUR
+   7 | RRR    | nagar
+   8 | ggg    | satara
+   9 | jjj    | kolhapur
+  10 | kkk    | konkan
+(10 rows)
+
+
+tcadb16=# select * from person;
+ pno |  pname   | married
+-----+----------+---------
+ 101 | Rohit    | t
+ 102 | Rishab   | f
+ 103 | Virat    | t
+ 104 | MSD      | t
+ 105 | Ishan    | f
+ 106 | KL Rahul | t
+(6 rows)
+
+
+tcadb16=# select * from player;
+ERROR:  relation "player" does not exist
+LINE 1: select * from player;
+                      ^
+tcadb16=# select msg();
+ERROR:  function msg() does not exist
+LINE 1: select msg();
+               ^
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=# select add(2,3);
+ERROR:  function add(integer, integer) does not exist
+LINE 1: select add(2,3);
+               ^
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=# select now();
+               now
+----------------------------------
+ 2025-11-16 10:51:27.752023+05:30
+(1 row)
+
+
+tcadb16=# select 2+3 as sum;
+ sum
+-----
+   5
+(1 row)
+
+
+tcadb16=# select rno AS rollnumber, name, city FROM student;
+ rollnumber |  name  |   city
+------------+--------+----------
+          1 | AAA    | PUNE
+          2 | BBB    | MUMBAI
+          3 | sachin | DELHI
+          4 | ZZZ    | BANGLORE
+          5 | PPPP   | PANJI
+          6 | QQQ    | SOLAPUR
+          7 | RRR    | nagar
+          8 | ggg    | satara
+          9 | jjj    | kolhapur
+         10 | kkk    | konkan
+(10 rows)
+
+
+tcadb16=# SELECT * FROM student AS s;
+ rno |  name  |   city
+-----+--------+----------
+   1 | AAA    | PUNE
+   2 | BBB    | MUMBAI
+   3 | sachin | DELHI
+   4 | ZZZ    | BANGLORE
+   5 | PPPP   | PANJI
+   6 | QQQ    | SOLAPUR
+   7 | RRR    | nagar
+   8 | ggg    | satara
+   9 | jjj    | kolhapur
+  10 | kkk    | konkan
+(10 rows)
+
+
+tcadb16=# select s.rno,s.name FROM student;
+ERROR:  missing FROM-clause entry for table "s"
+LINE 1: select s.rno,s.name FROM student;
+               ^
+tcadb16=# select s.rno,s.name FROM student AS s;
+ rno |  name
+-----+--------
+   1 | AAA
+   2 | BBB
+   3 | sachin
+   4 | ZZZ
+   5 | PPPP
+   6 | QQQ
+   7 | RRR
+   8 | ggg
+   9 | jjj
+  10 | kkk
+(10 rows)
+
+
+tcadb16=# select rno AS rollnum FROM student;
+ rollnum
+---------
+       1
+       2
+       3
+       4
+       5
+       6
+       7
+       8
+       9
+      10
+(10 rows)
+
+
+tcadb16=# select rno roll FROM student;
+ roll
+------
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+   10
+(10 rows)
+
+
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(
+tcadb16(#        rno int PRIMARY KEY,
+tcadb16(#        name varchar(10),
+tcadb16(#        per float
+tcadb16(# );
+CREATE TABLE
+tcadb16=# INSERT INTO student VALUES(101,'Virat', 60);
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(102,'Rohit', 80);
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name  | per
+-----+-------+-----
+ 101 | Virat |  60
+ 102 | Rohit |  80
+(2 rows)
+
+
+tcadb16=# ALTER TABLE student ADD COLUMN lname VARCHAR(10);
+ALTER TABLE
+tcadb16=# select * from student;
+ rno | name  | per | lname
+-----+-------+-----+-------
+ 101 | Virat |  60 |
+ 102 | Rohit |  80 |
+(2 rows)
+
+
+tcadb16=# DELETE FROM student WHERE rno=101;
+DELETE 1
+tcadb16=# select * from student;
+ rno | name  | per | lname
+-----+-------+-----+-------
+ 102 | Rohit |  80 |
+(1 row)
+
+
+tcadb16=# TRUNCATE student;
+TRUNCATE TABLE
+tcadb16=# select * from student;
+ rno | name | per | lname
+-----+------+-----+-------
+(0 rows)
+
+
+tcadb16=# INSERT INTO student VALUES(101,'Virat', 60,'Kohli');
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(102,'Rohit', 80,'Sharma');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name  | per | lname
+-----+-------+-----+--------
+ 101 | Virat |  60 | Kohli
+ 102 | Rohit |  80 | Sharma
+(2 rows)
+
+
+tcadb16=# select rno,name,per,lname FROM student;
+ rno | name  | per | lname
+-----+-------+-----+--------
+ 101 | Virat |  60 | Kohli
+ 102 | Rohit |  80 | Sharma
+(2 rows)
+
+
+tcadb16=# select rno,name,lname,per FROM student;
+ rno | name  | lname  | per
+-----+-------+--------+-----
+ 101 | Virat | Kohli  |  60
+ 102 | Rohit | Sharma |  80
+(2 rows)
+
+
+tcadb16=# select rno,name||lname,per FROM student;
+ rno |  ?column?   | per
+-----+-------------+-----
+ 101 | ViratKohli  |  60
+ 102 | RohitSharma |  80
+(2 rows)
+
+
+tcadb16=# select rno,name''||''lname,per FROM student;
+ rno | lname | per
+-----+-------+-----
+ 101 |       |  60
+ 102 |       |  80
+(2 rows)
+
+
+tcadb16=# select rno,name' '||' 'lname,per FROM student;
+ rno | lname | per
+-----+-------+-----
+ 101 |       |  60
+ 102 |       |  80
+(2 rows)
+
+
+tcadb16=# select rno,name||lname,per FROM student;
+ rno |  ?column?   | per
+-----+-------------+-----
+ 101 | ViratKohli  |  60
+ 102 | RohitSharma |  80
+(2 rows)
+
+
+tcadb16=# select rno,name||''||lname,per FROM student;
+ rno |  ?column?   | per
+-----+-------------+-----
+ 101 | ViratKohli  |  60
+ 102 | RohitSharma |  80
+(2 rows)
+
+
+tcadb16=# select rno,name||' '||lname,per FROM student;
+ rno |   ?column?   | per
+-----+--------------+-----
+ 101 | Virat Kohli  |  60
+ 102 | Rohit Sharma |  80
+(2 rows)
+
+
+tcadb16=# select rno,name||' '||lname AS fullname,per FROM student;
+ rno |   fullname   | per
+-----+--------------+-----
+ 101 | Virat Kohli  |  60
+ 102 | Rohit Sharma |  80
+(2 rows)
+
+
+tcadb16=# select rno,name lname,per FROM student;
+ rno | lname | per
+-----+-------+-----
+ 101 | Virat |  60
+ 102 | Rohit |  80
+(2 rows)
+
+
+tcadb16=# select rno,name + lname,per FROM student;
+ERROR:  operator does not exist: character varying + character varying
+LINE 1: select rno,name + lname,per FROM student;
+                        ^
+HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=# select rno,(name + lname),per FROM student;
+ERROR:  operator does not exist: character varying + character varying
+LINE 1: select rno,(name + lname),per FROM student;
+                         ^
+HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=# select rno,name||'-'||lname AS fullname,per FROM student;
+ rno |   fullname   | per
+-----+--------------+-----
+ 101 | Virat-Kohli  |  60
+ 102 | Rohit-Sharma |  80
+(2 rows)
+
+
+tcadb16=# select rno,name||'-'||lname AS full name,per FROM student;
+ERROR:  syntax error at or near "name"
+LINE 1: select rno,name||'-'||lname AS full name,per FROM student;
+                                            ^
+tcadb16=# select rno,name||'-'||lname AS (full name),per FROM student;
+ERROR:  syntax error at or near "("
+LINE 1: select rno,name||'-'||lname AS (full name),per FROM student;
+                                       ^
+tcadb16=# select rno,name||'-'||lname AS "full name",per FROM student;
+ rno |  full name   | per
+-----+--------------+-----
+ 101 | Virat-Kohli  |  60
+ 102 | Rohit-Sharma |  80
+(2 rows)
+
+
+tcadb16=# select * from student;
+ rno | name  | per | lname
+-----+-------+-----+--------
+ 101 | Virat |  60 | Kohli
+ 102 | Rohit |  80 | Sharma
+(2 rows)
+
+
+tcadb16=# CREATE TABLE student(
+tcadb16(#        rno int primary key,
+tcadb16(#        name varchar(10),
+tcadb16(#        city varchar(10)
+tcadb16(# );
+ERROR:  relation "student" already exists
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(
+tcadb16(#        rno int primary key,
+tcadb16(#        name varchar(10),
+tcadb16(#        city varchar(10)
+tcadb16(# );
+CREATE TABLE
+tcadb16=#
+tcadb16=# insert into student values(101,'AAA','PUNE');
+INSERT 0 1
+tcadb16=# insert into student values(102,'BBB','MUMBAI');
+INSERT 0 1
+tcadb16=# insert into student values(103,'CCC','MUMBAI'),(104,'DDD','SATARA'),(105,'EEE','PUNE');
+INSERT 0 3
+tcadb16=# select * from student;
+ rno | name |  city
+-----+------+--------
+ 101 | AAA  | PUNE
+ 102 | BBB  | MUMBAI
+ 103 | CCC  | MUMBAI
+ 104 | DDD  | SATARA
+ 105 | EEE  | PUNE
+(5 rows)
+
+
+tcadb16=# select city from student;
+  city
+--------
+ PUNE
+ MUMBAI
+ MUMBAI
+ SATARA
+ PUNE
+(5 rows)
+
+
+tcadb16=# select DISTINCT city from student;
+  city
+--------
+ MUMBAI
+ PUNE
+ SATARA
+(3 rows)
+
+
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(
+tcadb16(#        rno int PRIMARY KEY,
+tcadb16(#        name varchar(10),
+tcadb16(#        per float
+tcadb16(# );
+CREATE TABLE
+tcadb16=# INSERT INTO student VALUES(101,'Virat', 60);
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(102,'Rohit', 80);
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(103,'Msd', 70);
+INSERT 0 1
+tcadb16=# INSERT INTO student(rno,name) VALUES(104,'Surya');
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(105,'Ishan',75);
+INSERT 0 1
+tcadb16=# INSERT INTO student(rno,name) VALUES(106,'Sanju');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name  | per
+-----+-------+-----
+ 101 | Virat |  60
+ 102 | Rohit |  80
+ 103 | Msd   |  70
+ 104 | Surya |
+ 105 | Ishan |  75
+ 106 | Sanju |
+(6 rows)
+
+
+tcadb16=# select * from student ORDER BY per;
+ rno | name  | per
+-----+-------+-----
+ 101 | Virat |  60
+ 103 | Msd   |  70
+ 105 | Ishan |  75
+ 102 | Rohit |  80
+ 104 | Surya |
+ 106 | Sanju |
+(6 rows)
+
+
+tcadb16=# select * from student ORDER BY per ASC;
+ rno | name  | per
+-----+-------+-----
+ 101 | Virat |  60
+ 103 | Msd   |  70
+ 105 | Ishan |  75
+ 102 | Rohit |  80
+ 104 | Surya |
+ 106 | Sanju |
+(6 rows)
+
+
+tcadb16=# select * from student ORDER BY per DESC;
+ rno | name  | per
+-----+-------+-----
+ 104 | Surya |
+ 106 | Sanju |
+ 102 | Rohit |  80
+ 105 | Ishan |  75
+ 103 | Msd   |  70
+ 101 | Virat |  60
+(6 rows)
+
+
+tcadb16=# select * from student ORDER BY per DESC IS NOT NULL;
+ERROR:  syntax error at or near "IS"
+LINE 1: select * from student ORDER BY per DESC IS NOT NULL;
+                                                ^
+tcadb16=# select * from student ORDER BY per DESC NOT NULL;
+ERROR:  syntax error at or near "NOT"
+LINE 1: select * from student ORDER BY per DESC NOT NULL;
+                                                ^
+tcadb16=# select * from student ORDER BY per DESC NULLS LAST;
+ rno | name  | per
+-----+-------+-----
+ 102 | Rohit |  80
+ 105 | Ishan |  75
+ 103 | Msd   |  70
+ 101 | Virat |  60
+ 104 | Surya |
+ 106 | Sanju |
+(6 rows)
+
+
+tcadb16=# select * from student ORDER BY rno DESC;
+ rno | name  | per
+-----+-------+-----
+ 106 | Sanju |
+ 105 | Ishan |  75
+ 104 | Surya |
+ 103 | Msd   |  70
+ 102 | Rohit |  80
+ 101 | Virat |  60
+(6 rows)
+
+
+tcadb16=# select * from student ORDER BY NAME DESC;
+ rno | name  | per
+-----+-------+-----
+ 101 | Virat |  60
+ 104 | Surya |
+ 106 | Sanju |
+ 102 | Rohit |  80
+ 103 | Msd   |  70
+ 105 | Ishan |  75
+(6 rows)
+
+
+tcadb16=# select * from student ORDER BY NAME aSC;
+ rno | name  | per
+-----+-------+-----
+ 105 | Ishan |  75
+ 103 | Msd   |  70
+ 102 | Rohit |  80
+ 106 | Sanju |
+ 104 | Surya |
+ 101 | Virat |  60
+(6 rows)
+
+
+tcadb16=# select * from student ORDER BY per DESC NULLS LAST;
+ rno | name  | per
+-----+-------+-----
+ 102 | Rohit |  80
+ 105 | Ishan |  75
+ 103 | Msd   |  70
+ 101 | Virat |  60
+ 104 | Surya |
+ 106 | Sanju |
+(6 rows)
+
+
+tcadb16=# select * from student ORDER BY per DESC NULLS FIRST;
+ rno | name  | per
+-----+-------+-----
+ 104 | Surya |
+ 106 | Sanju |
+ 102 | Rohit |  80
+ 105 | Ishan |  75
+ 103 | Msd   |  70
+ 101 | Virat |  60
+(6 rows)
+
+
+tcadb16=# select * from student;
+ rno | name  | per
+-----+-------+-----
+ 101 | Virat |  60
+ 102 | Rohit |  80
+ 103 | Msd   |  70
+ 104 | Surya |
+ 105 | Ishan |  75
+ 106 | Sanju |
+(6 rows)
+
+
+tcadb16=# select * from student ORDER BY per;
+ rno | name  | per
+-----+-------+-----
+ 101 | Virat |  60
+ 103 | Msd   |  70
+ 105 | Ishan |  75
+ 102 | Rohit |  80
+ 104 | Surya |
+ 106 | Sanju |
+(6 rows)
+
+
+tcadb16=# select * from student ORDER BY per LIMIT 2;
+ rno | name  | per
+-----+-------+-----
+ 101 | Virat |  60
+ 103 | Msd   |  70
+(2 rows)
+
+
+tcadb16=# select * from student ORDER BY per ASC;
+ rno | name  | per
+-----+-------+-----
+ 101 | Virat |  60
+ 103 | Msd   |  70
+ 105 | Ishan |  75
+ 102 | Rohit |  80
+ 104 | Surya |
+ 106 | Sanju |
+(6 rows)
+
+
+tcadb16=# select * from student ORDER BY per DESC;
+ rno | name  | per
+-----+-------+-----
+ 104 | Surya |
+ 106 | Sanju |
+ 102 | Rohit |  80
+ 105 | Ishan |  75
+ 103 | Msd   |  70
+ 101 | Virat |  60
+(6 rows)
+
+
+tcadb16=# SELECT * FROM student ORDER BY per NULLS LAST;
+ rno | name  | per
+-----+-------+-----
+ 101 | Virat |  60
+ 103 | Msd   |  70
+ 105 | Ishan |  75
+ 102 | Rohit |  80
+ 104 | Surya |
+ 106 | Sanju |
+(6 rows)
+
+
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST;
+ rno | name  | per
+-----+-------+-----
+ 102 | Rohit |  80
+ 105 | Ishan |  75
+ 103 | Msd   |  70
+ 101 | Virat |  60
+ 104 | Surya |
+ 106 | Sanju |
+(6 rows)
+
+
+tcadb16=# SELECT * FROM STUDENT ORDER BY per LIMIT 1;
+ rno | name  | per
+-----+-------+-----
+ 101 | Virat |  60
+(1 row)
+
+
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST LIMIT 1;
+ rno | name  | per
+-----+-------+-----
+ 102 | Rohit |  80
+(1 row)
+
+
+tcadb16=# SELECT rno,name,MAX(per) FROM student;
+ERROR:  column "student.rno" must appear in the GROUP BY clause or be used in an aggregate function
+LINE 1: SELECT rno,name,MAX(per) FROM student;
+               ^
+tcadb16=# SELECT MAX(per) FROM student;
+ max
+-----
+  80
+(1 row)
+
+
+tcadb16=# SELECT * FROM student WHERE per=max;
+ERROR:  column "max" does not exist
+LINE 1: SELECT * FROM student WHERE per=max;
+                                        ^
+tcadb16=# SELECT * FROM student WHERE max(per);
+ERROR:  aggregate functions are not allowed in WHERE
+LINE 1: SELECT * FROM student WHERE max(per);
+                                    ^
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST LIMIT 3;
+ rno | name  | per
+-----+-------+-----
+ 102 | Rohit |  80
+ 105 | Ishan |  75
+ 103 | Msd   |  70
+(3 rows)
+
+
+tcadb16=# SELECT * FROM student;
+ rno | name  | per
+-----+-------+-----
+ 101 | Virat |  60
+ 102 | Rohit |  80
+ 103 | Msd   |  70
+ 104 | Surya |
+ 105 | Ishan |  75
+ 106 | Sanju |
+(6 rows)
+
+
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST;
+ rno | name  | per
+-----+-------+-----
+ 102 | Rohit |  80
+ 105 | Ishan |  75
+ 103 | Msd   |  70
+ 101 | Virat |  60
+ 104 | Surya |
+ 106 | Sanju |
+(6 rows)
+
+
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST LIMIT 1;
+ rno | name  | per
+-----+-------+-----
+ 102 | Rohit |  80
+(1 row)
+
+
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST LIMIT 1 OFFSET 2;
+ rno | name | per
+-----+------+-----
+ 103 | Msd  |  70
+(1 row)
+
+
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST LIMIT 1 OFFSET 0;
+ rno | name  | per
+-----+-------+-----
+ 102 | Rohit |  80
+(1 row)
+
+
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST LIMIT 1 OFFSET 1;
+ rno | name  | per
+-----+-------+-----
+ 105 | Ishan |  75
+(1 row)
+
+
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST LIMIT 1 OFFSET 3;
+ rno | name  | per
+-----+-------+-----
+ 101 | Virat |  60
+(1 row)
+
+
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST LIMIT 1 OFFSET 2;
+ rno | name | per
+-----+------+-----
+ 103 | Msd  |  70
+(1 row)
+
+
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST LIMIT 3 OFFSET 2;
+ rno | name  | per
+-----+-------+-----
+ 103 | Msd   |  70
+ 101 | Virat |  60
+ 104 | Surya |
+(3 rows)
+
+
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST;
+ rno | name  | per
+-----+-------+-----
+ 102 | Rohit |  80
+ 105 | Ishan |  75
+ 103 | Msd   |  70
+ 101 | Virat |  60
+ 104 | Surya |
+ 106 | Sanju |
+(6 rows)
+
+
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST LIMIT 4 OFFSET 2;
+ rno | name  | per
+-----+-------+-----
+ 103 | Msd   |  70
+ 101 | Virat |  60
+ 104 | Surya |
+ 106 | Sanju |
+(4 rows)
+
+
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST OFFSET 1;
+ rno | name  | per
+-----+-------+-----
+ 105 | Ishan |  75
+ 103 | Msd   |  70
+ 101 | Virat |  60
+ 104 | Surya |
+ 106 | Sanju |
+(5 rows)
+
+
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST;
+ rno | name  | per
+-----+-------+-----
+ 102 | Rohit |  80
+ 105 | Ishan |  75
+ 103 | Msd   |  70
+ 101 | Virat |  60
+ 104 | Surya |
+ 106 | Sanju |
+(6 rows)
+
+
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST limit 1;
+ rno | name  | per
+-----+-------+-----
+ 102 | Rohit |  80
+(1 row)
+
+
+tcadb16=# SELECT * FROM student ORDER BY per DESC NULLS LAST limit 2;
+ rno | name  | per
+-----+-------+-----
+ 102 | Rohit |  80
+ 105 | Ishan |  75
+(2 rows)
+
