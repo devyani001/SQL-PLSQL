@@ -1,0 +1,422 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select 2+3;
+ ?column?
+----------
+        5
+(1 row)
+
+
+tcadb16=# select 2<3;
+ ?column?
+----------
+ t
+(1 row)
+
+
+tcadb16=# select 2=3;
+ ?column?
+----------
+ f
+(1 row)
+
+
+tcadb16=# select * from student;
+ rno | name  | per
+-----+-------+-----
+ 101 | Virat |  60
+ 102 | Rohit |  80
+ 103 | Msd   |  70
+ 104 | Surya |
+ 105 | Ishan |  75
+ 106 | Sanju |
+(6 rows)
+
+
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(rno INT PRIMARY KEY, name VARCHAR(10),per float,city VARCHAR(10));
+CREATE TABLE
+tcadb16=# INSERT INTO students values(1,'AAA',70,'PUNE');
+INSERT 0 1
+tcadb16=# INSERT INTO students values(2,'BBB',29,'PANJI');
+INSERT 0 1
+tcadb16=# INSERT INTO students values(3,'CCC',50,'MUMBAI');
+INSERT 0 1
+tcadb16=# INSERT INTO students values(4,'DDD',64,'DELHI');
+INSERT 0 1
+tcadb16=# INSERT INTO students values(5,'EEE',87,'BANGLORE');
+INSERT 0 1
+tcadb16=# INSERT INTO students values(6,'FFF',95,'PUNE');
+INSERT 0 1
+tcadb16=# INSERT INTO students values(7,'GGG',55,'PUNE');
+INSERT 0 1
+tcadb16=# INSERT INTO students values(8,'HHH',73,'DELHI');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name | per | city
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=# select * from student;
+ rno | name | per | city
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=# INSERT INTO student values(1,'AAA',70,'PUNE');
+INSERT 0 1
+tcadb16=# select * from students;
+ rno | name | per |    grade
+-----+------+-----+-------------
+ 101 | AAA  |  60 |
+ 102 | BBB  |  70 | Distinction
+ 103 | CCC  |  45 | Pass class
+ 104 | DDD  |  99 |
+ 105 | EEE  | 100 | Distinction
+   1 | AAA  |  70 | Distinction
+   2 | BBB  |  29 | Fail
+   3 | CCC  |  50 | Pass class
+   4 | DDD  |  64 | First class
+   5 | EEE  |  87 | Distinction
+   6 | FFF  |  95 | Distinction
+   7 | GGG  |  55 | Pass class
+   8 | HHH  |  73 | Distinction
+(13 rows)
+
+
+tcadb16=# INSERT INTO student values(2,'BBB',29,'PANJI');
+INSERT 0 1
+tcadb16=# INSERT INTO student values(3,'CCC',50,'MUMBAI');
+INSERT 0 1
+tcadb16=# INSERT INTO student values(4,'DDD',64,'DELHI');
+INSERT 0 1
+tcadb16=# INSERT INTO student values(5,'EEE',87,'BANGLORE');
+INSERT 0 1
+tcadb16=# INSERT INTO student values(6,'FFF',95,'PUNE');
+INSERT 0 1
+tcadb16=# INSERT INTO student values(7,'GGG',55,'PUNE');
+INSERT 0 1
+tcadb16=# INSERT INTO student values(8,'HHH',73,'DELHI');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   8 | HHH  |  73 | DELHI
+(8 rows)
+
+
+tcadb16=# UPDATE TABLE student SET name='BBB' WHERE rno=8;
+ERROR:  syntax error at or near "TABLE"
+LINE 1: UPDATE TABLE student SET name='BBB' WHERE rno=8;
+               ^
+tcadb16=# UPDATE student SET name='BBB' WHERE rno=8;
+UPDATE 1
+tcadb16=# select * from student;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   8 | BBB  |  73 | DELHI
+(8 rows)
+
+
+tcadb16=# select * from student WHERE city = 'PUNE' OR city = 'MUMBAI';
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  70 | PUNE
+   3 | CCC  |  50 | MUMBAI
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from student WHERE city = 'PUNE';
+ rno | name | per | city
+-----+------+-----+------
+   1 | AAA  |  70 | PUNE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+(3 rows)
+
+
+tcadb16=# select * from student WHERE city = 'PUNE' AND city = 'MUMBAI';
+ rno | name | per | city
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=# select * from student WHERE city = 'PUNE' ORDER BY per DESC;
+ rno | name | per | city
+-----+------+-----+------
+   6 | FFF  |  95 | PUNE
+   1 | AAA  |  70 | PUNE
+   7 | GGG  |  55 | PUNE
+(3 rows)
+
+
+tcadb16=# select * from student WHERE city = 'PUNE' ORDER BY per;
+ rno | name | per | city
+-----+------+-----+------
+   7 | GGG  |  55 | PUNE
+   1 | AAA  |  70 | PUNE
+   6 | FFF  |  95 | PUNE
+(3 rows)
+
+
+tcadb16=# select * from student where per >=40;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   8 | BBB  |  73 | DELHI
+(7 rows)
+
+
+tcadb16=# select * from student where per < 40;
+ rno | name | per | city
+-----+------+-----+-------
+   2 | BBB  |  29 | PANJI
+(1 row)
+
+
+tcadb16=# select * from student where per >= 70;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   8 | BBB  |  73 | DELHI
+(4 rows)
+
+
+tcadb16=# select * from student;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   8 | BBB  |  73 | DELHI
+(8 rows)
+
+
+tcadb16=# select * from student WHERE per>=60 AND per < 70;
+ rno | name | per | city
+-----+------+-----+-------
+   4 | DDD  |  64 | DELHI
+(1 row)
+
+
+tcadb16=# select * from student WHERE per BETWEEN 60 AND 70;
+ rno | name | per | city
+-----+------+-----+-------
+   1 | AAA  |  70 | PUNE
+   4 | DDD  |  64 | DELHI
+(2 rows)
+
+
+tcadb16=# select * from student WHERE per BETWEEN 60 AND 69.99;
+ rno | name | per | city
+-----+------+-----+-------
+   4 | DDD  |  64 | DELHI
+(1 row)
+
+
+tcadb16=# select * from student WHERE per BETWEEN 60 AND 69.9;
+ rno | name | per | city
+-----+------+-----+-------
+   4 | DDD  |  64 | DELHI
+(1 row)
+
+
+tcadb16=# select * from student WHERE per BETWEEN 60 AND 70-1;
+ rno | name | per | city
+-----+------+-----+-------
+   4 | DDD  |  64 | DELHI
+(1 row)
+
+
+tcadb16=# select * from student;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   8 | BBB  |  73 | DELHI
+(8 rows)
+
+
+tcadb16=# SELECT * FROM student WHERE city BETWEEN 'BANGLORE' AND 'MUMBAI';
+ rno | name | per |   city
+-----+------+-----+----------
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   8 | BBB  |  73 | DELHI
+(4 rows)
+
+
+tcadb16=# SELECT * FROM student WHERE city BETWEEN 'MUMBAI' AND 'BANGLORE';
+ rno | name | per | city
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=# SELECT * FROM student WHERE city >= 'MUMBAI' AND city<='BANGLORE';
+ rno | name | per | city
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=# select * from student;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   8 | BBB  |  73 | DELHI
+(8 rows)
+
+
+tcadb16=# SELECT * FROM student WHERE city='PUNE';
+ rno | name | per | city
+-----+------+-----+------
+   1 | AAA  |  70 | PUNE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+(3 rows)
+
+
+tcadb16=# SELECT * FROM student WHERE city='PUNE' AND city='MUMBAI';
+ rno | name | per | city
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=# SELECT * FROM student WHERE city='PUNE' or city='MUMBAI';
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  70 | PUNE
+   3 | CCC  |  50 | MUMBAI
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from student WHERE IN( 'PUNE','MUMBAI' );
+ERROR:  syntax error at or near "IN"
+LINE 1: select * from student WHERE IN( 'PUNE','MUMBAI' );
+                                    ^
+tcadb16=# select * from student WHERE city IN( 'PUNE','MUMBAI' );
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  70 | PUNE
+   3 | CCC  |  50 | MUMBAI
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from student WHERE city NOT IN( 'PUNE','MUMBAI' );
+ rno | name | per |   city
+-----+------+-----+----------
+   2 | BBB  |  29 | PANJI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   8 | BBB  |  73 | DELHI
+(4 rows)
+
+
+tcadb16=# select * from student where city != 'Pune';
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   8 | BBB  |  73 | DELHI
+(8 rows)
+
+
+tcadb16=# select * from student where city != 'PUNE';
+ rno | name | per |   city
+-----+------+-----+----------
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   8 | BBB  |  73 | DELHI
+(5 rows)
+
+
+tcadb16=# select * from student where city != 'PUNE' AND city != 'MUMBAI';
+ rno | name | per |   city
+-----+------+-----+----------
+   2 | BBB  |  29 | PANJI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   8 | BBB  |  73 | DELHI
+(4 rows)
+
+
+tcadb16=# select * from student WHERE city IN( 'PUNE','MUMBAI', 'DELHI' );
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  70 | PUNE
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   8 | BBB  |  73 | DELHI
+(6 rows)
+
+
+tcadb16=# select * from student where per IN (60,70,80);
+ rno | name | per | city
+-----+------+-----+------
+   1 | AAA  |  70 | PUNE
+(1 row)
