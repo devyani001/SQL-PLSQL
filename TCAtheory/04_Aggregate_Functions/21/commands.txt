@@ -1,0 +1,53 @@
+Aggregate Functions
+===================
+1. count()
+2. sum()
+3. avg()
+4. max()
+5. min()
+
+count(*)   : counts no. of Records in a table
+count(per) : counts values in that column
+avg(per)   = sum(per) / count(per)
+
+
+Q. Print toppers data
+
+select * from student where per = 95;
+
+Nested Query
+---------------
+select * from student where per = (select max(per) from student);
+
+select * from emp where salary = ? ;
+
+Find topper from given city
+-----------------------------
+select * 
+from student 
+where city ='DELHI' 
+AND    per = ( select max(per) from student where city='DELHI');
+
+select * 
+from student 
+where city ='DELHI' 
+AND    per = 73;
+
+
+
+UPDATE student
+SET per = per + 2
+WHERE per = (select max(per) from student);
+
+Q. Delete min percentage wale students
+----------------------------------------
+DELETE FROM student
+WHERE per = (select min(per) from student);
+
+
+OFFSET : (VVIP)
+===============
+
+Interviewer la best query topper find kraychi hi Nested Query sanga
+coz LIMIT has ITSELF LIMIT,,, 
+LIMIT - alelya result madhe kiti records bghnyat user la interest ahe
