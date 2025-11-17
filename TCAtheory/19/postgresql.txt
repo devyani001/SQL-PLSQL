@@ -1,0 +1,361 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select * from student;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   8 | BBB  |  73 | DELHI
+(8 rows)
+
+
+tcadb16=# select * from student WHERE city 'P%';
+ERROR:  type "city" does not exist
+LINE 1: select * from student WHERE city 'P%';
+                                    ^
+tcadb16=# select * from student WHERE city like 'P%';
+ rno | name | per | city
+-----+------+-----+-------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from student WHERE city like 'p%';
+ rno | name | per | city
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=# select * from student WHERE city like 'P%E';
+ rno | name | per | city
+-----+------+-----+------
+   1 | AAA  |  70 | PUNE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+(3 rows)
+
+
+tcadb16=# select * from student WHERE city like '%E';
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from student WHERE city like '_A%E';
+ rno | name | per |   city
+-----+------+-----+----------
+   5 | EEE  |  87 | BANGLORE
+(1 row)
+
+
+tcadb16=# select * from student WHERE city like '____';
+ rno | name | per | city
+-----+------+-----+------
+   1 | AAA  |  70 | PUNE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+(3 rows)
+
+
+tcadb16=# select * from student WHERE city like '_____';
+ rno | name | per | city
+-----+------+-----+-------
+   2 | BBB  |  29 | PANJI
+   4 | DDD  |  64 | DELHI
+   8 | BBB  |  73 | DELHI
+(3 rows)
+
+
+tcadb16=# select * from student WHERE city like '_A___';
+ rno | name | per | city
+-----+------+-----+-------
+   2 | BBB  |  29 | PANJI
+(1 row)
+
+
+tcadb16=# select * from student WHERE city not like '_A___';
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   8 | BBB  |  73 | DELHI
+(7 rows)
+
+
+tcadb16=# select length('tca');
+ length
+--------
+      3
+(1 row)
+
+
+tcadb16=# select length(99887766);
+ERROR:  function length(integer) does not exist
+LINE 1: select length(99887766);
+               ^
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=# select length('99887766');
+ length
+--------
+      8
+(1 row)
+
+
+tcadb16=# select * from student WHERE per=70;
+ rno | name | per | city
+-----+------+-----+------
+   1 | AAA  |  70 | PUNE
+(1 row)
+
+
+tcadb16=# select * from student WHERE per!=70;
+ rno | name | per |   city
+-----+------+-----+----------
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   8 | BBB  |  73 | DELHI
+(7 rows)
+
+
+tcadb16=# select * from student WHERE city!='PUNE';
+ rno | name | per |   city
+-----+------+-----+----------
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   8 | BBB  |  73 | DELHI
+(5 rows)
+
+
+tcadb16=# select * from student WHERE city <> 'PUNE';
+ rno | name | per |   city
+-----+------+-----+----------
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   8 | BBB  |  73 | DELHI
+(5 rows)
+
+
+tcadb16=# select * from student;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   8 | BBB  |  73 | DELHI
+(8 rows)
+
+
+tcadb16=# insert into student(rno,name,city) VALUES(9,'HHH','PUNE');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   8 | BBB  |  73 | DELHI
+   9 | HHH  |     | PUNE
+(9 rows)
+
+
+tcadb16=# select * from student WHERE per=70;
+ rno | name | per | city
+-----+------+-----+------
+   1 | AAA  |  70 | PUNE
+(1 row)
+
+
+tcadb16=# select * from student WHERE city!='PUNE';
+ rno | name | per |   city
+-----+------+-----+----------
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   8 | BBB  |  73 | DELHI
+(5 rows)
+
+
+tcadb16=# select * from student WHERE city='PUNE';
+ rno | name | per | city
+-----+------+-----+------
+   1 | AAA  |  70 | PUNE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   9 | HHH  |     | PUNE
+(4 rows)
+
+
+tcadb16=# select * from student WHERE per = NULL;
+ rno | name | per | city
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=# select * from student WHERE per = 'NULL';
+ERROR:  invalid input syntax for type double precision: "NULL"
+LINE 1: select * from student WHERE per = 'NULL';
+                                          ^
+tcadb16=# select * from student WHERE per = "NULL";
+ERROR:  column "NULL" does not exist
+LINE 1: select * from student WHERE per = "NULL";
+                                          ^
+tcadb16=# select * from student WHERE per = '';
+ERROR:  invalid input syntax for type double precision: ""
+LINE 1: select * from student WHERE per = '';
+                                          ^
+tcadb16=# select * from student WHERE per IS NULL;
+ rno | name | per | city
+-----+------+-----+------
+   9 | HHH  |     | PUNE
+(1 row)
+
+
+tcadb16=# select * from student WHERE per IS not NULL;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   8 | BBB  |  73 | DELHI
+(8 rows)
+
+
+tcadb16=# select * from student WHERE per = ;
+ERROR:  syntax error at or near ";"
+LINE 1: select * from student WHERE per = ;
+                                          ^
+tcadb16=# select * from student WHERE per IS 70;
+ERROR:  syntax error at or near "70"
+LINE 1: select * from student WHERE per IS 70;
+                                           ^
+tcadb16=# select * from student WHERE per IS '70';
+ERROR:  syntax error at or near "'70'"
+LINE 1: select * from student WHERE per IS '70';
+                                           ^
+tcadb16=# select * from student WHERE per = 70;
+ rno | name | per | city
+-----+------+-----+------
+   1 | AAA  |  70 | PUNE
+(1 row)
+
+
+tcadb16=# select * from student;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   8 | BBB  |  73 | DELHI
+   9 | HHH  |     | PUNE
+(9 rows)
+
+
+tcadb16=# select * from student where city='PUNE' and per is NULL;
+ rno | name | per | city
+-----+------+-----+------
+   9 | HHH  |     | PUNE
+(1 row)
+
+
+tcadb16=# select * from student where city='PUNE' and per is NOT NULL;
+ rno | name | per | city
+-----+------+-----+------
+   1 | AAA  |  70 | PUNE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+(3 rows)
+
+
+tcadb16=# select * from student where city like 'P%';
+ rno | name | per | city
+-----+------+-----+-------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   9 | HHH  |     | PUNE
+(5 rows)
+
+
+tcadb16=# select * from student where city like 'p%';
+ rno | name | per | city
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=# select * from student where city ilike 'p%';
+ rno | name | per | city
+-----+------+-----+-------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   9 | HHH  |     | PUNE
+(5 rows)
+
+
+tcadb16=# select * from student where city ilike 'P%';
+ rno | name | per | city
+-----+------+-----+-------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  55 | PUNE
+   9 | HHH  |     | PUNE
+(5 rows)
+
+
+tcadb16=#

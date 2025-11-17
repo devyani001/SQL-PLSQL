@@ -1,0 +1,50 @@
+===================================
+Pattern Matching Using LIKE Clause
+===================================
+
+%  --> Any no. of chars
+_  --> Any single character
+
+
+P% 	--> Your City name is starting with letter 'P'
+P%E --> City Starting with 'P', End with 'E'
+
+_A%E -->
+
+%Java%
+Core Java J2EE
+Advacnce Java J2EE
+DSA USing Java
+
+name LIKE '%Dhane'
+
+============================VVIP==========================
+CREATE TABLE student(
+
+
+	ph TEXT 
+	CHECK((ph LIKE '7%' OR ph LIKE '8%' OR ph LIKE '9%') AND (length(ph)=10)
+);
+
+============================VVIP===========================
+CHECK(  (start with 7 or 8 or 9) AND ( length(ph)=10 ) )
+
+
+ph TEXT 
+	CHECK((ph LIKE '7_________' OR ph LIKE '8_________' OR ph LIKE '9__________')
+
+LIKE:
+-----
+--> It is Case Sensitive Pattern matching Clause
+-->'P%' Your string must start with Capital 'P', small 'p' is not allowed
+
+
+ILIKE:
+---------
+--> It is Case in-sensitive Pattern matching Clause.
+-->'P%' Your string can be start with 'P' or 'p'.
+
+------------------------------------------------
+
+system level not support ilike -- google it take info and then check this statement.....
+mysql - doesn't have ilike
