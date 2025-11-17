@@ -1,0 +1,73 @@
+=========================
+UPDATE, DELETE, TRUNCATE
+=========================
+
+CREATE TABLE student(  
+    rno int primary key, 
+    name varchar(10), 
+    per float, 
+    city varchar(20)  
+ ); 
+ 
+ 
+insert into student values(1,'AAA',70,'PUNE'); 
+insert into student values(2,'BBB',29,'PANJI'); 
+insert into student values(3,'CCC',50,'MUMBAI'); 
+insert into student values(4,'DDD',64,'DELHI'); 
+insert into student values(5,'EEE',87,'BANGLORE'); 
+insert into student values(6,'FFF',95,'PUNE'); 
+insert into student values(7,'GGG',45,'PUNE'); 
+insert into student values(8,'BBB',73,'DELHI');
+
+
+(rno=3 asel tr data change hoil)
+---------------------------------
+UPDATE student
+SET 	per = 43, city='PUNE'
+WHERE rno=3;
+
+update 1
+
+(no WHERE cmd -- sgle records update honar)
+--------------------------------------------
+UPDATE student
+SET 	per = 43, city='PUNE';
+
+update 8
+
+When record is not found
+---------------------------
+update student set per=43, city='MUMBAI' where rno=9;
+UPDATE 0
+
+DELETE
+---------
+--> This SQL Command removes record from table
+
+
+DROP TABLE student;
+
+DELETE FROM student;   ---> Logging Operation
+
+TRUNCATE FROM student;
+--------------------------------------------------------------
+
+
+NOTE :
+======
+DELETE FROM student;    // WHERE NHI LIHLA TR
+--> Sgle records delete hoil.
+    1-2 record delete krayche asel tr delete cmd ch vaprel PPNNNN
+    pn interview madhe mhna, sgle record delete krayche asel tr DELETE vaparnar nhi
+    TRUNCATE use krnar - delete all contents of table with structure remains same
+
+--> RENAME TABLE student;
+    data can be recover using ROLLBACK;
+    after COMMIT - data deletes permanantly
+
+--> TRUNCATE TABLE student; (DDL)
+    no data recover , cannot ROLLBACK;
+
+BEAWARE :
+=========
+(Interview t boltana TRUNCATE la pn DML mahde takal)    
