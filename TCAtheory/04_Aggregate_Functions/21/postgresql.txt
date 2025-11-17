@@ -1,0 +1,544 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select * from student;
+ rno | name | per | city
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=# insert into student values(1,'AAA',70,'PUNE');
+INSERT 0 1
+tcadb16=# insert into student values(2,'BBB',29,'PANJI');
+INSERT 0 1
+tcadb16=# insert into student values(3,'CCC',50,'MUMBAI');
+INSERT 0 1
+tcadb16=# insert into student values(4,'DDD',64,'DELHI');
+INSERT 0 1
+tcadb16=# insert into student values(5,'EEE',87,'BANGLORE');
+INSERT 0 1
+tcadb16=# insert into student values(6,'FFF',95,'PUNE');
+INSERT 0 1
+tcadb16=# insert into student values(7,'GGG',45,'PUNE');
+INSERT 0 1
+tcadb16=# insert into student values(8,'BBB',73,'DELHI');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  45 | PUNE
+   8 | BBB  |  73 | DELHI
+(8 rows)
+
+
+tcadb16=# select * from student;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  45 | PUNE
+   8 | BBB  |  73 | DELHI
+(8 rows)
+
+
+tcadb16=# select count(*) from student;
+ count
+-------
+     8
+(1 row)
+
+
+tcadb16=# select count(*) AS no_of_records from student;
+ no_of_records
+---------------
+             8
+(1 row)
+
+
+tcadb16=# select count(rno) AS no_of_records from student;
+ no_of_records
+---------------
+             8
+(1 row)
+
+
+tcadb16=# select count(name) AS no_of_records from student;
+ no_of_records
+---------------
+             8
+(1 row)
+
+
+tcadb16=# select count(per) AS no_of_records from student;
+ no_of_records
+---------------
+             8
+(1 row)
+
+
+tcadb16=# select count(city) AS no_of_records from student;
+ no_of_records
+---------------
+             8
+(1 row)
+
+
+tcadb16=# insert into student(rno,name,city) values(9,'III','PUNE');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  45 | PUNE
+   8 | BBB  |  73 | DELHI
+   9 | III  |     | PUNE
+(9 rows)
+
+
+tcadb16=# select count(*) from student;
+ count
+-------
+     9
+(1 row)
+
+
+tcadb16=# select count(per) from student;
+ count
+-------
+     8
+(1 row)
+
+
+tcadb16=# select count(per) AS no_of_values from student;
+ no_of_values
+--------------
+            8
+(1 row)
+
+
+tcadb16=# select sum(per) from student;
+ sum
+-----
+ 513
+(1 row)
+
+
+tcadb16=# select avg(per) from student;
+  avg
+--------
+ 64.125
+(1 row)
+
+
+tcadb16=# select max(per) FROM STUDENT;
+ max
+-----
+  95
+(1 row)
+
+
+tcadb16=# SELECT max(per) FROM student WHERE city='MUMBAI';
+ max
+-----
+  50
+(1 row)
+
+
+tcadb16=# SELECT max(per) FROM student WHERE city='DELHI';
+ max
+-----
+  73
+(1 row)
+
+
+tcadb16=# SELECT mIN(per) FROM student WHERE city='DELHI';
+ min
+-----
+  64
+(1 row)
+
+
+tcadb16=# SELECT mIN(per) FROM student;
+ min
+-----
+  29
+(1 row)
+
+
+tcadb16=# SELECT max(city) FROM student;
+ max
+------
+ PUNE
+(1 row)
+
+
+tcadb16=# select MAX(city) FROM student WHERE city LIKE 'P%';
+ max
+------
+ PUNE
+(1 row)
+
+
+tcadb16=# select city FROM student WHERE city LIKE 'P%';
+ city
+-------
+ PUNE
+ PANJI
+ PUNE
+ PUNE
+ PUNE
+(5 rows)
+
+
+tcadb16=# select *FROM student;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  45 | PUNE
+   8 | BBB  |  73 | DELHI
+   9 | III  |     | PUNE
+(9 rows)
+
+
+tcadb16=# select * FROM student WHERE city LIKE 'P%';
+ rno | name | per | city
+-----+------+-----+-------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  45 | PUNE
+   9 | III  |     | PUNE
+(5 rows)
+
+
+tcadb16=# select * FROM student WHERE city LIKE 'P%' LIMIT 2;
+ rno | name | per | city
+-----+------+-----+-------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+(2 rows)
+
+
+tcadb16=# select * FROM student WHERE city LIKE 'P%' LIMIT 2 OFFSET 3;
+ rno | name | per | city
+-----+------+-----+------
+   7 | GGG  |  45 | PUNE
+   9 | III  |     | PUNE
+(2 rows)
+
+
+tcadb16=# select * FROM student WHERE city LIKE 'P%' LIMIT 2 OFFSET 2;
+ rno | name | per | city
+-----+------+-----+------
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  45 | PUNE
+(2 rows)
+
+
+tcadb16=# select * FROM student WHERE city LIKE 'P%' LIMIT 2 OFFSET 1;
+ rno | name | per | city
+-----+------+-----+-------
+   2 | BBB  |  29 | PANJI
+   6 | FFF  |  95 | PUNE
+(2 rows)
+
+
+tcadb16=# SELECT mamx(city) FROM student WHERE CITY IN ('PUNE','PANJI');
+ERROR:  function mamx(character varying) does not exist
+LINE 1: SELECT mamx(city) FROM student WHERE CITY IN ('PUNE','PANJI'...
+               ^
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=# SELECT max(city) FROM student WHERE CITY IN ('PUNE','PANJI');
+ max
+------
+ PUNE
+(1 row)
+
+
+tcadb16=# SELECT max(city) FROM student WHERE CITY IN ('PUNE','PANJI');
+ max
+------
+ PUNE
+(1 row)
+
+
+tcadb16=# SELECT * FROM student WHERE CITY IN ('PUNE','PANJI');
+ rno | name | per | city
+-----+------+-----+-------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  45 | PUNE
+   9 | III  |     | PUNE
+(5 rows)
+
+
+tcadb16=# select * FROM student WHERE city LIKE 'P%';
+ rno | name | per | city
+-----+------+-----+-------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  45 | PUNE
+   9 | III  |     | PUNE
+(5 rows)
+
+
+tcadb16=# select * from student where per = 95;
+ rno | name | per | city
+-----+------+-----+------
+   6 | FFF  |  95 | PUNE
+(1 row)
+
+
+tcadb16=# SELECT * FROM student WHERE( SELECT MAX(per) FROM student );
+ERROR:  argument of WHERE must be type boolean, not type double precision
+LINE 1: SELECT * FROM student WHERE( SELECT MAX(per) FROM student );
+                                   ^
+tcadb16=# SELECT * FROM student WHERE per = ( SELECT MAX(per) FROM student );
+ rno | name | per | city
+-----+------+-----+------
+   6 | FFF  |  95 | PUNE
+(1 row)
+
+
+tcadb16=# SELECT * FROM student WHERE per = ( SELECT MIN(per) FROM student );
+ rno | name | per | city
+-----+------+-----+-------
+   2 | BBB  |  29 | PANJI
+(1 row)
+
+
+tcadb16=# select *FROM student;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  45 | PUNE
+   8 | BBB  |  73 | DELHI
+   9 | III  |     | PUNE
+(9 rows)
+
+
+tcadb16=# UPDATE student SET per=95 WHERE rno = 9;
+UPDATE 1
+tcadb16=# select *FROM student;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  45 | PUNE
+   8 | BBB  |  73 | DELHI
+   9 | III  |  95 | PUNE
+(9 rows)
+
+
+tcadb16=# SELECT * FROM student WHERE per = ( SELECT MAX(per) FROM student );
+ rno | name | per | city
+-----+------+-----+------
+   6 | FFF  |  95 | PUNE
+   9 | III  |  95 | PUNE
+(2 rows)
+
+
+tcadb16=# select * from student order by per desc;
+ rno | name | per |   city
+-----+------+-----+----------
+   6 | FFF  |  95 | PUNE
+   9 | III  |  95 | PUNE
+   5 | EEE  |  87 | BANGLORE
+   8 | BBB  |  73 | DELHI
+   1 | AAA  |  70 | PUNE
+   4 | DDD  |  64 | DELHI
+   3 | CCC  |  50 | MUMBAI
+   7 | GGG  |  45 | PUNE
+   2 | BBB  |  29 | PANJI
+(9 rows)
+
+
+tcadb16=# select * from student order by per desc LIMIT 1;
+ rno | name | per | city
+-----+------+-----+------
+   6 | FFF  |  95 | PUNE
+(1 row)
+
+
+tcadb16=# select * from student order by per desc LIMIT 2;
+ rno | name | per | city
+-----+------+-----+------
+   6 | FFF  |  95 | PUNE
+   9 | III  |  95 | PUNE
+(2 rows)
+
+
+tcadb16=# select count(*) from student where per < 70;
+ count
+-------
+     4
+(1 row)
+
+
+tcadb16=# select count(*) from student where per < 40;
+ count
+-------
+     1
+(1 row)
+
+
+tcadb16=# select count(*) from student where per < 40 RETURNING *;
+ERROR:  syntax error at or near "RETURNING"
+LINE 1: select count(*) from student where per < 40 RETURNING *;
+                                                    ^
+tcadb16=# select count(per) from student where per < 40 RETURNING *;
+ERROR:  syntax error at or near "RETURNING"
+LINE 1: select count(per) from student where per < 40 RETURNING *;
+                                                      ^
+tcadb16=# select count(*) from student where per IS NULL;
+ count
+-------
+     0
+(1 row)
+
+
+tcadb16=# select count(*) from student where per IS NOT NULL;
+ count
+-------
+     9
+(1 row)
+
+
+tcadb16=# SELECT count(*) FROM student WHERE city='DELHI';
+ count
+-------
+     2
+(1 row)
+
+
+tcadb16=# select max(per) from student where city='DELHI';
+ max
+-----
+  73
+(1 row)
+
+
+tcadb16=# select * from student where per = ( select max(per) FROM student ) AND city='DELHI';
+ rno | name | per | city
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=# select * from student where city='DELHI';
+ rno | name | per | city
+-----+------+-----+-------
+   4 | DDD  |  64 | DELHI
+   8 | BBB  |  73 | DELHI
+(2 rows)
+
+
+tcadb16=# select * from student where per = ( select max(per) FROM student WHERE city='DELHI');
+ rno | name | per | city
+-----+------+-----+-------
+   8 | BBB  |  73 | DELHI
+(1 row)
+
+
+tcadb16=# select * from student;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  45 | PUNE
+   8 | BBB  |  73 | DELHI
+   9 | III  |  95 | PUNE
+(9 rows)
+
+
+tcadb16=# update student set per = 73 WHERE rno=9;
+UPDATE 1
+tcadb16=# select * from student;
+ rno | name | per |   city
+-----+------+-----+----------
+   1 | AAA  |  70 | PUNE
+   2 | BBB  |  29 | PANJI
+   3 | CCC  |  50 | MUMBAI
+   4 | DDD  |  64 | DELHI
+   5 | EEE  |  87 | BANGLORE
+   6 | FFF  |  95 | PUNE
+   7 | GGG  |  45 | PUNE
+   8 | BBB  |  73 | DELHI
+   9 | III  |  73 | PUNE
+(9 rows)
+
+
+tcadb16=# select * from student where per = ( select max(per) FROM student WHERE city='DELHI');
+ rno | name | per | city
+-----+------+-----+-------
+   8 | BBB  |  73 | DELHI
+   9 | III  |  73 | PUNE
+(2 rows)
+
+
+tcadb16=# select * from student where city='DELHI' AND per = ( select max(per) FROM student WHERE city='DELHI');
+ rno | name | per | city
+-----+------+-----+-------
+   8 | BBB  |  73 | DELHI
+(1 row)
+
+
+tcadb16=# select * from student where city='PUNE' AND per = ( select max(per) FROM student WHERE city='DELHI');
+ rno | name | per | city
+-----+------+-----+------
+   9 | III  |  73 | PUNE
+(1 row)
+
+
+tcadb16=# select * from student where city='pune' AND per = ( select max(per) FROM student WHERE city='DELHI');
+ rno | name | per | city
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=#
