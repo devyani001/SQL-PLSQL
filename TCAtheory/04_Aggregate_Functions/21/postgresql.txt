@@ -541,4 +541,4 @@ tcadb16=# select * from student where city='pune' AND per = ( select max(per) FR
 (0 rows)
 
 
-tcadb16=#
+tcadb16=#dkjs
