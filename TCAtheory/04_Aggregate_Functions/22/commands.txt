@@ -1,0 +1,81 @@
+TOO MUCH VVIP & HARD (watch this again lecture 22 aggregate function)
+======================================================================
+FIND 3rd topper without LIMIT and OFFSET
+
+
+Q. Delete min percentage wale students
+----------------------------------------
+DELETE FROM student
+WHERE per = (select min(per) from student);
+
+
+Q. To find n-th topper
+
+THis query is finding 2nd topper
+
+ select * from student order by per desc LIMIT 1 OFFSET 1;
+
+ rno | name | per |   city
+-----+------+-----+----------
+   5 | EEE  |  87 | BANGLORE
+
+Topper wala record sodun
+select * from student where per != (select max(per) from student);
+
+
+2nd topper che percentage
+---------------------------
+select max(per) from student where per != (select max(per) from student);
+
+select  * 
+from student 
+where per = (
+							select max(per) 
+							from student 
+							where per != ( select max(per) from student)
+							);
+
+
+select city, max(per) AS toppers_per 
+from student 
+GROUP by city HAVING max(per) >=50 
+ORDER BY toppers_per DESC;
+
+select city, count(*)
+from student
+GROUP by city HAVING count(*)>=2;
+
+select city, count(*)
+from student
+GROUP by city HAVING count(*)=1;
+
+select city, count(*)
+from student
+GROUP by city HAVING count(*)<10;
+
+
+select city,count(*)
+from student
+GROUP by city HAVING count(*)<10;
+
+select city,count(*)
+from student
+GROUP by city HAVING city LIKE 'P%';
+
+--------------------------------------------------------------
+
+WHERE CLAUSE    - record by record check hoto 
+GROUP BY CLAUSE - group  by group check hoto
+
+--------------------------------------------------------------
+
+Query Execution sequence :
+1. FROM
+2. WHERE
+3. GROUP BY
+4. HAVING
+5. SELECT
+6. DISTINCT
+7. ORDER BY
+8. LIMIT
+9. output
