@@ -1,0 +1,64 @@
+Many-to-Many (M-M)
+--------------------
+
+Student & Teacher Entities are Many-Many Related with descriptive attribute 'ldate'
+
+Student(rno, name, per, city)
+Teacher(tno, name, salary, city)
+ST(rno, tno, ldate)
+
+
+Q. What is Descriptive Attribute ?
+------------------------------------
+--> It is an attribute which describes relationship.
+--> It is always part of relations table.
+
+Q. What is Foreign  key ?
+---------------------------
+--> Primary key of one table when acts as a key in another table(relatioship able) such key is called as Foreign Key.
+
+
+CREATE TABLE student(
+	rno int primary key,
+	name varchar(10),
+	per  float,
+	city varchar(10)
+);
+
+
+CREATE TABLE teacher(
+	tno int primary key, 
+	name varchar(10),
+	salary float,
+	city varchar(10)
+);
+
+
+CREATE TABLE ST(
+
+	rno int REFERENCES student(rno) ON DELETE CASCADE ON UPDATE CASCADE,
+	tno int REFERENCES teacher(tno) ON DELETE CASCADE ON UPDATE CASCADE,
+	ldate DATE
+);
+
+
+MYSQL
+=====
+
+CREATE TABLE ST(
+
+	fk_rno int,
+	fk_tno int,
+	ldate DATE,
+
+	FOREIGN KEY (fk_rno) REFERENCES student(rno) ON DELETE CASCADE ON UPDATE CASCADE,
+
+	FOREIGN KEY(fk_tno) REFERENCES teacher(tno) ON DELETE CASCADE ON UPDATE CASCADE
+
+);
+
+
+
+Note:
+-----
+While dropping, Realtionship table should be dropped first before entity tables.
