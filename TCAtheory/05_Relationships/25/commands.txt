@@ -1,0 +1,44 @@
+
+Note:
+-----
+While dropping, Realtionship table should be dropped first before entity tables.
+
+
+
+Adding records into student table - 
+------------------------------------
+INSERT INTO student VALUES(1,'AAA',60,'PUNE'); 
+INSERT INTO student VALUES(2,'BBB',70,'DELHI'); 
+INSERT INTO student VALUES(3,'CCC',65,'MUMBAI'); 
+INSERT INTO student VALUES(4,'DDD',80,'PUNE'); 
+ 
+ 
+Adding records into teacher table - 
+------------------------------------ 
+INSERT INTO teacher VALUES(101,'PPP',10000,'PANJI'); 
+INSERT INTO teacher VALUES(102,'QQQ',70000,'DELHI'); 
+INSERT INTO teacher VALUES(103,'RRR',30000,'PUNE'); 
+INSERT INTO teacher VALUES(104,'SSS',70000,'MUMBAI'); 
+ 
+Adding records into ST table - 
+------------------------------------ 
+INSERT INTO ST values(1,101,'2017-08-21'); 
+INSERT INTO ST values(1,104,'2017-08-17'); 
+INSERT INTO ST values(2,102,'2017-08-24'); 
+INSERT INTO ST values(3,103,'2017-08-15'); 
+INSERT INTO ST values(2,101,'2017-08-21'); 
+
+UPDATE student
+SET rno=7
+WHERE rno=2;
+
+
+Q. Display count of persons from PUNE city
+--------------------------------------------
+ select (select count(*) from student where city='PUNE') +
+ 				(select count(*) from teacher where city='PUNE') 
+ 				AS count_of_pune_people;
+
+SELECT *
+FROM   student, teacher, st 
+WHERE  student.rno = st.rno AND teacher.tno=st.tno; 

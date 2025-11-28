@@ -1,0 +1,850 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select * from student;
+ rno | name | per | city
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=# select * from teacher;
+ tno | name | salary | city
+-----+------+--------+------
+(0 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno | ldate
+-----+-----+-------
+(0 rows)
+
+
+tcadb16=# DROP TABLE student;
+ERROR:  cannot drop table student because other objects depend on it
+DETAIL:  constraint st_rno_fkey on table st depends on table student
+HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+tcadb16=# DROP TABLE teacher;
+ERROR:  cannot drop table teacher because other objects depend on it
+DETAIL:  constraint st_tno_fkey on table st depends on table teacher
+HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+tcadb16=# DROP TABLE st;
+DROP TABLE
+tcadb16=# DROP TABLE student;
+DROP TABLE
+tcadb16=# DROP TABLE teacher;
+DROP TABLE
+tcadb16=# select * from student;
+ERROR:  relation "student" does not exist
+LINE 1: select * from student;
+                      ^
+tcadb16=# select * from teacher;
+ERROR:  relation "teacher" does not exist
+LINE 1: select * from teacher;
+                      ^
+tcadb16=# select * from st;
+ERROR:  relation "st" does not exist
+LINE 1: select * from st;
+                      ^
+tcadb16=# create table student (rno int primary key, name varchar(10), per float, city varchar(10));
+CREATE TABLE
+tcadb16=# create table teacher (tno int primary key, name varchar(10), salary float, city varchar(10));
+CREATE TABLE
+tcadb16=# create table st ( rno int REFERENCES student(rno) ON DELETE CASCADE ON UPDATE CASCADE, tno int REFERENCES teacher(tno) ON DELETE CASCADE ON UPDATE CASCADE );
+CREATE TABLE
+tcadb16=# select * from student;
+ rno | name | per | city
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=# select * from teacher;
+ tno | name | salary | city
+-----+------+--------+------
+(0 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno
+-----+-----
+(0 rows)
+
+
+tcadb16=# INSERT INTO student VALUES(1,'AAA',60,'PUNE');
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(2,'BBB',70,'DELHI');
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(3,'CCC',65,'MUMBAI');
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(4,'DDD',80,'PUNE');
+INSERT 0 1
+tcadb16=#  SELECT * FROM student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(4 rows)
+
+
+tcadb16=# INSERT INTO teacher VALUES(101,'PPP',10000,'PANJI');
+INSERT 0 1
+tcadb16=# INSERT INTO teacher VALUES(102,'QQQ',70000,'DELHI');
+INSERT 0 1
+tcadb16=# INSERT INTO teacher VALUES(103,'RRR',30000,'PUNE');
+INSERT 0 1
+tcadb16=# INSERT INTO teacher VALUES(104,'SSS',70000,'MUMBAI');
+INSERT 0 1
+tcadb16=# select * from teacher;
+ tno | name | salary |  city
+-----+------+--------+--------
+ 101 | PPP  |  10000 | PANJI
+ 102 | QQQ  |  70000 | DELHI
+ 103 | RRR  |  30000 | PUNE
+ 104 | SSS  |  70000 | MUMBAI
+(4 rows)
+
+
+tcadb16=# INSERT INTO ST values(1,101,'2017-08-21');
+ERROR:  INSERT has more expressions than target columns
+LINE 1: INSERT INTO ST values(1,101,'2017-08-21');
+                                    ^
+tcadb16=# INSERT INTO ST values(1,104,'2017-08-17');
+ERROR:  INSERT has more expressions than target columns
+LINE 1: INSERT INTO ST values(1,104,'2017-08-17');
+                                    ^
+tcadb16=# INSERT INTO ST values(2,102,'2017-08-24');
+ERROR:  INSERT has more expressions than target columns
+LINE 1: INSERT INTO ST values(2,102,'2017-08-24');
+                                    ^
+tcadb16=# INSERT INTO ST values(3,103,'2017-08-15');
+ERROR:  INSERT has more expressions than target columns
+LINE 1: INSERT INTO ST values(3,103,'2017-08-15');
+                                    ^
+tcadb16=# INSERT INTO ST values(2,101,'2017-08-21');
+ERROR:  INSERT has more expressions than target columns
+LINE 1: INSERT INTO ST values(2,101,'2017-08-21');
+                                    ^
+tcadb16=#  SELECT * FROM st;
+ rno | tno
+-----+-----
+(0 rows)
+
+
+tcadb16=# ALTER TABLE st ADD COLUMN ldate DATE;
+ALTER TABLE
+tcadb16=# INSERT INTO ST values(1,101,'2017-08-21');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(1,104,'2017-08-17');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(2,102,'2017-08-24');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(3,103,'2017-08-15');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(2,101,'2017-08-21');
+INSERT 0 1
+tcadb16=# SELECT * FROM st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+   3 | 103 | 2017-08-15
+   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=#  SELECT * FROM student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from teacher;
+ tno | name | salary |  city
+-----+------+--------+--------
+ 101 | PPP  |  10000 | PANJI
+ 102 | QQQ  |  70000 | DELHI
+ 103 | RRR  |  30000 | PUNE
+ 104 | SSS  |  70000 | MUMBAI
+(4 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+   3 | 103 | 2017-08-15
+   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# insert into st values(5, 101, '2017-08-26');
+ERROR:  insert or update on table "st" violates foreign key constraint "st_rno_fkey"
+DETAIL:  Key (rno)=(5) is not present in table "student".
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+   3 | 103 | 2017-08-15
+   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# update table student set rno=7 where rno = 2;
+ERROR:  syntax error at or near "table"
+LINE 1: update table student set rno=7 where rno = 2;
+               ^
+tcadb16=# update student set rno=7 where rno = 2;
+UPDATE 1
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+   7 | BBB  |  70 | DELHI
+(4 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   3 | 103 | 2017-08-15
+   7 | 102 | 2017-08-24
+   7 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# DELETE from student where rno=7;
+DELETE 1
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(3 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   3 | 103 | 2017-08-15
+(3 rows)
+
+
+tcadb16=# update student set rno=7 where rno=3;
+UPDATE 1
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   4 | DDD  |  80 | PUNE
+   7 | CCC  |  65 | MUMBAI
+(3 rows)
+
+
+tcadb16=# select * from teacher;
+ tno | name | salary |  city
+-----+------+--------+--------
+ 101 | PPP  |  10000 | PANJI
+ 102 | QQQ  |  70000 | DELHI
+ 103 | RRR  |  30000 | PUNE
+ 104 | SSS  |  70000 | MUMBAI
+(4 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   7 | 103 | 2017-08-15
+(3 rows)
+
+
+tcadb16=#
+
+==================================================================
+SIR
+==================================================================
+
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (14.2)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select * from student;
+ rno | name | per | city
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=# select * from teacher;
+ tno | name | salary | city
+-----+------+--------+------
+(0 rows)
+
+
+tcadb16=# select * from ST;
+ rno | tno | ldate
+-----+-----+-------
+(0 rows)
+
+
+tcadb16=# DROP TABLE student;
+ERROR:  cannot drop table student because other objects depend on it
+DETAIL:  constraint st_rno_fkey on table st depends on table student
+HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+tcadb16=# DROP TABLE teacher;
+ERROR:  cannot drop table teacher because other objects depend on it
+DETAIL:  constraint st_tno_fkey on table st depends on table teacher
+HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+tcadb16=# DROP TABLE ST;
+DROP TABLE
+tcadb16=# DROP TABLE student;
+DROP TABLE
+tcadb16=# DROP TABLE teacher;
+DROP TABLE
+tcadb16=# select * from student;
+ERROR:  relation "student" does not exist
+LINE 1: select * from student;
+                      ^
+tcadb16=# CREATE TABLE ST(
+tcadb16(#
+tcadb16(# rno int REFERENCES student(rno) ON DELETE CASCADE ON UPDATE CASCADE,
+tcadb16(# tno int REFERENCES teacher(tno) ON DELETE CASCADE ON UPDATE CASCADE,
+tcadb16(# ldate DATE
+tcadb16(# );
+ERROR:  relation "student" does not exist
+tcadb16=# CREATE TABLE student(
+tcadb16(# rno int primary key,
+tcadb16(# name varchar(10),
+tcadb16(# per  float,
+tcadb16(# city varchar(10)
+tcadb16(# );
+CREATE TABLE
+tcadb16=#
+tcadb16=#
+tcadb16=# CREATE TABLE teacher(
+tcadb16(# tno int primary key,
+tcadb16(# name varchar(10),
+tcadb16(# salary float,
+tcadb16(# city varchar(10)
+tcadb16(# );
+CREATE TABLE
+tcadb16=#
+tcadb16=#
+tcadb16=# CREATE TABLE ST(
+tcadb16(#
+tcadb16(# rno int REFERENCES student(rno) ON DELETE CASCADE ON UPDATE CASCADE,
+tcadb16(# tno int REFERENCES teacher(tno) ON DELETE CASCADE ON UPDATE CASCADE,
+tcadb16(# ldate DATE
+tcadb16(# );
+CREATE TABLE
+tcadb16=# select * from student;
+ rno | name | per | city
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=# select * from teacher;
+ tno | name | salary | city
+-----+------+--------+------
+(0 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno | ldate
+-----+-----+-------
+(0 rows)
+
+
+tcadb16=# insert into st values(101,1, '2025-07-06');
+ERROR:  insert or update on table "st" violates foreign key constraint "st_rno_fkey"
+DETAIL:  Key (rno)=(101) is not present in table "student".
+tcadb16=# INSERT INTO student VALUES(1,'AAA',60,'PUNE');
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(2,'BBB',70,'DELHI');
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(3,'CCC',65,'MUMBAI');
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(4,'DDD',80,'PUNE');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(4 rows)
+
+
+tcadb16=# INSERT INTO teacher VALUES(101,'PPP',10000,'PANJI');
+INSERT 0 1
+tcadb16=# INSERT INTO teacher VALUES(102,'QQQ',70000,'DELHI');
+INSERT 0 1
+tcadb16=# INSERT INTO teacher VALUES(103,'RRR',30000,'PUNE');
+INSERT 0 1
+tcadb16=# INSERT INTO teacher VALUES(104,'SSS',70000,'MUMBAI');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(1,101,'2017-08-21');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(1,104,'2017-08-17');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(2,102,'2017-08-24');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(3,103,'2017-08-15');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(2,101,'2017-08-21');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from teacher;
+ tno | name | salary |  city
+-----+------+--------+--------
+ 101 | PPP  |  10000 | PANJI
+ 102 | QQQ  |  70000 | DELHI
+ 103 | RRR  |  30000 | PUNE
+ 104 | SSS  |  70000 | MUMBAI
+(4 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+   3 | 103 | 2017-08-15
+   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# insert into st values(5,101,'2017-08-26');
+ERROR:  insert or update on table "st" violates foreign key constraint "st_rno_fkey"
+DETAIL:  Key (rno)=(5) is not present in table "student".
+tcadb16=# insert into st values(1,108,'2017-08-26');
+ERROR:  insert or update on table "st" violates foreign key constraint "st_tno_fkey"
+DETAIL:  Key (tno)=(108) is not present in table "teacher".
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+   3 | 103 | 2017-08-15
+   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# UPDATE student SET rno = 7 WHERE rno=2;
+UPDATE 1
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   3 | 103 | 2017-08-15
+   7 | 102 | 2017-08-24
+   7 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+   7 | BBB  |  70 | DELHI
+(4 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   3 | 103 | 2017-08-15
+   7 | 102 | 2017-08-24
+   7 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# DELETE FROM student WHERE rno=7;
+DELETE 1
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   3 | 103 | 2017-08-15
+(3 rows)
+
+
+tcadb16=# drop table st;
+DROP TABLE
+tcadb16=# CREATE TABLE ST(
+tcadb16(#
+tcadb16(# rno int REFERENCES student(rno),
+tcadb16(# tno int REFERENCES teacher(tno),
+tcadb16(# ldate DATE
+tcadb16(# );
+CREATE TABLE
+tcadb16=# INSERT INTO ST values(1,101,'2017-08-21');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(1,104,'2017-08-17');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(3,103,'2017-08-15');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(3 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   3 | 103 | 2017-08-15
+(3 rows)
+
+
+tcadb16=# UPDATE student SET rno=7 where rno=3;
+ERROR:  update or delete on table "student" violates foreign key constraint "st_rno_fkey" on table "st"
+DETAIL:  Key (rno)=(3) is still referenced from table "st".
+tcadb16=# DELETE FROM student where rno=3;
+ERROR:  update or delete on table "student" violates foreign key constraint "st_rno_fkey" on table "st"
+DETAIL:  Key (rno)=(3) is still referenced from table "st".
+tcadb16=# drop table st;
+DROP TABLE
+tcadb16=# CREATE TABLE ST(
+tcadb16(#
+tcadb16(# rno int ,
+tcadb16(# tno int ,
+tcadb16(# ldate DATE
+tcadb16(# );
+CREATE TABLE
+tcadb16=# INSERT INTO ST values(1,101,'2017-08-21');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(1,104,'2017-08-17');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(3,103,'2017-08-15');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(3 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   3 | 103 | 2017-08-15
+(3 rows)
+
+
+tcadb16=# UPDATE student set rno=7  where rno=3;
+UPDATE 1
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   4 | DDD  |  80 | PUNE
+   7 | CCC  |  65 | MUMBAI
+(3 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   3 | 103 | 2017-08-15
+(3 rows)
+
+
+tcadb16=# delete from student where rno=1;
+DELETE 1
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   3 | 103 | 2017-08-15
+(3 rows)
+
+
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   4 | DDD  |  80 | PUNE
+   7 | CCC  |  65 | MUMBAI
+(2 rows)
+
+
+tcadb16=# drop table st;
+DROP TABLE
+tcadb16=# delete from student;
+DELETE 2
+tcadb16=# delete from teacher;
+DELETE 4
+tcadb16=# CREATE TABLE ST(
+tcadb16(#
+tcadb16(# rno int REFERENCES student(rno) ON DELETE CASCADE ON UPDATE CASCADE,
+tcadb16(# tno int REFERENCES teacher(tno) ON DELETE CASCADE ON UPDATE CASCADE,
+tcadb16(# ldate DATE
+tcadb16(# );
+CREATE TABLE
+tcadb16=# INSERT INTO student VALUES(1,'AAA',60,'PUNE');
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(2,'BBB',70,'DELHI');
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(3,'CCC',65,'MUMBAI');
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(4,'DDD',80,'PUNE');
+INSERT 0 1
+tcadb16=# INSERT INTO teacher VALUES(101,'PPP',10000,'PANJI');
+INSERT 0 1
+tcadb16=# INSERT INTO teacher VALUES(102,'QQQ',70000,'DELHI');
+INSERT 0 1
+tcadb16=# INSERT INTO teacher VALUES(103,'RRR',30000,'PUNE');
+INSERT 0 1
+tcadb16=# INSERT INTO teacher VALUES(104,'SSS',70000,'MUMBAI');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(1,101,'2017-08-21');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(1,104,'2017-08-17');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(2,102,'2017-08-24');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(3,103,'2017-08-15');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(2,101,'2017-08-21');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from teacher;
+ tno | name | salary |  city
+-----+------+--------+--------
+ 101 | PPP  |  10000 | PANJI
+ 102 | QQQ  |  70000 | DELHI
+ 103 | RRR  |  30000 | PUNE
+ 104 | SSS  |  70000 | MUMBAI
+(4 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+   3 | 103 | 2017-08-15
+   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from student where city='PUNE';
+ rno | name | per | city
+-----+------+-----+------
+   1 | AAA  |  60 | PUNE
+   4 | DDD  |  80 | PUNE
+(2 rows)
+
+
+tcadb16=# select name from student where city='PUNE';
+ name
+------
+ AAA
+ DDD
+(2 rows)
+
+
+tcadb16=# select name from teacher where city='PUNE';
+ name
+------
+ RRR
+(1 row)
+
+
+tcadb16=# select count(*) from student;
+ count
+-------
+     4
+(1 row)
+
+
+tcadb16=# select count(*) from student WHERE city='PUNE';
+ count
+-------
+     2
+(1 row)
+
+
+tcadb16=# select count(*) from teacher WHERE city='PUNE';
+ count
+-------
+     1
+(1 row)
+
+
+tcadb16=# select count(*) from student,teacher WHERE city='PUNE';
+ERROR:  column reference "city" is ambiguous
+LINE 1: select count(*) from student,teacher WHERE city='PUNE';
+                                                   ^
+tcadb16=# select count(*) from student,teacher WHERE student.city='PUNE';
+ count
+-------
+     8
+(1 row)
+
+
+tcadb16=# select 2+1;
+ ?column?
+----------
+        3
+(1 row)
+
+
+tcadb16=# select (select count(*) from student where city='PUNE')+(select count(*) from teacher where city='PUNE') as count_of_pune_people;
+ count_of_pune_people
+----------------------
+                    3
+(1 row)
+
+
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from teacher;
+ tno | name | salary |  city
+-----+------+--------+--------
+ 101 | PPP  |  10000 | PANJI
+ 102 | QQQ  |  70000 | DELHI
+ 103 | RRR  |  30000 | PUNE
+ 104 | SSS  |  70000 | MUMBAI
+(4 rows)
+
+
+tcadb16=# select * from student, teacher;
+ rno | name | per |  city  | tno | name | salary |  city
+-----+------+-----+--------+-----+------+--------+--------
+   1 | AAA  |  60 | PUNE   | 101 | PPP  |  10000 | PANJI
+   1 | AAA  |  60 | PUNE   | 102 | QQQ  |  70000 | DELHI
+   1 | AAA  |  60 | PUNE   | 103 | RRR  |  30000 | PUNE
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI
+   2 | BBB  |  70 | DELHI  | 101 | PPP  |  10000 | PANJI
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI
+   2 | BBB  |  70 | DELHI  | 103 | RRR  |  30000 | PUNE
+   2 | BBB  |  70 | DELHI  | 104 | SSS  |  70000 | MUMBAI
+   3 | CCC  |  65 | MUMBAI | 101 | PPP  |  10000 | PANJI
+   3 | CCC  |  65 | MUMBAI | 102 | QQQ  |  70000 | DELHI
+   3 | CCC  |  65 | MUMBAI | 103 | RRR  |  30000 | PUNE
+   3 | CCC  |  65 | MUMBAI | 104 | SSS  |  70000 | MUMBAI
+   4 | DDD  |  80 | PUNE   | 101 | PPP  |  10000 | PANJI
+   4 | DDD  |  80 | PUNE   | 102 | QQQ  |  70000 | DELHI
+   4 | DDD  |  80 | PUNE   | 103 | RRR  |  30000 | PUNE
+   4 | DDD  |  80 | PUNE   | 104 | SSS  |  70000 | MUMBAI
+(16 rows)
+
+
+tcadb16=#
