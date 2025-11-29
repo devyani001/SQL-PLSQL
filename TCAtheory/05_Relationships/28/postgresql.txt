@@ -1,0 +1,522 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb;
+connection to server at "localhost" (::1), port 5432 failed: FATAL:  database "tcadb" does not exist
+Previous connection kept
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from teacher;
+ tno | name | salary |  city
+-----+------+--------+--------
+ 101 | PPP  |  10000 | PANJI
+ 102 | QQQ  |  70000 | DELHI
+ 103 | RRR  |  30000 | PUNE
+ 104 | SSS  |  70000 | MUMBAI
+(4 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+   3 | 103 | 2017-08-15
+   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# select max() from teacher;
+ERROR:  function max() does not exist
+LINE 1: select max() from teacher;
+               ^
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=# select max(salary) from teacher;
+  max
+-------
+ 70000
+(1 row)
+
+
+tcadb16=# SELECT * FROM teacher WHERE salary = 70000;
+ tno | name | salary |  city
+-----+------+--------+--------
+ 102 | QQQ  |  70000 | DELHI
+ 104 | SSS  |  70000 | MUMBAI
+(2 rows)
+
+
+tcadb16=# select * from teacher where salary = ( SELECT MAX(salary) FROM teacher );
+ tno | name | salary |  city
+-----+------+--------+--------
+ 102 | QQQ  |  70000 | DELHI
+ 104 | SSS  |  70000 | MUMBAI
+(2 rows)
+
+
+tcadb16=# SELECT * from student,teacher,st WHERE student.rno = st.rno AND teacher.tno = st.tno AND salary = 70000;
+ rno | name | per | city  | tno | name | salary |  city  | rno | tno |   ldate
+-----+------+-----+-------+-----+------+--------+--------+-----+-----+------------
+   1 | AAA  |  60 | PUNE  | 104 | SSS  |  70000 | MUMBAI |   1 | 104 | 2017-08-17
+   2 | BBB  |  70 | DELHI | 102 | QQQ  |  70000 | DELHI  |   2 | 102 | 2017-08-24
+(2 rows)
+
+
+tcadb16=# SELECT * from student,teacher,st WHERE teacher.salary = 70000;
+ rno | name | per |  city  | tno | name | salary |  city  | rno | tno |   ldate
+-----+------+-----+--------+-----+------+--------+--------+-----+-----+------------
+   1 | AAA  |  60 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   1 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   1 | 104 | 2017-08-17
+   1 | AAA  |  60 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   2 | 102 | 2017-08-24
+   1 | AAA  |  60 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   3 | 103 | 2017-08-15
+   1 | AAA  |  60 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   2 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   1 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   1 | 104 | 2017-08-17
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   2 | 102 | 2017-08-24
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   3 | 103 | 2017-08-15
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   2 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   1 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   1 | 104 | 2017-08-17
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   2 | 102 | 2017-08-24
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   3 | 103 | 2017-08-15
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   2 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 104 | SSS  |  70000 | MUMBAI |   1 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 104 | SSS  |  70000 | MUMBAI |   1 | 104 | 2017-08-17
+   2 | BBB  |  70 | DELHI  | 104 | SSS  |  70000 | MUMBAI |   2 | 102 | 2017-08-24
+   2 | BBB  |  70 | DELHI  | 104 | SSS  |  70000 | MUMBAI |   3 | 103 | 2017-08-15
+   2 | BBB  |  70 | DELHI  | 104 | SSS  |  70000 | MUMBAI |   2 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 102 | QQQ  |  70000 | DELHI  |   1 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 102 | QQQ  |  70000 | DELHI  |   1 | 104 | 2017-08-17
+   3 | CCC  |  65 | MUMBAI | 102 | QQQ  |  70000 | DELHI  |   2 | 102 | 2017-08-24
+   3 | CCC  |  65 | MUMBAI | 102 | QQQ  |  70000 | DELHI  |   3 | 103 | 2017-08-15
+   3 | CCC  |  65 | MUMBAI | 102 | QQQ  |  70000 | DELHI  |   2 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 104 | SSS  |  70000 | MUMBAI |   1 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 104 | SSS  |  70000 | MUMBAI |   1 | 104 | 2017-08-17
+   3 | CCC  |  65 | MUMBAI | 104 | SSS  |  70000 | MUMBAI |   2 | 102 | 2017-08-24
+   3 | CCC  |  65 | MUMBAI | 104 | SSS  |  70000 | MUMBAI |   3 | 103 | 2017-08-15
+   3 | CCC  |  65 | MUMBAI | 104 | SSS  |  70000 | MUMBAI |   2 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   1 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   1 | 104 | 2017-08-17
+   4 | DDD  |  80 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   2 | 102 | 2017-08-24
+   4 | DDD  |  80 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   3 | 103 | 2017-08-15
+   4 | DDD  |  80 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   2 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   1 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   1 | 104 | 2017-08-17
+   4 | DDD  |  80 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   2 | 102 | 2017-08-24
+   4 | DDD  |  80 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   3 | 103 | 2017-08-15
+   4 | DDD  |  80 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   2 | 101 | 2017-08-21
+(40 rows)
+
+
+tcadb16=# select * from teacher where salary = ( SELECT MAX(salary) FROM teacher );
+ tno | name | salary |  city
+-----+------+--------+--------
+ 102 | QQQ  |  70000 | DELHI
+ 104 | SSS  |  70000 | MUMBAI
+(2 rows)
+
+
+tcadb16=# select teacher.name from teacher where salary = ( SELECT MAX(salary) FROM teacher );
+ name
+------
+ QQQ
+ SSS
+(2 rows)
+
+
+tcadb16=# select teacher.rno from teacher where salary = ( SELECT MAX(salary) FROM teacher );
+ERROR:  column teacher.rno does not exist
+LINE 1: select teacher.rno from teacher where salary = ( SELECT MAX(...
+               ^
+HINT:  Perhaps you meant to reference the column "teacher.tno".
+tcadb16=# select teacher.tno from teacher where salary = ( SELECT MAX(salary) FROM teacher );
+ tno
+-----
+ 102
+ 104
+(2 rows)
+
+
+tcadb16=# SELECT student.name from student,teacher,st WHERE teacher.salary = ( select max(salray) from teacher );
+ERROR:  column "salray" does not exist
+LINE 1: ...nt,teacher,st WHERE teacher.salary = ( select max(salray) fr...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "teacher.salary" or the column "teacher.salary".
+tcadb16=# SELECT student.name from student,teacher,st WHERE salary = ( select max(salray) from teacher );
+ERROR:  column "salray" does not exist
+LINE 1: ...om student,teacher,st WHERE salary = ( select max(salray) fr...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "teacher.salary" or the column "teacher.salary".
+tcadb16=# SELECT student.name from student,teacher,st WHERE student.rno = st.rno AND teacher.tno = st.tno AND salary = ( select max(salray) from teacher );
+ERROR:  column "salray" does not exist
+LINE 1: ...ND teacher.tno = st.tno AND salary = ( select max(salray) fr...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "teacher.salary" or the column "teacher.salary".
+tcadb16=# SELECT student.name from student,teacher,st WHERE student.rno = st.rno AND teacher.tno = st.tno AND salary = ( select max(salray) from teacher );
+ERROR:  column "salray" does not exist
+LINE 1: ...ND teacher.tno = st.tno AND salary = ( select max(salray) fr...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "teacher.salary" or the column "teacher.salary".
+tcadb16=# SELECT student.name from student,teacher,st WHERE student.rno = st.rno AND teacher.tno = st.tno AND teacher.salary = ( select max(salray) from teacher );
+ERROR:  column "salray" does not exist
+LINE 1: ...er.tno = st.tno AND teacher.salary = ( select max(salray) fr...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "teacher.salary" or the column "teacher.salary".
+tcadb16=# SELECT student.name from student,teacher,st WHERE student.rno = st.rno AND teacher.tno = st.tno AND salary = ( select max(salaray) from teacher );
+ERROR:  column "salaray" does not exist
+LINE 1: ...ND teacher.tno = st.tno AND salary = ( select max(salaray) f...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "teacher.salary" or the column "teacher.salary".
+tcadb16=# SELECT student.name from student,teacher,st WHERE student.rno = st.rno AND teacher.tno = st.tno AND salary = ( select max(salary) from teacher );
+ name
+------
+ AAA
+ BBB
+(2 rows)
+
+
+tcadb16=# SELECT student.name from student,teacher,st WHERE student.rno = st.rno AND teacher.tno = st.tno AND teacher.salary = ( select max(salary) from teacher );
+ name
+------
+ AAA
+ BBB
+(2 rows)
+
+
+tcadb16=# SELECT student.name FROM student JOIN st ON student.rno = st.rno;
+ name
+------
+ AAA
+ AAA
+ BBB
+ CCC
+ BBB
+(5 rows)
+
+
+tcadb16=# SELECT student.name FROM student JOIN st ON student.rno = st.rno JOIN teacher ON st.tno = teacher.tno;
+ name
+------
+ AAA
+ AAA
+ BBB
+ CCC
+ BBB
+(5 rows)
+
+
+tcadb16=# SELECT * FROM student JOIN st ON student.rno = st.rno JOIN teacher ON st.tno = teacher.tno;
+ rno | name | per |  city  | rno | tno |   ldate    | tno | name | salary |  city
+-----+------+-----+--------+-----+-----+------------+-----+------+--------+--------
+   1 | AAA  |  60 | PUNE   |   1 | 101 | 2017-08-21 | 101 | PPP  |  10000 | PANJI
+   1 | AAA  |  60 | PUNE   |   1 | 104 | 2017-08-17 | 104 | SSS  |  70000 | MUMBAI
+   2 | BBB  |  70 | DELHI  |   2 | 102 | 2017-08-24 | 102 | QQQ  |  70000 | DELHI
+   3 | CCC  |  65 | MUMBAI |   3 | 103 | 2017-08-15 | 103 | RRR  |  30000 | PUNE
+   2 | BBB  |  70 | DELHI  |   2 | 101 | 2017-08-21 | 101 | PPP  |  10000 | PANJI
+(5 rows)
+
+
+tcadb16=# SELECT * FROM student JOIN st ON student.rno = st.rno JOIN teacher ON st.tno = teacher.tno WHERE teacher.salary = (select max(salary) FROM teacher);
+ rno | name | per | city  | rno | tno |   ldate    | tno | name | salary |  city
+-----+------+-----+-------+-----+-----+------------+-----+------+--------+--------
+   1 | AAA  |  60 | PUNE  |   1 | 104 | 2017-08-17 | 104 | SSS  |  70000 | MUMBAI
+   2 | BBB  |  70 | DELHI |   2 | 102 | 2017-08-24 | 102 | QQQ  |  70000 | DELHI
+(2 rows)
+
+
+tcadb16=# SELECT student.name FROM student JOIN st ON student.rno = st.rno JOIN teacher ON st.tno = teacher.tno WHERE teacher.salary = (select max(salary) FROM teacher);
+ name
+------
+ AAA
+ BBB
+(2 rows)
+
+
+tcadb16=# SELECT student.rno FROM student JOIN st ON student.rno = st.rno JOIN teacher ON st.tno = teacher.tno WHERE teacher.salary = (select max(salary) FROM teacher);
+ rno
+-----
+   1
+   2
+(2 rows)
+
+
+tcadb16=# SELECT teacher.tno FROM student JOIN st ON student.rno = st.rno JOIN teacher ON st.tno = teacher.tno WHERE teacher.salary = (select max(salary) FROM teacher);
+ tno
+-----
+ 104
+ 102
+(2 rows)
+
+
+tcadb16=# SELECT * FROM st WHere tno IN(select tno from teacher where salary = (select max(salary) from teacher ));
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+(2 rows)
+
+
+tcadb16=# select * from st where tno IN(102,104);
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+(2 rows)
+
+
+tcadb16=# SELECT student.rno FROM st WHere tno IN(select tno from teacher where salary = (select max(salary) from teacher ));
+ERROR:  missing FROM-clause entry for table "student"
+LINE 1: SELECT student.rno FROM st WHere tno IN(select tno from teac...
+               ^
+tcadb16=# SELECT st.rno FROM st WHere tno IN(select tno from teacher where salary = (select max(salary) from teacher ));
+ rno
+-----
+   1
+   2
+(2 rows)
+
+
+tcadb16=# SELECT rno FROM st WHere tno IN(select tno from teacher where salary = (select max(salary) from teacher ));
+ rno
+-----
+   1
+   2
+(2 rows)
+
+
+tcadb16=# SELECT * FROM student WHERE rno IN ( SELECT rno FROM st WHere tno IN(select tno from teacher where salary = (select max(salary) from teacher )) );
+ rno | name | per | city
+-----+------+-----+-------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+(2 rows)
+
+
+tcadb16=# select name from student where city = 'PUNE';
+ name
+------
+ AAA
+ DDD
+(2 rows)
+
+
+tcadb16=# select name from teacher where city = 'PUNE';
+ name
+------
+ RRR
+(1 row)
+
+
+tcadb16=# (select name from student where city = 'PUNE')UNION(select name from teacher where city = 'PUNE');
+ name
+------
+ AAA
+ DDD
+ RRR
+(3 rows)
+
+
+tcadb16=# {'AAA','BBB'} UNION {'RRR'};
+ERROR:  syntax error at or near "{"
+LINE 1: {'AAA','BBB'} UNION {'RRR'};
+        ^
+tcadb16=# ()INTERSECTION();
+ERROR:  syntax error at or near ")"
+LINE 1: ()INTERSECTION();
+         ^
+tcadb16=# (select city from student)INTERSECTION(select city from teacher);
+ERROR:  syntax error at or near "INTERSECTION"
+LINE 1: (select city from student)INTERSECTION(select city from teac...
+                                  ^
+tcadb16=# (select city from student)INTERSECT(select city from teacher);
+  city
+--------
+ MUMBAI
+ DELHI
+ PUNE
+(3 rows)
+
+
+tcadb16=# SELECT * from STUDENT,TEACHER WHERE (select city from student)INTERSECT(select city from teacher);
+ERROR:  argument of WHERE must be type boolean, not type character varying
+LINE 1: SELECT * from STUDENT,TEACHER WHERE (select city from studen...
+                                            ^
+tcadb16=# SELECT student.name, teacher.name FROM student,teacher WHERE student.city = teacher.city;
+ name | name
+------+------
+ AAA  | RRR
+ BBB  | QQQ
+ CCC  | SSS
+ DDD  | RRR
+(4 rows)
+
+
+tcadb16=# SELECT student.name, student.city, teacher.name, teacher.city FROM student,teacher WHERE student.city = teacher.city;
+ name |  city  | name |  city
+------+--------+------+--------
+ AAA  | PUNE   | RRR  | PUNE
+ BBB  | DELHI  | QQQ  | DELHI
+ CCC  | MUMBAI | SSS  | MUMBAI
+ DDD  | PUNE   | RRR  | PUNE
+(4 rows)
+
+
+tcadb16=# SELECT * from STUDENT,TEACHER WHERE (select city from student)INTERSECT(select city from teacher);
+ERROR:  argument of WHERE must be type boolean, not type character varying
+LINE 1: SELECT * from STUDENT,TEACHER WHERE (select city from studen...
+                                            ^
+tcadb16=# (select city from student)INTERSECT(select city from teacher);
+  city
+--------
+ MUMBAI
+ DELHI
+ PUNE
+(3 rows)
+
+
+tcadb16=# select name from student where city IN ( (select city from student)INTERSECT(select city from teacher) );
+ name
+------
+ AAA
+ BBB
+ CCC
+ DDD
+(4 rows)
+
+
+tcadb16=# select name from TEACHER where city IN ( (select city from student)INTERSECT(select city from teacher) );
+ name
+------
+ QQQ
+ RRR
+ SSS
+(3 rows)
+
+
+tcadb16=# select name from student where city IN ( (select city from student)INTERSECT(select city from teacher) ) UNION select name from TEACHER where city IN ( (select city from student)INTERSECT(select city from teacher) );
+ name
+------
+ RRR
+ CCC
+ BBB
+ SSS
+ DDD
+ AAA
+ QQQ
+(7 rows)
+
+
+tcadb16=# select name from student where city IN ( (select city from student)INTERSECT(select city from teacher) ) UNION select name from TEACHER where city IN ( (select city from student)INTERSECT(select city from teacher) ) ORDER BY name;
+ name
+------
+ AAA
+ BBB
+ CCC
+ DDD
+ QQQ
+ RRR
+ SSS
+(7 rows)
+
+
+tcadb16=# select city,name from student;
+  city  | name
+--------+------
+ PUNE   | AAA
+ DELHI  | BBB
+ MUMBAI | CCC
+ PUNE   | DDD
+(4 rows)
+
+
+tcadb16=# select city,name from student order by city;
+  city  | name
+--------+------
+ DELHI  | BBB
+ MUMBAI | CCC
+ PUNE   | AAA
+ PUNE   | DDD
+(4 rows)
+
+
+tcadb16=# select city, name from teacher;
+  city  | name
+--------+------
+ PANJI  | PPP
+ DELHI  | QQQ
+ PUNE   | RRR
+ MUMBAI | SSS
+(4 rows)
+
+
+tcadb16=# select city, name from teacher order by city;
+  city  | name
+--------+------
+ DELHI  | QQQ
+ MUMBAI | SSS
+ PANJI  | PPP
+ PUNE   | RRR
+(4 rows)
+
+
+tcadb16=# (select city,name from student order by city)UNION(select city, name from teacher order by city);
+  city  | name
+--------+------
+ PUNE   | DDD
+ DELHI  | QQQ
+ PUNE   | RRR
+ MUMBAI | SSS
+ PUNE   | AAA
+ PANJI  | PPP
+ MUMBAI | CCC
+ DELHI  | BBB
+(8 rows)
+
+
+tcadb16=# (select city,name from student order by city)UNION(select city, name from teacher order by city) ORDER BY CITY;
+  city  | name
+--------+------
+ DELHI  | BBB
+ DELHI  | QQQ
+ MUMBAI | CCC
+ MUMBAI | SSS
+ PANJI  | PPP
+ PUNE   | AAA
+ PUNE   | DDD
+ PUNE   | RRR
+(8 rows)
+
+
+tcadb16=# (select city,name from student order by city)UNION(select city, name from teacher order by city) ORDER BY CITY,name;
+  city  | name
+--------+------
+ DELHI  | BBB
+ DELHI  | QQQ
+ MUMBAI | CCC
+ MUMBAI | SSS
+ PANJI  | PPP
+ PUNE   | AAA
+ PUNE   | DDD
+ PUNE   | RRR
+(8 rows)
+

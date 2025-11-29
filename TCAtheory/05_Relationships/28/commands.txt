@@ -1,0 +1,138 @@
+select tno from teacher where salary = (select max(salary) from teacher);
+ 
+ tno
+-----
+ 102
+ 104
+
+
+Finding Highesh paid teacher teaching students
+--------------------------------------------------
+Solution-1
+-----------
+SELECT student.name
+FROM student, teacher, st
+WHERE student.rno =st.rno AND teacher.tno = st.tno
+AND salary = (select max(salary) from teacher);
+
+Solution-2
+-----------
+select * 
+from student 
+where rno IN (
+				select rno 
+				from st 
+				where tno IN(
+								select tno 
+								from teacher 
+								where salary = (select max(salary) from teacher)
+			 );
+
+
+common cities
+----------------
+(select city from student)INTERSECT(select city from teacher)
+
+
+select name from student 
+where city IN ((select city from student)INTERSECT(select city from teacher));
+
+select name from teacher 
+where city IN ((select city from student)INTERSECT(select city from teacher));
+
+
+
+select name from student 
+where city IN ((select city from student)INTERSECT(select city from teacher))
+
+UNION
+
+select name from teacher 
+where city IN ((select city from student)INTERSECT(select city from teacher));
+
+--------------------------------------------
+
+select name from student 
+where city IN ((select city from student)INTERSECT(select city from teacher))
+UNION
+select name from teacher 
+where city IN ((select city from student)INTERSECT(select city from teacher))
+order by name;
+
+
+select name from student 
+where city IN ((select city from student)INTERSECT(select city from teacher))
+UNION
+select name from teacher 
+where city IN ((select city from student)INTERSECT(select city from teacher))
+order by name;
+
+
+City : Pune
+-----------------
+List of teacher :  RRR
+List of Student :  AAA, DDD
+
+City : Mumbai
+---------------
+List of teacher :  SSS
+List of Student :  CCC
+
+City : Delhi
+-------------
+List of teacher : QQQ
+List of Student : BBB
+
+Total no. of entities found : 7 
+
+Note: 
+***No student & teacher from PANJI***
+
+
+Citywise list of student and Teacher
+-------------------------------------
+(select city,name from student order by city)UNION(select city,name from teacher order by city)order by city;
+
+  city  | name
+--------+------
+ DELHI  | BBB
+ DELHI  | QQQ
+ MUMBAI | CCC
+ MUMBAI | SSS
+ PANJI  | PPP
+ PUNE   | AAA
+ PUNE   | RRR
+ PUNE   | DDD
+
+
+ citywise then name wise - list of student & teacher
+ -----------------------------------------------------
+  (select city,name from student order by city)UNION(select city,name from teacher order by city)order by city,name;
+  city  | name
+--------+------
+ DELHI  | BBB
+ DELHI  | QQQ
+ MUMBAI | CCC
+ MUMBAI | SSS
+ PANJI  | PPP
+ PUNE   | AAA
+ PUNE   | DDD
+ PUNE   | RRR
+
+SELECT teacher.name AS tname, student.name as sname 
+FROM teacher, student 
+WHERE teacher.tno = student.tno 
+ORDER BY teacher.name;
+
+Using Join-
+-----------
+SELECT teacher.name AS tname, student.name as sname 
+FROM teacher JOIN student ON teacher.tno = student.tno 
+ORDER BY teacher.name;
+
+ tname | sname
+-------+-------
+ PPP   | CCC
+ PPP   | DDD
+ RRR   | AAA
+ SSS   | BBB
