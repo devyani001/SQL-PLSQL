@@ -1,0 +1,618 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   4 | DDD  |  80 | PUNE
+   7 | CCC  |  65 | MUMBAI
+(3 rows)
+
+
+tcadb16=# select * from teacher;
+ tno | name | salary |  city
+-----+------+--------+--------
+ 101 | PPP  |  10000 | PANJI
+ 102 | QQQ  |  70000 | DELHI
+ 103 | RRR  |  30000 | PUNE
+ 104 | SSS  |  70000 | MUMBAI
+(4 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   7 | 103 | 2017-08-15
+(3 rows)
+
+
+tcadb16=# drop table student;
+ERROR:  cannot drop table student because other objects depend on it
+DETAIL:  constraint st_rno_fkey on table st depends on table student
+HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+tcadb16=# drop table st;
+DROP TABLE
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(
+tcadb16(#       rno int primary key,
+tcadb16(#       name varchar(10),
+tcadb16(#       per  float,
+tcadb16(#       city varchar(10)
+tcadb16(# );
+CREATE TABLE
+tcadb16=# INSERT INTO student VALUES(1,'AAA',60,'PUNE');
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(2,'BBB',70,'DELHI');
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(3,'CCC',65,'MUMBAI');
+INSERT 0 1
+tcadb16=# INSERT INTO student VALUES(4,'DDD',80,'PUNE');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from teacher;
+ tno | name | salary |  city
+-----+------+--------+--------
+ 101 | PPP  |  10000 | PANJI
+ 102 | QQQ  |  70000 | DELHI
+ 103 | RRR  |  30000 | PUNE
+ 104 | SSS  |  70000 | MUMBAI
+(4 rows)
+
+
+tcadb16=# select * from st;
+ERROR:  relation "st" does not exist
+LINE 1: select * from st;
+                      ^
+tcadb16=# create table st (rno int REFERENCES student(rno) ON DELETE CASCADE ON UPDATE CASCADE, tno int REFERENCES teacher(tno) ON DELETE CASCADE ON UPDATE CASCADE, lname DATE);
+CREATE TABLE
+tcadb16=# select * from st;
+ rno | tno | lname
+-----+-----+-------
+(0 rows)
+
+
+tcadb16=# INSERT INTO ST values(1,101,'2017-08-21');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(1,104,'2017-08-17');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(2,102,'2017-08-24');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(3,103,'2017-08-15');
+INSERT 0 1
+tcadb16=# INSERT INTO ST values(2,101,'2017-08-21');
+INSERT 0 1
+tcadb16=# select * from st;
+ rno | tno |   lname
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+   3 | 103 | 2017-08-15
+   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from teacher;
+ tno | name | salary |  city
+-----+------+--------+--------
+ 101 | PPP  |  10000 | PANJI
+ 102 | QQQ  |  70000 | DELHI
+ 103 | RRR  |  30000 | PUNE
+ 104 | SSS  |  70000 | MUMBAI
+(4 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   lname
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+   3 | 103 | 2017-08-15
+   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# SELECT * FROM Student, Teacher;
+ rno | name | per |  city  | tno | name | salary |  city
+-----+------+-----+--------+-----+------+--------+--------
+   1 | AAA  |  60 | PUNE   | 101 | PPP  |  10000 | PANJI
+   1 | AAA  |  60 | PUNE   | 102 | QQQ  |  70000 | DELHI
+   1 | AAA  |  60 | PUNE   | 103 | RRR  |  30000 | PUNE
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI
+   2 | BBB  |  70 | DELHI  | 101 | PPP  |  10000 | PANJI
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI
+   2 | BBB  |  70 | DELHI  | 103 | RRR  |  30000 | PUNE
+   2 | BBB  |  70 | DELHI  | 104 | SSS  |  70000 | MUMBAI
+   3 | CCC  |  65 | MUMBAI | 101 | PPP  |  10000 | PANJI
+   3 | CCC  |  65 | MUMBAI | 102 | QQQ  |  70000 | DELHI
+   3 | CCC  |  65 | MUMBAI | 103 | RRR  |  30000 | PUNE
+   3 | CCC  |  65 | MUMBAI | 104 | SSS  |  70000 | MUMBAI
+   4 | DDD  |  80 | PUNE   | 101 | PPP  |  10000 | PANJI
+   4 | DDD  |  80 | PUNE   | 102 | QQQ  |  70000 | DELHI
+   4 | DDD  |  80 | PUNE   | 103 | RRR  |  30000 | PUNE
+   4 | DDD  |  80 | PUNE   | 104 | SSS  |  70000 | MUMBAI
+(16 rows)
+
+
+tcadb16=# SELECT * FROM Student, Teacher, st;
+ rno | name | per |  city  | tno | name | salary |  city  | rno | tno |   lname
+-----+------+-----+--------+-----+------+--------+--------+-----+-----+------------
+   1 | AAA  |  60 | PUNE   | 101 | PPP  |  10000 | PANJI  |   1 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 101 | PPP  |  10000 | PANJI  |   1 | 104 | 2017-08-17
+   1 | AAA  |  60 | PUNE   | 101 | PPP  |  10000 | PANJI  |   2 | 102 | 2017-08-24
+   1 | AAA  |  60 | PUNE   | 101 | PPP  |  10000 | PANJI  |   3 | 103 | 2017-08-15
+   1 | AAA  |  60 | PUNE   | 101 | PPP  |  10000 | PANJI  |   2 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   1 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   1 | 104 | 2017-08-17
+   1 | AAA  |  60 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   2 | 102 | 2017-08-24
+   1 | AAA  |  60 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   3 | 103 | 2017-08-15
+   1 | AAA  |  60 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   2 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 103 | RRR  |  30000 | PUNE   |   1 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 103 | RRR  |  30000 | PUNE   |   1 | 104 | 2017-08-17
+   1 | AAA  |  60 | PUNE   | 103 | RRR  |  30000 | PUNE   |   2 | 102 | 2017-08-24
+   1 | AAA  |  60 | PUNE   | 103 | RRR  |  30000 | PUNE   |   3 | 103 | 2017-08-15
+   1 | AAA  |  60 | PUNE   | 103 | RRR  |  30000 | PUNE   |   2 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   1 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   1 | 104 | 2017-08-17
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   2 | 102 | 2017-08-24
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   3 | 103 | 2017-08-15
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   2 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 101 | PPP  |  10000 | PANJI  |   1 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 101 | PPP  |  10000 | PANJI  |   1 | 104 | 2017-08-17
+   2 | BBB  |  70 | DELHI  | 101 | PPP  |  10000 | PANJI  |   2 | 102 | 2017-08-24
+   2 | BBB  |  70 | DELHI  | 101 | PPP  |  10000 | PANJI  |   3 | 103 | 2017-08-15
+   2 | BBB  |  70 | DELHI  | 101 | PPP  |  10000 | PANJI  |   2 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   1 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   1 | 104 | 2017-08-17
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   2 | 102 | 2017-08-24
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   3 | 103 | 2017-08-15
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   2 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 103 | RRR  |  30000 | PUNE   |   1 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 103 | RRR  |  30000 | PUNE   |   1 | 104 | 2017-08-17
+   2 | BBB  |  70 | DELHI  | 103 | RRR  |  30000 | PUNE   |   2 | 102 | 2017-08-24
+   2 | BBB  |  70 | DELHI  | 103 | RRR  |  30000 | PUNE   |   3 | 103 | 2017-08-15
+   2 | BBB  |  70 | DELHI  | 103 | RRR  |  30000 | PUNE   |   2 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 104 | SSS  |  70000 | MUMBAI |   1 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 104 | SSS  |  70000 | MUMBAI |   1 | 104 | 2017-08-17
+   2 | BBB  |  70 | DELHI  | 104 | SSS  |  70000 | MUMBAI |   2 | 102 | 2017-08-24
+   2 | BBB  |  70 | DELHI  | 104 | SSS  |  70000 | MUMBAI |   3 | 103 | 2017-08-15
+   2 | BBB  |  70 | DELHI  | 104 | SSS  |  70000 | MUMBAI |   2 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 101 | PPP  |  10000 | PANJI  |   1 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 101 | PPP  |  10000 | PANJI  |   1 | 104 | 2017-08-17
+   3 | CCC  |  65 | MUMBAI | 101 | PPP  |  10000 | PANJI  |   2 | 102 | 2017-08-24
+   3 | CCC  |  65 | MUMBAI | 101 | PPP  |  10000 | PANJI  |   3 | 103 | 2017-08-15
+   3 | CCC  |  65 | MUMBAI | 101 | PPP  |  10000 | PANJI  |   2 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 102 | QQQ  |  70000 | DELHI  |   1 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 102 | QQQ  |  70000 | DELHI  |   1 | 104 | 2017-08-17
+   3 | CCC  |  65 | MUMBAI | 102 | QQQ  |  70000 | DELHI  |   2 | 102 | 2017-08-24
+   3 | CCC  |  65 | MUMBAI | 102 | QQQ  |  70000 | DELHI  |   3 | 103 | 2017-08-15
+   3 | CCC  |  65 | MUMBAI | 102 | QQQ  |  70000 | DELHI  |   2 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 103 | RRR  |  30000 | PUNE   |   1 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 103 | RRR  |  30000 | PUNE   |   1 | 104 | 2017-08-17
+   3 | CCC  |  65 | MUMBAI | 103 | RRR  |  30000 | PUNE   |   2 | 102 | 2017-08-24
+   3 | CCC  |  65 | MUMBAI | 103 | RRR  |  30000 | PUNE   |   3 | 103 | 2017-08-15
+   3 | CCC  |  65 | MUMBAI | 103 | RRR  |  30000 | PUNE   |   2 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 104 | SSS  |  70000 | MUMBAI |   1 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 104 | SSS  |  70000 | MUMBAI |   1 | 104 | 2017-08-17
+   3 | CCC  |  65 | MUMBAI | 104 | SSS  |  70000 | MUMBAI |   2 | 102 | 2017-08-24
+   3 | CCC  |  65 | MUMBAI | 104 | SSS  |  70000 | MUMBAI |   3 | 103 | 2017-08-15
+   3 | CCC  |  65 | MUMBAI | 104 | SSS  |  70000 | MUMBAI |   2 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 101 | PPP  |  10000 | PANJI  |   1 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 101 | PPP  |  10000 | PANJI  |   1 | 104 | 2017-08-17
+   4 | DDD  |  80 | PUNE   | 101 | PPP  |  10000 | PANJI  |   2 | 102 | 2017-08-24
+   4 | DDD  |  80 | PUNE   | 101 | PPP  |  10000 | PANJI  |   3 | 103 | 2017-08-15
+   4 | DDD  |  80 | PUNE   | 101 | PPP  |  10000 | PANJI  |   2 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   1 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   1 | 104 | 2017-08-17
+   4 | DDD  |  80 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   2 | 102 | 2017-08-24
+   4 | DDD  |  80 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   3 | 103 | 2017-08-15
+   4 | DDD  |  80 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   2 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 103 | RRR  |  30000 | PUNE   |   1 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 103 | RRR  |  30000 | PUNE   |   1 | 104 | 2017-08-17
+   4 | DDD  |  80 | PUNE   | 103 | RRR  |  30000 | PUNE   |   2 | 102 | 2017-08-24
+   4 | DDD  |  80 | PUNE   | 103 | RRR  |  30000 | PUNE   |   3 | 103 | 2017-08-15
+   4 | DDD  |  80 | PUNE   | 103 | RRR  |  30000 | PUNE   |   2 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   1 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   1 | 104 | 2017-08-17
+   4 | DDD  |  80 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   2 | 102 | 2017-08-24
+   4 | DDD  |  80 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   3 | 103 | 2017-08-15
+   4 | DDD  |  80 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   2 | 101 | 2017-08-21
+(80 rows)
+
+
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=# SELECT * FROM st;
+ rno | tno |   lname
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+   3 | 103 | 2017-08-15
+   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# SELECT * FROM student, teacher,st WHERE student.rno = st.rno AND teacher.tno = st.tno
+tcadb16-# ;
+ rno | name | per |  city  | tno | name | salary |  city  | rno | tno |   lname
+-----+------+-----+--------+-----+------+--------+--------+-----+-----+------------
+   1 | AAA  |  60 | PUNE   | 101 | PPP  |  10000 | PANJI  |   1 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   1 | 104 | 2017-08-17
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   2 | 102 | 2017-08-24
+   3 | CCC  |  65 | MUMBAI | 103 | RRR  |  30000 | PUNE   |   3 | 103 | 2017-08-15
+   2 | BBB  |  70 | DELHI  | 101 | PPP  |  10000 | PANJI  |   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# SELECT * FROM st;
+ rno | tno |   lname
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+   3 | 103 | 2017-08-15
+   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# SELECT name.name FROM student, teacher,st WHERE student.rno = st.rno AND teacher.tno = st.tno
+tcadb16-# ;
+ERROR:  missing FROM-clause entry for table "name"
+LINE 1: SELECT name.name FROM student, teacher,st WHERE student.rno ...
+               ^
+ cadb16=# SELECT student.name, teacher.name FROM student, teacher,st WHERE student.rno = st.rno AND teacher.tno = st.tno
+tcadb16-# ;
+ name | name
+------+------
+ AAA  | PPP
+ AAA  | SSS
+ BBB  | QQQ
+ CCC  | RRR
+ BBB  | PPP
+(5 rows)
+
+
+tcadb16=# SELECT student.name AS student_name, teacher.name AS teacher_name FROM student, teacher,st WHERE student.rno = st.rno AND teacher.tno = st.tno;
+ student_name | teacher_name
+--------------+--------------
+ AAA          | PPP
+ AAA          | SSS
+ BBB          | QQQ
+ CCC          | RRR
+ BBB          | PPP
+(5 rows)
+
+
+tcadb16=# SELECT teacher.name AS teacher_name, student.name AS student_name FROM student, teacher,st WHERE student.rno = st.rno AND teacher.tno = st.tno;
+ teacher_name | student_name
+--------------+--------------
+ PPP          | AAA
+ SSS          | AAA
+ QQQ          | BBB
+ RRR          | CCC
+ PPP          | BBB
+(5 rows)
+
+
+tcadb16=# SELECT teacher.name AS teacher_name, student.name AS student_name FROM student, teacher,st WHERE student.rno = st.rno AND teacher.tno = st.tno ORDER BY teacher.name;
+ teacher_name | student_name
+--------------+--------------
+ PPP          | AAA
+ PPP          | BBB
+ QQQ          | BBB
+ RRR          | CCC
+ SSS          | AAA
+(5 rows)
+
+
+tcadb16=# SELECT * FROM student, teacher, st WHERE student.rno = st.rno AND teacher.tno = st.tno AND teacher.city = 'PUNE';
+ rno | name | per |  city  | tno | name | salary | city | rno | tno |   lname
+-----+------+-----+--------+-----+------+--------+------+-----+-----+------------
+   3 | CCC  |  65 | MUMBAI | 103 | RRR  |  30000 | PUNE |   3 | 103 | 2017-08-15
+(1 row)
+
+
+tcadb16=# SELECT * FROM student, teacher, st WHERE student.rno = st.rno AND teacher.tno = st.tno AND teacher.city = 'pune';
+ rno | name | per | city | tno | name | salary | city | rno | tno | lname
+-----+------+-----+------+-----+------+--------+------+-----+-----+-------
+(0 rows)
+
+
+tcadb16=# SELECT teacher.name AS teacher_name, student.name AS student_name
+tcadb16-# FROM   student, teacher, st
+tcadb16-# WHERE  student.rno = st.rno AND teacher.tno=st.tno
+tcadb16-# ORDER BY teacher.name;
+ teacher_name | student_name
+--------------+--------------
+ PPP          | AAA
+ PPP          | BBB
+ QQQ          | BBB
+ RRR          | CCC
+ SSS          | AAA
+(5 rows)
+
+
+tcadb16=# SELECT S.name, T.name FROM student AS S, teacher AS S, st WHERE S.rno = st.rno AND T.tno = st.tno ORDER BY T.name;
+ERROR:  table name "s" specified more than once
+tcadb16=# SELECT S.name, T.name FROM student AS S, teacher AS T, st WHERE S.rno = st.rno AND T.tno = st.tno ORDER BY T.name;
+ name | name
+------+------
+ AAA  | PPP
+ BBB  | PPP
+ BBB  | QQQ
+ CCC  | RRR
+ AAA  | SSS
+(5 rows)
+
+
+tcadb16=# SELECT T.name, S.name FROM student AS S, teacher AS T, st WHERE S.rno = st.rno AND T.tno = st.tno ORDER BY T.name;
+ name | name
+------+------
+ PPP  | AAA
+ PPP  | BBB
+ QQQ  | BBB
+ RRR  | CCC
+ SSS  | AAA
+(5 rows)
+
+
+tcadb16=# SELECT T.name, S.name FROM student S, teacher T, st WHERE S.rno = st.rno AND T.tno = st.tno ORDER BY T.name;
+ name | name
+------+------
+ PPP  | AAA
+ PPP  | BBB
+ QQQ  | BBB
+ RRR  | CCC
+ SSS  | AAA
+(5 rows)
+
+
+tcadb16=# select rno,name,per from student;
+ rno | name | per
+-----+------+-----
+   1 | AAA  |  60
+   2 | BBB  |  70
+   3 | CCC  |  65
+   4 | DDD  |  80
+(4 rows)
+
+
+tcadb16=# select rno AS rollnum ber,name,per from student;
+ERROR:  syntax error at or near "ber"
+LINE 1: select rno AS rollnum ber,name,per from student;
+                              ^
+tcadb16=# select rno AS rollnumber,name,per from student;
+ rollnumber | name | per
+------------+------+-----
+          1 | AAA  |  60
+          2 | BBB  |  70
+          3 | CCC  |  65
+          4 | DDD  |  80
+(4 rows)
+
+
+tcadb16=# select rno rollnumber,name,per from student;
+ rollnumber | name | per
+------------+------+-----
+          1 | AAA  |  60
+          2 | BBB  |  70
+          3 | CCC  |  65
+          4 | DDD  |  80
+(4 rows)
+
+
+tcadb16=# select rno rollnum ber,name,per from student;
+ERROR:  syntax error at or near "ber"
+LINE 1: select rno rollnum ber,name,per from student;
+                           ^
+tcadb16=# SELECT * FROM student JOIN st ON student.rno = st.rno;
+ rno | name | per |  city  | rno | tno |   lname
+-----+------+-----+--------+-----+-----+------------
+   1 | AAA  |  60 | PUNE   |   1 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   |   1 | 104 | 2017-08-17
+   2 | BBB  |  70 | DELHI  |   2 | 102 | 2017-08-24
+   3 | CCC  |  65 | MUMBAI |   3 | 103 | 2017-08-15
+   2 | BBB  |  70 | DELHI  |   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# SELECT * FROM student JOIN st ON student.rno = st.rno JOIN teacher ON teacher.tno = st.tno;
+ rno | name | per |  city  | rno | tno |   lname    | tno | name | salary |  city
+-----+------+-----+--------+-----+-----+------------+-----+------+--------+--------
+   1 | AAA  |  60 | PUNE   |   1 | 101 | 2017-08-21 | 101 | PPP  |  10000 | PANJI
+   1 | AAA  |  60 | PUNE   |   1 | 104 | 2017-08-17 | 104 | SSS  |  70000 | MUMBAI
+   2 | BBB  |  70 | DELHI  |   2 | 102 | 2017-08-24 | 102 | QQQ  |  70000 | DELHI
+   3 | CCC  |  65 | MUMBAI |   3 | 103 | 2017-08-15 | 103 | RRR  |  30000 | PUNE
+   2 | BBB  |  70 | DELHI  |   2 | 101 | 2017-08-21 | 101 | PPP  |  10000 | PANJI
+(5 rows)
+
+
+tcadb16=# SELECT * FROM student,teacher,st WHERE student.rno = st.rno AND teacher.tno = st.tno;
+ rno | name | per |  city  | tno | name | salary |  city  | rno | tno |   lname
+-----+------+-----+--------+-----+------+--------+--------+-----+-----+------------
+   1 | AAA  |  60 | PUNE   | 101 | PPP  |  10000 | PANJI  |   1 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   1 | 104 | 2017-08-17
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   2 | 102 | 2017-08-24
+   3 | CCC  |  65 | MUMBAI | 103 | RRR  |  30000 | PUNE   |   3 | 103 | 2017-08-15
+   2 | BBB  |  70 | DELHI  | 101 | PPP  |  10000 | PANJI  |   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# SELECT * FROM student,st,teacher WHERE student.rno = st.rno AND teacher.tno = st.tno;
+ rno | name | per |  city  | rno | tno |   lname    | tno | name | salary |  city
+-----+------+-----+--------+-----+-----+------------+-----+------+--------+--------
+   1 | AAA  |  60 | PUNE   |   1 | 101 | 2017-08-21 | 101 | PPP  |  10000 | PANJI
+   1 | AAA  |  60 | PUNE   |   1 | 104 | 2017-08-17 | 104 | SSS  |  70000 | MUMBAI
+   2 | BBB  |  70 | DELHI  |   2 | 102 | 2017-08-24 | 102 | QQQ  |  70000 | DELHI
+   3 | CCC  |  65 | MUMBAI |   3 | 103 | 2017-08-15 | 103 | RRR  |  30000 | PUNE
+   2 | BBB  |  70 | DELHI  |   2 | 101 | 2017-08-21 | 101 | PPP  |  10000 | PANJI
+(5 rows)
+
+
+tcadb16=# rollback;
+WARNING:  there is no transaction in progress
+ROLLBACK
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from teacher;
+ tno | name | salary |  city
+-----+------+--------+--------
+ 101 | PPP  |  10000 | PANJI
+ 102 | QQQ  |  70000 | DELHI
+ 103 | RRR  |  30000 | PUNE
+ 104 | SSS  |  70000 | MUMBAI
+(4 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   lname
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+   3 | 103 | 2017-08-15
+   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# select * from student, teacher,st;
+ rno | name | per |  city  | tno | name | salary |  city  | rno | tno |   lname
+-----+------+-----+--------+-----+------+--------+--------+-----+-----+------------
+   1 | AAA  |  60 | PUNE   | 101 | PPP  |  10000 | PANJI  |   1 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 101 | PPP  |  10000 | PANJI  |   1 | 104 | 2017-08-17
+   1 | AAA  |  60 | PUNE   | 101 | PPP  |  10000 | PANJI  |   2 | 102 | 2017-08-24
+   1 | AAA  |  60 | PUNE   | 101 | PPP  |  10000 | PANJI  |   3 | 103 | 2017-08-15
+   1 | AAA  |  60 | PUNE   | 101 | PPP  |  10000 | PANJI  |   2 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   1 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   1 | 104 | 2017-08-17
+   1 | AAA  |  60 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   2 | 102 | 2017-08-24
+   1 | AAA  |  60 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   3 | 103 | 2017-08-15
+   1 | AAA  |  60 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   2 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 103 | RRR  |  30000 | PUNE   |   1 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 103 | RRR  |  30000 | PUNE   |   1 | 104 | 2017-08-17
+   1 | AAA  |  60 | PUNE   | 103 | RRR  |  30000 | PUNE   |   2 | 102 | 2017-08-24
+   1 | AAA  |  60 | PUNE   | 103 | RRR  |  30000 | PUNE   |   3 | 103 | 2017-08-15
+   1 | AAA  |  60 | PUNE   | 103 | RRR  |  30000 | PUNE   |   2 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   1 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   1 | 104 | 2017-08-17
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   2 | 102 | 2017-08-24
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   3 | 103 | 2017-08-15
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   2 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 101 | PPP  |  10000 | PANJI  |   1 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 101 | PPP  |  10000 | PANJI  |   1 | 104 | 2017-08-17
+   2 | BBB  |  70 | DELHI  | 101 | PPP  |  10000 | PANJI  |   2 | 102 | 2017-08-24
+   2 | BBB  |  70 | DELHI  | 101 | PPP  |  10000 | PANJI  |   3 | 103 | 2017-08-15
+   2 | BBB  |  70 | DELHI  | 101 | PPP  |  10000 | PANJI  |   2 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   1 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   1 | 104 | 2017-08-17
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   2 | 102 | 2017-08-24
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   3 | 103 | 2017-08-15
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   2 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 103 | RRR  |  30000 | PUNE   |   1 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 103 | RRR  |  30000 | PUNE   |   1 | 104 | 2017-08-17
+   2 | BBB  |  70 | DELHI  | 103 | RRR  |  30000 | PUNE   |   2 | 102 | 2017-08-24
+   2 | BBB  |  70 | DELHI  | 103 | RRR  |  30000 | PUNE   |   3 | 103 | 2017-08-15
+   2 | BBB  |  70 | DELHI  | 103 | RRR  |  30000 | PUNE   |   2 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 104 | SSS  |  70000 | MUMBAI |   1 | 101 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 104 | SSS  |  70000 | MUMBAI |   1 | 104 | 2017-08-17
+   2 | BBB  |  70 | DELHI  | 104 | SSS  |  70000 | MUMBAI |   2 | 102 | 2017-08-24
+   2 | BBB  |  70 | DELHI  | 104 | SSS  |  70000 | MUMBAI |   3 | 103 | 2017-08-15
+   2 | BBB  |  70 | DELHI  | 104 | SSS  |  70000 | MUMBAI |   2 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 101 | PPP  |  10000 | PANJI  |   1 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 101 | PPP  |  10000 | PANJI  |   1 | 104 | 2017-08-17
+   3 | CCC  |  65 | MUMBAI | 101 | PPP  |  10000 | PANJI  |   2 | 102 | 2017-08-24
+   3 | CCC  |  65 | MUMBAI | 101 | PPP  |  10000 | PANJI  |   3 | 103 | 2017-08-15
+   3 | CCC  |  65 | MUMBAI | 101 | PPP  |  10000 | PANJI  |   2 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 102 | QQQ  |  70000 | DELHI  |   1 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 102 | QQQ  |  70000 | DELHI  |   1 | 104 | 2017-08-17
+   3 | CCC  |  65 | MUMBAI | 102 | QQQ  |  70000 | DELHI  |   2 | 102 | 2017-08-24
+   3 | CCC  |  65 | MUMBAI | 102 | QQQ  |  70000 | DELHI  |   3 | 103 | 2017-08-15
+   3 | CCC  |  65 | MUMBAI | 102 | QQQ  |  70000 | DELHI  |   2 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 103 | RRR  |  30000 | PUNE   |   1 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 103 | RRR  |  30000 | PUNE   |   1 | 104 | 2017-08-17
+   3 | CCC  |  65 | MUMBAI | 103 | RRR  |  30000 | PUNE   |   2 | 102 | 2017-08-24
+   3 | CCC  |  65 | MUMBAI | 103 | RRR  |  30000 | PUNE   |   3 | 103 | 2017-08-15
+   3 | CCC  |  65 | MUMBAI | 103 | RRR  |  30000 | PUNE   |   2 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 104 | SSS  |  70000 | MUMBAI |   1 | 101 | 2017-08-21
+   3 | CCC  |  65 | MUMBAI | 104 | SSS  |  70000 | MUMBAI |   1 | 104 | 2017-08-17
+   3 | CCC  |  65 | MUMBAI | 104 | SSS  |  70000 | MUMBAI |   2 | 102 | 2017-08-24
+   3 | CCC  |  65 | MUMBAI | 104 | SSS  |  70000 | MUMBAI |   3 | 103 | 2017-08-15
+   3 | CCC  |  65 | MUMBAI | 104 | SSS  |  70000 | MUMBAI |   2 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 101 | PPP  |  10000 | PANJI  |   1 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 101 | PPP  |  10000 | PANJI  |   1 | 104 | 2017-08-17
+   4 | DDD  |  80 | PUNE   | 101 | PPP  |  10000 | PANJI  |   2 | 102 | 2017-08-24
+   4 | DDD  |  80 | PUNE   | 101 | PPP  |  10000 | PANJI  |   3 | 103 | 2017-08-15
+   4 | DDD  |  80 | PUNE   | 101 | PPP  |  10000 | PANJI  |   2 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   1 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   1 | 104 | 2017-08-17
+   4 | DDD  |  80 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   2 | 102 | 2017-08-24
+   4 | DDD  |  80 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   3 | 103 | 2017-08-15
+   4 | DDD  |  80 | PUNE   | 102 | QQQ  |  70000 | DELHI  |   2 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 103 | RRR  |  30000 | PUNE   |   1 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 103 | RRR  |  30000 | PUNE   |   1 | 104 | 2017-08-17
+   4 | DDD  |  80 | PUNE   | 103 | RRR  |  30000 | PUNE   |   2 | 102 | 2017-08-24
+   4 | DDD  |  80 | PUNE   | 103 | RRR  |  30000 | PUNE   |   3 | 103 | 2017-08-15
+   4 | DDD  |  80 | PUNE   | 103 | RRR  |  30000 | PUNE   |   2 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   1 | 101 | 2017-08-21
+   4 | DDD  |  80 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   1 | 104 | 2017-08-17
+   4 | DDD  |  80 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   2 | 102 | 2017-08-24
+   4 | DDD  |  80 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   3 | 103 | 2017-08-15
+   4 | DDD  |  80 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   2 | 101 | 2017-08-21
+(80 rows)
+
+
+tcadb16=#
+tcadb16=#

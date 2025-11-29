@@ -1,0 +1,63 @@
+SELECT * FROM Student, Teacher;
+--------------------------------
+Ans : Cartesian Product
+
+Ambiguous = confusion
+----------------------
+
+JOIN
+-----
+--> 2 table madhe ek tri column column pahije nhi tr table join kru skt nhi
+--> any how table join kraychach asel tr bala bal kra
+    SELECT * FROM Student, Teacher;     --> Cartesian Product
+
+
+
+Q. Display count of persons from PUNE city
+--------------------------------------------
+ select (select count(*) from student where city='PUNE') +
+ 				(select count(*) from teacher where city='PUNE') 
+ 				AS count_of_pune_people;
+
+SELECT *
+FROM   student, teacher, st 
+WHERE  student.rno = st.rno AND teacher.tno=st.tno; 
+
+
+
+SELECT teacher.name AS teacher_name, student.name AS student_name 
+FROM   student, teacher, st 
+WHERE  student.rno = st.rno AND teacher.tno=st.tno 
+ORDER BY teacher.name;
+
+
+SELECT T.name AS teacher_name, S.name AS student_name 
+FROM   student AS S , teacher AS T, st 
+WHERE  S.rno = st.rno AND T.tno=st.tno 
+ORDER BY T.name;
+
+
+SELECT T.name  teacher_name, S.name  student_name 
+FROM   student S , teacher T, st 
+WHERE  S.rno = st.rno AND T.tno=st.tno 
+ORDER BY T.name;
+
+SELECT teacher.name AS teacher_name, student.name AS student_name 
+FROM   student, teacher, st 
+WHERE  student.rno = st.rno AND teacher.tno=st.tno 
+AND    teacher.city = 'PUNE'
+ORDER BY teacher.name;
+
+
+SELECT __________ 
+FROM   student, teacher, st 
+WHERE  student.rno = st.rno AND teacher.tno=st.tno 
+AND    required_condition;
+
+
+SELECT * 
+FROM   student, teacher, st 
+WHERE  student.rno = st.rno AND teacher.tno=st.tno;
+
+SELECT *
+FROM student JOIN ST ON student.rno = st.rno JOIN teacher ON teacher.tno = ST.tno;
