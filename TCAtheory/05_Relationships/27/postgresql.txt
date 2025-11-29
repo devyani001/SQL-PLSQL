@@ -1,0 +1,779 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# select * from student;
+ rno | name | per  | phno
+-----+------+------+-------
+ 101 | AAA  | 60.7 | devil
+(1 row)
+
+
+postgres=# show databases;
+ERROR:  unrecognized configuration parameter "databases"
+postgres=# show database;
+ERROR:  unrecognized configuration parameter "database"
+postgres=# \c tcadb16
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from teacher;
+ tno | name | salary |  city
+-----+------+--------+--------
+ 101 | PPP  |  10000 | PANJI
+ 102 | QQQ  |  70000 | DELHI
+ 103 | RRR  |  30000 | PUNE
+ 104 | SSS  |  70000 | MUMBAI
+(4 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   lname
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+   3 | 103 | 2017-08-15
+   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# select * from student where city = 'pune';
+ rno | name | per | city
+-----+------+-----+------
+(0 rows)
+
+
+tcadb16=# select * from student where city = 'PUNE';
+ rno | name | per | city
+-----+------+-----+------
+   1 | AAA  |  60 | PUNE
+   4 | DDD  |  80 | PUNE
+(2 rows)
+
+
+tcadb16=# SELECT student.name FROM student, teacher, st WHERE student.rno = st.rno AND teacher.tno = st.tno AND teacher.name = 'QQQ';
+ name
+------
+ BBB
+(1 row)
+
+
+tcadb16=# SELECT * FROM student, teacher, st WHERE student.rno = st.rno AND teacher.tno = st.tno AND teacher.name = 'QQQ';
+ rno | name | per | city  | tno | name | salary | city  | rno | tno |   lname
+-----+------+-----+-------+-----+------+--------+-------+-----+-----+------------
+   2 | BBB  |  70 | DELHI | 102 | QQQ  |  70000 | DELHI |   2 | 102 | 2017-08-24
+(1 row)
+
+
+tcadb16=# SELECT student.rno, student.name, student.per FROM student, teacher, st WHERE student.rno = st.rno AND teacher.tno = st.tno AND teacher.name = 'QQQ';
+ rno | name | per
+-----+------+-----
+   2 | BBB  |  70
+(1 row)
+
+
+tcadb16=# SELECT student.rno, student.name, student.per, student.city FROM student, teacher, st WHERE student.rno = st.rno AND teacher.tno = st.tno AND teacher.name = 'QQQ';
+ rno | name | per | city
+-----+------+-----+-------
+   2 | BBB  |  70 | DELHI
+(1 row)
+
+
+tcadb16=# SELECT s.rno, s.name, s.per, s.city FROM student AS S, teacher, st WHERE student.rno = st.rno AND teacher.tno = st.tno AND teacher.name = 'QQQ';
+ERROR:  invalid reference to FROM-clause entry for table "student"
+LINE 1: ....per, s.city FROM student AS S, teacher, st WHERE student.rn...
+                                                             ^
+HINT:  Perhaps you meant to reference the table alias "s".
+tcadb16=# SELECT s.rno, s.name, s.per, s.city FROM student AS s, teacher, st WHERE student.rno = st.rno AND teacher.tno = st.tno AND teacher.name = 'QQQ';
+ERROR:  invalid reference to FROM-clause entry for table "student"
+LINE 1: ....per, s.city FROM student AS s, teacher, st WHERE student.rn...
+                                                             ^
+HINT:  Perhaps you meant to reference the table alias "s".
+tcadb16=# SELECT s.rno, s.name, s.per, s.city FROM student AS s, teacher, st WHERE s.rno = st.rno AND teacher.tno = st.tno AND teacher.name = 'QQQ';
+ rno | name | per | city
+-----+------+-----+-------
+   2 | BBB  |  70 | DELHI
+(1 row)
+
+
+tcadb16=# SELECT s.rno, s.name, s.per, s.city FROM student AS s, teacher, st WHERE student.rno = st.rno AND teacher.tno = st.tno AND teacher.name = 'QQQ';
+ERROR:  invalid reference to FROM-clause entry for table "student"
+LINE 1: ....per, s.city FROM student AS s, teacher, st WHERE student.rn...
+                                                             ^
+HINT:  Perhaps you meant to reference the table alias "s".
+tcadb16=# SELECT s.rno, s.name, s.per, s.city FROM student AS s, teacher, st WHERE s.rno = st.rno AND teacher.tno = st.tno AND teacher.name = 'QQQ';
+ rno | name | per | city
+-----+------+-----+-------
+   2 | BBB  |  70 | DELHI
+(1 row)
+
+
+tcadb16=# SELECT s.rno, s.name, s.per FROM student as s, teacher as t, st WHERE s.rno = st.rno AND t.tno = st.tno WHERE t.name = 'PPP';
+ERROR:  syntax error at or near "WHERE"
+LINE 1: ... as t, st WHERE s.rno = st.rno AND t.tno = st.tno WHERE t.na...
+                                                             ^
+tcadb16=# SELECT s.rno, s.name, s.per FROM student as s, teacher as t, st WHERE s.rno = st.rno AND t.tno = st.tno AND t.name = 'PPP';
+ rno | name | per
+-----+------+-----
+   1 | AAA  |  60
+   2 | BBB  |  70
+(2 rows)
+
+
+tcadb16=# SELECT teacher.name FROM student, teacher, st WHERE student.rno = st.rno AND teacher.tno = st.tno AND student.name = 'AAA';
+ name
+------
+ PPP
+ SSS
+(2 rows)
+
+
+tcadb16=# SELECT student.name FROM student, teacher, st WHERE student.rno = st.rno AND teacher.tno = st.tno AND st.ldate = '2017-08-21';
+ERROR:  column st.ldate does not exist
+LINE 1: ...student.rno = st.rno AND teacher.tno = st.tno AND st.ldate =...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "st.lname".
+tcadb16=# SELECT st.rno FROM student, teacher, st WHERE student.rno = st.rno AND teacher.tno = st.tno AND st.ldate = '2017-08-21';
+ERROR:  column st.ldate does not exist
+LINE 1: ...student.rno = st.rno AND teacher.tno = st.tno AND st.ldate =...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "st.lname".
+tcadb16=# SELECT student.name FROM student, st WHERE student.rno = st.rno AND st.ldate = '2017-08-21';
+ERROR:  column st.ldate does not exist
+LINE 1: ...e FROM student, st WHERE student.rno = st.rno AND st.ldate =...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "st.lname".
+tcadb16=# SELECT student.name FROM student, st WHERE student.rno = st.rno AND ldate = '2017-08-21';
+ERROR:  column "ldate" does not exist
+LINE 1: ...e FROM student, st WHERE student.rno = st.rno AND ldate = '2...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "st.lname".
+tcadb16=# SELECT student.name
+tcadb16-# FROM student, st
+tcadb16-# WHERE student.rno = st.rno
+tcadb16-# AND ldate = '2017-08-21';
+ERROR:  column "ldate" does not exist
+LINE 4: AND ldate = '2017-08-21';
+            ^
+HINT:  Perhaps you meant to reference the column "st.lname".
+tcadb16=# \d st;
+                 Table "public.st"
+ Column |  Type   | Collation | Nullable | Default
+--------+---------+-----------+----------+---------
+ rno    | integer |           |          |
+ tno    | integer |           |          |
+ lname  | date    |           |          |
+Foreign-key constraints:
+    "st_rno_fkey" FOREIGN KEY (rno) REFERENCES student(rno) ON UPDATE CASCADE ON DELETE CASCADE
+    "st_tno_fkey" FOREIGN KEY (tno) REFERENCES teacher(tno) ON UPDATE CASCADE ON DELETE CASCADE
+
+
+tcadb16=# AND lname = '2017-08-21';
+ERROR:  syntax error at or near "AND"
+LINE 1: AND lname = '2017-08-21';
+        ^
+tcadb16=# SELECT student.name FROM student, st WHERE student.rno = st.rno AND lname = '2017-08-21';
+ name
+------
+ AAA
+ BBB
+(2 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   lname
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+   3 | 103 | 2017-08-15
+   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# RENAME ST lname TO ldate;
+ERROR:  syntax error at or near "RENAME"
+LINE 1: RENAME ST lname TO ldate;
+        ^
+tcadb16=# RENAME lname TO ldate;
+ERROR:  syntax error at or near "RENAME"
+LINE 1: RENAME lname TO ldate;
+        ^
+tcadb16=# ALTER TABLE student RENAME COLUMN lname TO ldate;
+ERROR:  column "lname" does not exist
+tcadb16=# ALTER TABLE st RENAME COLUMN lname TO ldate;
+ALTER TABLE
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+   3 | 103 | 2017-08-15
+   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# SELECT student.name FROM student, st WHERE student.rno = st.rno AND lname = '2017-08-21';
+ERROR:  column "lname" does not exist
+LINE 1: ...e FROM student, st WHERE student.rno = st.rno AND lname = '2...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "student.name".
+tcadb16=# SELECT student.name FROM student, st WHERE student.rno = st.rno AND ldate = '2017-08-21';
+ name
+------
+ AAA
+ BBB
+(2 rows)
+
+
+tcadb16=# SELECT student.name
+tcadb16-# FROM student, st
+tcadb16-# WHERE student.rno =st.rno
+tcadb16-# AND ldate = '2017-08-21';
+ name
+------
+ AAA
+ BBB
+(2 rows)
+
+
+tcadb16=# SELECT student.name FROM student, teacher ,st WHERE student.rno = st.rno AND teacher.tno = st.tno AND ldate = '2017-08-21';
+ name
+------
+ BBB
+ AAA
+(2 rows)
+
+
+tcadb16=# SELECT student.name FROM student, teacher ,st WHERE student.rno = st.rno AND teacher.tno = st.tno AND ldate = '2017-08-21' ORDER BY student.name;
+ name
+------
+ AAA
+ BBB
+(2 rows)
+
+
+tcadb16=# SELECT student.name FROM student, teacher ,st WHERE student.rno = st.rno AND teacher.tno = st.tno AND ldate = '2017-08-21' ORDER BY student.name DESC;
+ name
+------
+ BBB
+ AAA
+(2 rows)
+
+
+tcadb16=# SELECT student.name FROM student, teacher ,st WHERE student.rno = st.rno AND teacher.tno = st.tno AND ldate = '2017-08-21' ORDER BY student.name;
+ name
+------
+ AAA
+ BBB
+(2 rows)
+
+
+tcadb16=# SELECT count(*) FROM student, st WHERE student.rno = st.rno AND ldate = '2017-08-21';
+ count
+-------
+     2
+(1 row)
+
+
+tcadb16=# SELECT count(*) FROM student, st WHERE student.rno = st.rno AND teacher.tno = st.tno AND ldate = '2017-08-21' AND teacher.name = 'PPP';
+ERROR:  missing FROM-clause entry for table "teacher"
+LINE 1: ...) FROM student, st WHERE student.rno = st.rno AND teacher.tn...
+                                                             ^
+tcadb16=# SELECT count(*) FROM student, teacher ,st WHERE student.rno = st.rno AND teacher.tno = st.tno AND ldate = '2017-08-21' AND teacher.name = 'PPP';
+ count
+-------
+     2
+(1 row)
+
+
+tcadb16=# SELECT count(*) FROM student, st WHERE student.rno = st.rno AND ldate = '2017-08-21';
+ count
+-------
+     2
+(1 row)
+
+
+tcadb16=# SELECT count(*) FROM student, st WHERE student.rno = st.rno AND ldate != '2017-08-21';
+ count
+-------
+     3
+(1 row)
+
+
+tcadb16=# SELECT student.name FROM student, st WHERE student.rno = st.rno AND ldate != '2017-08-21';
+ name
+------
+ AAA
+ BBB
+ CCC
+(3 rows)
+
+
+tcadb16=# SELECT * FROM st WHERE ldate = '2017-08-21';
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   2 | 101 | 2017-08-21
+(2 rows)
+
+
+tcadb16=# SELECT * FROM st WHERE ldate = '21-08-2017';
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   2 | 101 | 2017-08-21
+(2 rows)
+
+
+tcadb16=# SELECT * FROM student WHERE city IN('PUNE','MUMBAI');
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(3 rows)
+
+
+tcadb16=# SELECT * FROM student WHERE city NOT IN('PUNE','MUMBAI');
+ rno | name | per | city
+-----+------+-----+-------
+   2 | BBB  |  70 | DELHI
+(1 row)
+
+
+tcadb16=# SELECT * FROM st WHERE ldate = '21-08-2017';
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   2 | 101 | 2017-08-21
+(2 rows)
+
+
+tcadb16=# SELECT rno FROM st WHERE ldate = '21-08-2017';
+ rno
+-----
+   1
+   2
+(2 rows)
+
+
+tcadb16=# SELECT * FROM student WHERE rno IN(1,2);
+ rno | name | per | city
+-----+------+-----+-------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+(2 rows)
+
+
+tcadb16=# SELECT * FROM student WHERE rno IN(SELECT rno FROM st WHERE ldate = '21-08-2017');
+ rno | name | per | city
+-----+------+-----+-------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+(2 rows)
+
+
+tcadb16=# SELECT * FROM student WHERE rno not IN(SELECT rno FROM st WHERE ldate = '21-08-2017');
+ rno | name | per |  city
+-----+------+-----+--------
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(2 rows)
+
+
+
+======================================
+SIR
+======================================
+
+Server [localhost]:
+Database [postgres]: tcadb16
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (14.2)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+tcadb16=# SELECT *
+tcadb16-# FROM   student, teacher, st
+tcadb16-# WHERE  student.rno = st.rno AND teacher.tno=st.tno;
+ rno | name | per |  city  | tno | name | salary |  city  | rno | tno |   ldate
+-----+------+-----+--------+-----+------+--------+--------+-----+-----+------------
+   1 | AAA  |  60 | PUNE   | 101 | PPP  |  10000 | PANJI  |   1 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   | 104 | SSS  |  70000 | MUMBAI |   1 | 104 | 2017-08-17
+   2 | BBB  |  70 | DELHI  | 102 | QQQ  |  70000 | DELHI  |   2 | 102 | 2017-08-24
+   3 | CCC  |  65 | MUMBAI | 103 | RRR  |  30000 | PUNE   |   3 | 103 | 2017-08-15
+   2 | BBB  |  70 | DELHI  | 101 | PPP  |  10000 | PANJI  |   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# select * from st;
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   1 | 104 | 2017-08-17
+   2 | 102 | 2017-08-24
+   3 | 103 | 2017-08-15
+   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from teacher;
+ tno | name | salary |  city
+-----+------+--------+--------
+ 101 | PPP  |  10000 | PANJI
+ 102 | QQQ  |  70000 | DELHI
+ 103 | RRR  |  30000 | PUNE
+ 104 | SSS  |  70000 | MUMBAI
+(4 rows)
+
+
+tcadb16=# select * from student where city='PUNE';
+ rno | name | per | city
+-----+------+-----+------
+   1 | AAA  |  60 | PUNE
+   4 | DDD  |  80 | PUNE
+(2 rows)
+
+
+tcadb16=# SELECT student.name
+tcadb16-# FROM   student, teacher,st
+tcadb16-# WHERE  student.rno = st.rno AND teacher.tno=st.tno
+tcadb16-# AND    teacher.name = 'QQQ';
+ name
+------
+ BBB
+(1 row)
+
+
+tcadb16=# SELECT *
+tcadb16-# FROM   student, teacher,st
+tcadb16-# WHERE  student.rno = st.rno AND teacher.tno=st.tno
+tcadb16-# AND    teacher.name = 'QQQ';
+ rno | name | per | city  | tno | name | salary | city  | rno | tno |   ldate
+-----+------+-----+-------+-----+------+--------+-------+-----+-----+------------
+   2 | BBB  |  70 | DELHI | 102 | QQQ  |  70000 | DELHI |   2 | 102 | 2017-08-24
+(1 row)
+
+
+tcadb16=# SELECT student.rno, student.name, student.per, student.city
+tcadb16-# FROM   student, teacher,st
+tcadb16-# WHERE  student.rno = st.rno AND teacher.tno=st.tno
+tcadb16-# AND    teacher.name = 'QQQ';
+ rno | name | per | city
+-----+------+-----+-------
+   2 | BBB  |  70 | DELHI
+(1 row)
+
+
+tcadb16=# SELECT S.rno, S.name, S.per, S.city
+tcadb16-# FROM   student AS S, teacher,st
+tcadb16-# WHERE  student.rno = st.rno AND teacher.tno=st.tno
+tcadb16-# AND    teacher.name = 'QQQ';
+ERROR:  invalid reference to FROM-clause entry for table "student"
+LINE 3: WHERE  student.rno = st.rno AND teacher.tno=st.tno
+               ^
+HINT:  Perhaps you meant to reference the table alias "s".
+tcadb16=# SELECT S.rno, S.name, S.per, S.city
+tcadb16-# FROM   student AS S, teacher,st
+tcadb16-# WHERE  S.rno = st.rno AND teacher.tno=st.tno
+tcadb16-# AND    teacher.name = 'QQQ';
+ rno | name | per | city
+-----+------+-----+-------
+   2 | BBB  |  70 | DELHI
+(1 row)
+
+
+tcadb16=# SELECT S.rno, S.name, S.per, S.city
+tcadb16-# FROM   student AS S, teacher,st
+tcadb16-# WHERE  S.rno = st.rno AND teacher.tno=st.tno
+tcadb16-# AND    teacher.name = 'PPP';
+ rno | name | per | city
+-----+------+-----+-------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+(2 rows)
+
+
+tcadb16=# SELECT teacher.name
+tcadb16-# FROM   student, teacher, st
+tcadb16-# WHERE  S.rno = st.rno AND teacher.tno=st.tno
+tcadb16-# AND   student.name = 'AAA';
+ERROR:  missing FROM-clause entry for table "s"
+LINE 3: WHERE  S.rno = st.rno AND teacher.tno=st.tno
+               ^
+tcadb16=# SELECT teacher.name
+tcadb16-# FROM   student, teacher, st
+tcadb16-# WHERE  student.rno = st.rno AND teacher.tno=st.tno
+tcadb16-# AND   student.name = 'AAA';
+ name
+------
+ PPP
+ SSS
+(2 rows)
+
+
+tcadb16=# SELECT student.name
+tcadb16-# FROM student, st
+tcadb16-# WHERE student.rno =st.rno
+tcadb16-# AND ldate = '2017-08-21';
+ name
+------
+ AAA
+ BBB
+(2 rows)
+
+
+tcadb16=# SELECT student.name
+tcadb16-# FROM student, teacher, st
+tcadb16-# WHERE student.rno = st.rno AND teacher.tno=st.tno
+tcadb16-# AND ldate = '2017-08-21';
+ name
+------
+ BBB
+ AAA
+(2 rows)
+
+
+tcadb16=# SELECT count(*)
+tcadb16-# FROM student, st
+tcadb16-# WHERE student.rno =st.rno
+tcadb16-# AND ldate = '2017-08-21';
+ count
+-------
+     2
+(1 row)
+
+
+tcadb16=# SELECT count(*)
+tcadb16-# FROM student, teacher, st
+tcadb16-# WHERE student.rno =st.rno AND teacher.tno = st.tno
+tcadb16-# AND ldate = '2017-08-21'
+tcadb16-# AND teacher.name = 'PPP';
+ count
+-------
+     2
+(1 row)
+
+
+tcadb16=# SELECT student.name
+tcadb16-# FROM student, st
+tcadb16-# WHERE student.rno =st.rno
+tcadb16-# AND ldate = '2017-08-21';
+ name
+------
+ AAA
+ BBB
+(2 rows)
+
+
+tcadb16=# SELECT student.name
+tcadb16-# FROM student, st
+tcadb16-# WHERE student.rno =st.rno
+tcadb16-# AND ldate != '2017-08-21';
+ name
+------
+ AAA
+ BBB
+ CCC
+(3 rows)
+
+
+tcadb16=# SELECT student.name
+tcadb16-# FROM student, st
+tcadb16-# WHERE student.rno =st.rno
+tcadb16-# AND ldate != '2017-08-21';
+ name
+------
+ AAA
+ BBB
+ CCC
+(3 rows)
+
+
+tcadb16=# select * from student;
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(4 rows)
+
+
+tcadb16=# select * from student WHERE city IN ('PUNE','MUMBAI');
+ rno | name | per |  city
+-----+------+-----+--------
+   1 | AAA  |  60 | PUNE
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(3 rows)
+
+
+tcadb16=# select * from student WHERE city NOT IN ('PUNE','MUMBAI');
+ rno | name | per | city
+-----+------+-----+-------
+   2 | BBB  |  70 | DELHI
+(1 row)
+
+
+tcadb16=# select * from st where ldate = '2017-08-21';
+ rno | tno |   ldate
+-----+-----+------------
+   1 | 101 | 2017-08-21
+   2 | 101 | 2017-08-21
+(2 rows)
+
+
+tcadb16=# select rno from st where ldate = '2017-08-21';
+ rno
+-----
+   1
+   2
+(2 rows)
+
+
+tcadb16=# select * from student where rno IN (1,2);
+ rno | name | per | city
+-----+------+-----+-------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+(2 rows)
+
+
+tcadb16=# select * from student where rno IN (select rno from st where ldate = '2017-08-21');
+ rno | name | per | city
+-----+------+-----+-------
+   1 | AAA  |  60 | PUNE
+   2 | BBB  |  70 | DELHI
+(2 rows)
+
+
+tcadb16=# select * from student where rno NOT IN (select rno from st where ldate = '2017-08-21');
+ rno | name | per |  city
+-----+------+-----+--------
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(2 rows)
+
+
+tcadb16=# select rno from st where ldate = '2017-08-21';
+ rno
+-----
+   1
+   2
+(2 rows)
+
+
+tcadb16=# select * from student where rno NOT IN (select rno from st where ldate = '2017-08-21');
+ rno | name | per |  city
+-----+------+-----+--------
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(2 rows)
+
+
+tcadb16=# select * from student where rno NOT IN (select rno from st where ldate = '2017-08-21');
+ rno | name | per |  city
+-----+------+-----+--------
+   3 | CCC  |  65 | MUMBAI
+   4 | DDD  |  80 | PUNE
+(2 rows)
+
+
+tcadb16=# SELECT student.name
+tcadb16-# FROM student, st
+tcadb16-# WHERE student.rno =st.rno
+tcadb16-# AND ldate != '2017-08-21' AND student.rno;
+ERROR:  argument of AND must be type boolean, not type integer
+LINE 4: AND ldate != '2017-08-21' AND student.rno;
+                                      ^
+tcadb16=# SELECT student.name
+tcadb16-# FROM student, st
+tcadb16-# WHERE student.rno =st.rno
+tcadb16-# AND ldate != '2017-08-21'
+tcadb16-# AND student.rno NOT IN (select rno from st where ldate = '2017-08-21');
+ name
+------
+ CCC
+(1 row)
+
+
+tcadb16=# SELECT student.name
+tcadb16-# FROM student, st
+tcadb16-# WHERE student.rno =st.rno
+tcadb16-# AND student.rno NOT IN (select rno from st where ldate = '2017-08-21');
+ name
+------
+ CCC
+(1 row)
+
+
+tcadb16=# SELECT student.name
+tcadb16-# FROM student, st
+tcadb16-# WHERE student.rno =st.rno;
+ name
+------
+ AAA
+ AAA
+ BBB
+ CCC
+ BBB
+(5 rows)
+
+
+tcadb16=# SELECT *
+tcadb16-# FROM student, st
+tcadb16-# WHERE student.rno =st.rno;
+ rno | name | per |  city  | rno | tno |   ldate
+-----+------+-----+--------+-----+-----+------------
+   1 | AAA  |  60 | PUNE   |   1 | 101 | 2017-08-21
+   1 | AAA  |  60 | PUNE   |   1 | 104 | 2017-08-17
+   2 | BBB  |  70 | DELHI  |   2 | 102 | 2017-08-24
+   3 | CCC  |  65 | MUMBAI |   3 | 103 | 2017-08-15
+   2 | BBB  |  70 | DELHI  |   2 | 101 | 2017-08-21
+(5 rows)
+
+
+tcadb16=# select rno from st where ldate = '2017-08-21';
+ rno
+-----
+   1
+   2
+(2 rows)
+
+
+tcadb16=#

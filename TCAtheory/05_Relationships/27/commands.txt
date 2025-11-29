@@ -1,0 +1,56 @@
+SELECT student.rno, student.name, student.per, student.city
+FROM   student, teacher,st 
+WHERE  student.rno = st.rno AND teacher.tno=st.tno
+AND    teacher.name = 'QQQ'; 
+
+
+SELECT S.rno, S.name, S.per, S.city
+FROM   student AS S, teacher,st 
+WHERE  S.rno = st.rno AND teacher.tno=st.tno
+AND    teacher.name = 'QQQ'; 
+
+SELECT S.rno, S.name, S.per, S.city
+FROM   student AS S, teacher,st 
+WHERE  S.rno = st.rno AND teacher.tno=st.tno
+AND    teacher.name = 'PPP'; 
+
+
+
+SELECT distinct teacher.name
+FROM   student, teacher, st 
+WHERE  student.rno = st.rno AND teacher.tno=st.tno
+AND   student.name = 'AAA';
+
+SELECT student.name
+FROM student, st
+WHERE student.rno =st.rno
+AND ldate = '2017-08-21';
+
+
+SELECT count(*)
+FROM student, st
+WHERE student.rno =st.rno
+AND ldate = '2017-08-21';
+
+
+SELECT count(*)
+FROM student, teacher, st
+WHERE student.rno =st.rno AND teacher.tno = st.tno
+AND ldate = '2017-08-21'
+AND teacher.name = 'PPP';
+
+SELECT student.name
+FROM student, st
+WHERE student.rno =st.rno
+AND ldate != '2017-08-21';
+
+
+tcadb16=# select rno from st where ldate = '2017-08-21';
+
+ rno
+-----
+   1
+   2
+
+select * from student where rno IN (1,2);
+
