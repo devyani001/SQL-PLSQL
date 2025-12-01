@@ -1,0 +1,111 @@
+==================
+1-1 Relationship
+==================
+
+M-M
+M-1
+1-M
+1-1
+<%-- Logic to Print message in JSP --%>
+
+
+groom(gno,name)
+bride(bno, name, gno, mdate)
+
+CREATE TABLE groom(
+	gno int primary key,
+	name varchar(10)
+);
+
+CREATE TABLE bride(
+	bno int primary key,
+	name varchar(10),
+
+	gno int UNIQUE references groom(gno) ON DELETE CASCADE ON UPDATE CASCADE,
+
+	mdate date
+
+);
+
+insert into groom values(1,'AAA'); 
+insert into groom values(2,'BBB'); 
+insert into groom values(3,'CCC'); 
+insert into groom values(4,'DDD'); 
+
+
+insert into bride values(101,'PPP',3,'2017-01-27'); 
+insert into bride values(102,'QQQ',1,'2020-06-05'); 
+insert into bride values(103,'RRR',4,'2020-07-10'); 
+insert into bride values(104,'SSS',2,'2020-08-15'); 
+
+
+SELECT groom.name as groom_name, bride.name as bride_name, mdate as marriage_date
+FROM groom, bride
+WHERE groom.gno = bride.gno;
+
+
+SELECT groom.name as groom_name, bride.name as bride_name, mdate as marriage_date
+FROM groom JOIN bride ON groom.gno = bride.gno;
+
+
+SELECT *
+FROM groom, bride
+WHERE groom.gno = bride.gno;
+
+Display Names of couple those who are married in covid time. 
+
+
+SELECT groom.name as groom_name, bride.name as bride_name, mdate as marriage_date
+FROM groom, bride
+WHERE groom.gno = bride.gno
+AND mdate BETWEEN '2020-03-22' AND '2022-04-30';
+
+
+
+SELECT count(*)
+FROM groom, bride
+WHERE groom.gno = bride.gno
+AND mdate BETWEEN '2020-03-22' AND '2022-04-30';
+
+
+SELECT groom.name as groom_name, bride.name as bride_name, mdate as marriage_date
+FROM groom, bride
+WHERE groom.gno = bride.gno
+AND mdate <'2020-03-22';
+
+
+SELECT groom.name as groom_name, bride.name as bride_name, mdate as marriage_date
+FROM groom, bride
+WHERE groom.gno = bride.gno
+order by mdate;
+
+
+select name 
+from groom 
+where gno NOT IN (select gno from bride where gno IS NOT NULL);
+                 (3,1,4,2)
+
+
+***
+
+Unmarried bride
+----------------
+select name from bride where gno IS NULL;
+
+ name
+------
+ TTT
+
+Unmarried Groom
+-----------------
+tcadb16=# select name from groom where gno NOT IN (select gno from bride where gno IS NOT NULL);
+ name
+------
+ EEE
+(1 row)
+
+
+Find names of Unmarried Persons
+----------------------------------
+ (select name from groom where gno NOT IN (select gno from bride where gno IS NOT NULL)) UNION (select name from bride where gno IS NULL);
+

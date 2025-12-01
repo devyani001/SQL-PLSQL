@@ -1,0 +1,390 @@
+Server [localhost]:
+Database [postgres]: tcadb16
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+tcadb16=# create table groom(gno int primary key, name varchar(10));
+CREATE TABLE
+tcadb16=# create table bride(bno int primary key, name VARCHAR(10), gno int UNIQUE REFERENCES groom(gno) ON DELETE CASCADE ON DELETE CASCADE, mdate DATE);
+ERROR:  syntax error at or near "DELETE"
+LINE 1: ...UNIQUE REFERENCES groom(gno) ON DELETE CASCADE ON DELETE CAS...
+                                                             ^
+tcadb16=# create table bride(bno int primary key, name VARCHAR(10), gno int UNIQUE REFERENCES groom(gno) ON DELETE CASCADE ON UPDATE CASCADE, mdate DATE);
+CREATE TABLE
+tcadb16=# select * from groom;
+ gno | name
+-----+------
+(0 rows)
+
+
+tcadb16=# select * from bride;
+ bno | name | gno | mdate
+-----+------+-----+-------
+(0 rows)
+
+
+tcadb16=# insert into groom values(1,'AAA');
+INSERT 0 1
+tcadb16=# insert into groom values(2,'BBB');
+INSERT 0 1
+tcadb16=# insert into groom values(3,'CCC');
+INSERT 0 1
+tcadb16=# insert into groom values(4,'DDD');
+INSERT 0 1
+tcadb16=# insert into bride values(101,'PPP',3,'2017-01-27');
+INSERT 0 1
+tcadb16=# insert into bride values(102,'QQQ',1,'2020-06-05');
+INSERT 0 1
+tcadb16=# insert into bride values(103,'RRR',4,'2020-07-10');
+INSERT 0 1
+tcadb16=# insert into bride values(104,'SSS',2,'2020-08-15');
+INSERT 0 1
+tcadb16=# select * from bride;
+ bno | name | gno |   mdate
+-----+------+-----+------------
+ 101 | PPP  |   3 | 2017-01-27
+ 102 | QQQ  |   1 | 2020-06-05
+ 103 | RRR  |   4 | 2020-07-10
+ 104 | SSS  |   2 | 2020-08-15
+(4 rows)
+
+
+tcadb16=# select * from groom;
+ gno | name
+-----+------
+   1 | AAA
+   2 | BBB
+   3 | CCC
+   4 | DDD
+(4 rows)
+
+
+tcadb16=# SELECT groom.name as groom_name, bride.name as bride_name FROM groom, bride WHERE groom.gno = bride.gno;
+ groom_name | bride_name
+------------+------------
+ AAA        | QQQ
+ BBB        | SSS
+ CCC        | PPP
+ DDD        | RRR
+(4 rows)
+
+
+tcadb16=# SELECT groom.name as groom_name, bride.name as bride_name, mdate as married_Date FROM groom, bride WHERE groom.gno = bride.gno;
+ groom_name | bride_name | married_date
+------------+------------+--------------
+ AAA        | QQQ        | 2020-06-05
+ BBB        | SSS        | 2020-08-15
+ CCC        | PPP        | 2017-01-27
+ DDD        | RRR        | 2020-07-10
+(4 rows)
+
+
+tcadb16=# SELECT groom.name as groom_name, bride.name as bride_name, bride.mdate as married_Date FROM groom, bride WHERE groom.gno = bride.gno;
+ groom_name | bride_name | married_date
+------------+------------+--------------
+ AAA        | QQQ        | 2020-06-05
+ BBB        | SSS        | 2020-08-15
+ CCC        | PPP        | 2017-01-27
+ DDD        | RRR        | 2020-07-10
+(4 rows)
+
+
+tcadb16=# SELECT groom.name groom_name, bride.name bride_name FROM groom JOIN bride ON groom.gno = bride.gno;
+ groom_name | bride_name
+------------+------------
+ AAA        | QQQ
+ BBB        | SSS
+ CCC        | PPP
+ DDD        | RRR
+(4 rows)
+
+
+tcadb16=# SELECT groom.name groom_name, bride.name bride_name, bride.mdate marriage_date FROM groom JOIN bride ON groom.gno = bride.gno;
+ groom_name | bride_name | marriage_date
+------------+------------+---------------
+ AAA        | QQQ        | 2020-06-05
+ BBB        | SSS        | 2020-08-15
+ CCC        | PPP        | 2017-01-27
+ DDD        | RRR        | 2020-07-10
+(4 rows)
+
+
+tcadb16=# SELECT* FROM groom JOIN bride ON groom.gno = bride.gno;
+ gno | name | bno | name | gno |   mdate
+-----+------+-----+------+-----+------------
+   1 | AAA  | 102 | QQQ  |   1 | 2020-06-05
+   2 | BBB  | 104 | SSS  |   2 | 2020-08-15
+   3 | CCC  | 101 | PPP  |   3 | 2017-01-27
+   4 | DDD  | 103 | RRR  |   4 | 2020-07-10
+(4 rows)
+
+
+tcadb16=# select*fromstudent;
+ERROR:  syntax error at or near "fromstudent"
+LINE 1: select*fromstudent;
+               ^
+tcadb16=# select*from student;
+ rno | name | per |  city  | tno |   ldate
+-----+------+-----+--------+-----+------------
+   1 | AAA  |  60 | PUNE   | 103 | 2017-08-21
+   2 | BBB  |  70 | DELHI  | 104 | 2017-08-15
+   3 | CCC  |  65 | MUMBAI | 101 | 2017-08-17
+   4 | DDD  |  80 | PUNE   | 101 | 2017-08-15
+(4 rows)
+
+
+tcadb16=# SELECT* FROM groom JOIN bride ON groom.gno = bride.gno;
+ gno | name | bno | name | gno |   mdate
+-----+------+-----+------+-----+------------
+   1 | AAA  | 102 | QQQ  |   1 | 2020-06-05
+   2 | BBB  | 104 | SSS  |   2 | 2020-08-15
+   3 | CCC  | 101 | PPP  |   3 | 2017-01-27
+   4 | DDD  | 103 | RRR  |   4 | 2020-07-10
+(4 rows)
+
+
+tcadb16=# SELECT groom.name groom_name, bride.name bride_name, bride.mdate marriage_date FROM groom JOIN bride ON groom.gno = bride.gno AND mdate BETWEEN '2020-03-22' AND '2022-04-03';
+ groom_name | bride_name | marriage_date
+------------+------------+---------------
+ AAA        | QQQ        | 2020-06-05
+ DDD        | RRR        | 2020-07-10
+ BBB        | SSS        | 2020-08-15
+(3 rows)
+
+
+tcadb16=# SELECT count(*) FROM groom JOIN bride ON groom.gno = bride.gno AND mdate BETWEEN '2020-03-22' AND '2022-04-03';
+ count
+-------
+     3
+(1 row)
+
+
+tcadb16=# SELECT groom.name groom_name, bride.name bride_name, bride.mdate marriage_date FROM groom JOIN bride ON groom.gno = bride.gno AND mdate <'2020-03-22';
+ groom_name | bride_name | marriage_date
+------------+------------+---------------
+ CCC        | PPP        | 2017-01-27
+(1 row)
+
+
+tcadb16=# SELECT groom.name groom_name, bride.name bride_name, bride.mdate marriage_date FROM groom JOIN bride ON groom.gno = bride.gno ORDER BY mdate;
+ groom_name | bride_name | marriage_date
+------------+------------+---------------
+ CCC        | PPP        | 2017-01-27
+ AAA        | QQQ        | 2020-06-05
+ DDD        | RRR        | 2020-07-10
+ BBB        | SSS        | 2020-08-15
+(4 rows)
+
+
+tcadb16=# select * from bride;
+ bno | name | gno |   mdate
+-----+------+-----+------------
+ 101 | PPP  |   3 | 2017-01-27
+ 102 | QQQ  |   1 | 2020-06-05
+ 103 | RRR  |   4 | 2020-07-10
+ 104 | SSS  |   2 | 2020-08-15
+(4 rows)
+
+
+tcadb16=# insert into bride(105, 'TTT',5, '2025-08-08');
+ERROR:  syntax error at or near "105"
+LINE 1: insert into bride(105, 'TTT',5, '2025-08-08');
+                          ^
+tcadb16=# insert into groom(5,TTT);
+ERROR:  syntax error at or near "5"
+LINE 1: insert into groom(5,TTT);
+                          ^
+tcadb16=# insert into groom(5,'TTT');
+ERROR:  syntax error at or near "5"
+LINE 1: insert into groom(5,'TTT');
+                          ^
+tcadb16=# select * from groom;
+ gno | name
+-----+------
+   1 | AAA
+   2 | BBB
+   3 | CCC
+   4 | DDD
+(4 rows)
+
+
+tcadb16=# select * from bride;
+ bno | name | gno |   mdate
+-----+------+-----+------------
+ 101 | PPP  |   3 | 2017-01-27
+ 102 | QQQ  |   1 | 2020-06-05
+ 103 | RRR  |   4 | 2020-07-10
+ 104 | SSS  |   2 | 2020-08-15
+(4 rows)
+
+
+tcadb16=# insert into groom(5,'ttt');
+ERROR:  syntax error at or near "5"
+LINE 1: insert into groom(5,'ttt');
+                          ^
+tcadb16=# insert into groom values(5,'ttt');
+INSERT 0 1
+tcadb16=# insert into bride(105, 'TTT',5, '2025-08-08');
+ERROR:  syntax error at or near "105"
+LINE 1: insert into bride(105, 'TTT',5, '2025-08-08');
+                          ^
+tcadb16=# insert into bride values(105, 'TTT',5, '2025-08-08');
+INSERT 0 1
+tcadb16=# select * from bride;
+ bno | name | gno |   mdate
+-----+------+-----+------------
+ 101 | PPP  |   3 | 2017-01-27
+ 102 | QQQ  |   1 | 2020-06-05
+ 103 | RRR  |   4 | 2020-07-10
+ 104 | SSS  |   2 | 2020-08-15
+ 105 | TTT  |   5 | 2025-08-08
+(5 rows)
+
+
+tcadb16=# select * from groom;
+ gno | name
+-----+------
+   1 | AAA
+   2 | BBB
+   3 | CCC
+   4 | DDD
+   5 | ttt
+(5 rows)
+
+
+tcadb16=# insert into bride values(106,'ttt',1,'2025-12-01');
+ERROR:  duplicate key value violates unique constraint "bride_gno_key"
+DETAIL:  Key (gno)=(1) already exists.
+tcadb16=# insert into bride(bno,name,mdate) values(106,'ttt','2025-12-01');
+INSERT 0 1
+tcadb16=# select * from bride;
+ bno | name | gno |   mdate
+-----+------+-----+------------
+ 101 | PPP  |   3 | 2017-01-27
+ 102 | QQQ  |   1 | 2020-06-05
+ 103 | RRR  |   4 | 2020-07-10
+ 104 | SSS  |   2 | 2020-08-15
+ 105 | TTT  |   5 | 2025-08-08
+ 106 | ttt  |     | 2025-12-01
+(6 rows)
+
+
+tcadb16=# select * from groom;
+ gno | name
+-----+------
+   1 | AAA
+   2 | BBB
+   3 | CCC
+   4 | DDD
+   5 | ttt
+(5 rows)
+
+
+tcadb16=# select * from bride;
+ bno | name | gno |   mdate
+-----+------+-----+------------
+ 101 | PPP  |   3 | 2017-01-27
+ 102 | QQQ  |   1 | 2020-06-05
+ 103 | RRR  |   4 | 2020-07-10
+ 104 | SSS  |   2 | 2020-08-15
+ 105 | TTT  |   5 | 2025-08-08
+ 106 | ttt  |     | 2025-12-01
+(6 rows)
+
+
+tcadb16=# select name from bride WHERE gno IS NULL;
+ name
+------
+ ttt
+(1 row)
+
+
+tcadb16=# select * from groom;
+ gno | name
+-----+------
+   1 | AAA
+   2 | BBB
+   3 | CCC
+   4 | DDD
+   5 | ttt
+(5 rows)
+
+
+tcadb16=# select name from groom WHERE gno NOT IN (3,1,4,2);
+ name
+------
+ ttt
+(1 row)
+
+
+tcadb16=# select name from groom WHERE gno NOT IN (select gno from bride);
+ name
+------
+(0 rows)
+
+
+tcadb16=# select name from groom WHERE gno IN (3,1,4,2);
+ name
+------
+ AAA
+ BBB
+ CCC
+ DDD
+(4 rows)
+
+
+tcadb16=# select name from groom WHERE gno IN (select gno from bride WHERE gno IS NOT NULL);
+ name
+------
+ AAA
+ BBB
+ CCC
+ DDD
+ ttt
+(5 rows)
+
+
+tcadb16=# select name from groom WHERE gno NOT IN (select gno from bride WHERE gno IS NOT NULL);
+ name
+------
+(0 rows)
+
+
+tcadb16=# select name from groom where gno NOT IN (select gno from bride where gno IS NOT NULL);
+ name
+------
+(0 rows)
+
+
+tcadb16=# insert into groom values(6,'EEE');
+INSERT 0 1
+tcadb16=# select name from groom where gno NOT IN (select gno from bride where gno IS NOT NULL);
+ name
+------
+ EEE
+(1 row)
+
+
+tcadb16=# select name from bride where gno is null;
+ name
+------
+ ttt
+(1 row)
+
+
+tcadb16=# (select name from groom where gno NOT IN (select gno from bride where gno IS NOT NULL)) UNION (select name from bride where gno is null);
+ name
+------
+ ttt
+ EEE
+(2 rows)
+
+
+tcadb16=#
