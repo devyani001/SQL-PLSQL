@@ -1,0 +1,93 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select * from account;
+ ano | name | balance
+-----+------+---------
+ 101 | AAA  |    1000
+ 102 | BBB  |    2000
+ 103 | CCC  |    3000
+(3 rows)
+
+
+tcadb16=# BEGIN TRANSACITON;
+ERROR:  syntax error at or near "TRANSACITON"
+LINE 1: BEGIN TRANSACITON;
+              ^
+tcadb16=# BEGIN TRANSACTION;
+BEGIN
+tcadb16=*# update account set balance = balance - 400 WHERE ano=101;
+UPDATE 1
+tcadb16=*# update account set balance = balance + 400 WHERE ano=101;
+UPDATE 1
+tcadb16=*# COMMIT TRANSACTION;
+COMMIT
+tcadb16=# select * from account;
+ ano | name | balance
+-----+------+---------
+ 102 | BBB  |    2000
+ 103 | CCC  |    3000
+ 101 | AAA  |    1000
+(3 rows)
+
+
+tcadb16=# BEGIN TRANSACITON;
+ERROR:  syntax error at or near "TRANSACITON"
+LINE 1: BEGIN TRANSACITON;
+              ^
+tcadb16=# COMMIT TRANSACTION;
+WARNING:  there is no transaction in progress
+COMMIT
+tcadb16=# BEGIN TRANSACTION
+tcadb16-# ;
+BEGIN
+tcadb16=*# update account set balance = balance - 400 WHERE ano=101;
+UPDATE 1
+tcadb16=*# update account set balance = balance + 400 WHERE ano=103;
+UPDATE 1
+tcadb16=*# COMMIT TRANSACTION;
+COMMIT
+tcadb16=# select * from account;
+ ano | name | balance
+-----+------+---------
+ 102 | BBB  |    2000
+ 101 | AAA  |     600
+ 103 | CCC  |    3400
+(3 rows)
+
+
+tcadb16=# BEGIN TRANSACTION;
+BEGIN
+tcadb16=*# UPDATE account set balance = balance - 700 where ano = 102;
+UPDATE 1
+tcadb16=*# UPDATE account set balance = balance - 700 where ano = 101;
+ERROR:  new row for relation "account" violates check constraint "account_balance_check"
+DETAIL:  Failing row contains (101, AAA, -100).
+tcadb16=!# ROLLBACK TRANSACTION;
+ROLLBACK
+tcadb16=# select * from account;
+ ano | name | balance
+-----+------+---------
+ 102 | BBB  |    2000
+ 101 | AAA  |     600
+ 103 | CCC  |    3400
+(3 rows)
+
+
+tcadb16=#
+
+====================
+SIR
+====================
+

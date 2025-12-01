@@ -1,0 +1,56 @@
+==============
+Transaction
+==============
+
+
+Q. What is mean Transaction ?
+------------------------------
+--> Set of logically related database operations is called as Transaction
+--> Example:
+	Person 'A' wants to transfer Rs.500 to Person 'B'
+
+
+ T1                    
+------                     
+R(A)                  
+A = A - 500
+W(A)
+
+R(B)
+B = B + 500
+W(B)
+commit
+
+Transaction failure in between the operations ---------------------------------------------- 
+Now that we understand what is transaction, we should understand what are the problems associated with it. 
+
+The main problem that can happen during a transaction is that the transaction can fail before finishing the all the operations in the set. This can happen due to power failure, system crash etc. 
+
+This is a serious problem that can leave database in an inconsistent state. Assume that transaction fail after third operation (see the example above) then the amount would be deducted from your account but your friend will not receive it.
+
+Commit: 
+------
+---> If all the operations in a transaction are completed successfully then commit those changes to the database permanently. 
+ 
+Rollback:
+--------- 
+---> If any of the operation fails then rollback all the changes done by previous operations.
+
+CREATE TABLE account (
+	ano int primary key, 
+	name varchar(20), 
+	balance float CHECK(balance>500) 
+);
+
+INSERT INTO  account VALUES(101,'AAA',1000); 
+INSERT INTO  account VALUES(102,'BBB',2000); 
+INSERT INTO  account VALUES(103,'CCC',3000); 
+
+BEGIN TRANSACTION;
+	update account set balance = balance-400 where ano=101;
+	update account set balance = balance+400 where ano=103;
+COMMIT TRANSACTION;
+
+OR
+---
+ROLLBACK TRANSACTION;
