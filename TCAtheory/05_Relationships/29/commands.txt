@@ -1,0 +1,78 @@
+===================================================
+*One-Many Relationship* === Many-One Relationship
+===================================================
+
+teacher(tno, name, salary ,city)
+student(rno, name, per , city, tno, ldate)
+
+CREATE TABLE teacher(
+	tno int primary key,
+	name varchar(10),
+	salary float,
+	city varchar(10)
+);
+
+CREATE TABLE student(
+	rno int primary key,
+	name varchar(10),
+	per float,
+	city varchar(10),
+
+	tno int references teacher(tno) ON DELETE CASCADE ON UPDATE CASCADE,
+	ldate date
+);
+
+INSERT INTO teacher VALUES(101,'PPP',10000,'PANJI'); 
+INSERT INTO teacher VALUES(102,'QQQ',70000,'DELHI'); 
+INSERT INTO teacher VALUES(103,'RRR',30000,'PUNE'); 
+INSERT INTO teacher VALUES(104,'SSS',70000,'MUMBAI');
+
+INSERT INTO student VALUES(1,'AAA',60,'PUNE',103,'2017-08-21'); 
+INSERT INTO student VALUES(2,'BBB',70,'DELHI',104,'2017-08-15'); 
+INSERT INTO student VALUES(3,'CCC',65,'MUMBAI',101,'2017-08-17'); 
+INSERT INTO student VALUES(4,'DDD',80,'PUNE',101,'2017-08-15'); 
+
+SELECT *
+FROM student, teacher
+WHERE student.tno = teacher.tno;
+
+
+SELECT * 
+FROM student JOIN teacher ON student.tno = teacher.tno;
+
+SELECT student.name
+FROM student, teacher
+WHERE student.tno = teacher.tno
+AND teacher.name = 'PPP';
+
+SELECT teacher.name, student.name
+FROM student, teacher
+WHERE student.tno = teacher.tno
+AND ldate='2017-08-15'
+ORDER BY teacher.name;
+
+SELECT teacher.name, student.name
+FROM student, teacher
+WHERE student.tno = teacher.tno
+AND ldate='2017-08-15'
+ORDER BY teacher.name;
+
+SELECT teacher.name, student.name
+FROM student, teacher
+WHERE student.tno = teacher.tno
+AND (ldate >='2017-08-01' AND ldate<='2017-08-20')
+ORDER BY teacher.name;
+
+
+SELECT teacher.name, student.name
+FROM student, teacher
+WHERE student.tno = teacher.tno
+AND ldate BETWEEN '2017-08-01' AND '2017-08-20'
+ORDER BY teacher.name;
+
+
+M-M
+M-1
+1-M
+1-1
+<%-- Logic to Print message in JSP --%>
