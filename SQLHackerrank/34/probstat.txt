@@ -1,0 +1,245 @@
+TOP EARNERS
+============
+
+We define an employee's total earnings to be their monthly  worked, and the maximum total earnings to be the maximum total earnings for any employee in the Employee table. Write a query to find the maximum total earnings for all employees as well as the total number of employees who have maximum total earnings. Then print these values as  space-separated integers.
+
+Input Format
+
+The Employee table containing employee data for a company is described as follows:
+
+
+
+where employee_id is an employee's ID number, name is their name, months is the total number of months they've been working for the company, and salary is the their monthly salary.
+
+Sample Input
+
+
+
+Sample Output
+
+69952 1
+Explanation
+
+The table and earnings data is depicted in the following diagram: 
+
+The maximum earnings value is . The only employee with earnings  is Kimberly, so we print the maximum earnings value () and a count of the number of employees who have earned  (which is ) as two space-separated values.
+
+
+ANSWER :
+========
+
+/*
+Enter your query here.
+    total = salary * months;
+    
+
+*/
+-- SELECT MAX(months*salary) AS mon, COUNT(mon) FROM Employee;
+
+-- SELECT max(months*salary) AS sal FROM Employee;
+
+-- SELECT salary as max_sal from Employee WHERE salary < (SELECT max(months*salary) AS sal FROM Employee);
+
+SELECT
+    (select max(months*salary) from Employee),
+    (select COUNT(*) from Employee WHERE months*salary = (select max(months*salary) from Employee)
+    );
+
+
+
+ChatGPT
+=========
+
+    You're attempting the right idea, but the query you wrote has a few issues.
+Let me explain what the question wants and how to think about it — without giving the final full query yet.
+
+✅ What the question is asking
+
+We need two things:
+
+Maximum total earnings among all employees
+Total earnings = months * salary
+
+How many employees have that maximum earnings value
+
+Then print them space-separated (e.g., 69952 1).
+
+❌ Issues with your attempt:
+SELECT MAX(months*salary) AS mon, COUNT(mon) FROM Employee;
+
+
+COUNT(mon) doesn’t work because mon is not a column in the table — it's an alias created in the same SELECT clause, and SQL does not allow referencing it there.
+
+Also, this counts all employees, not only those with max earnings.
+
+Next line:
+SELECT salary as max_sal from Employee WHERE salary < (SELECT max(months*salary) AS sal FROM Employee);
+
+
+This is unrelated — you're comparing salary instead of total earnings (months * salary).
+
+Also, < is incorrect — we need employees equal to the max.
+
+🧠 Think of it like this:
+
+Step 1️⃣ — Find the maximum earning:
+
+SELECT MAX(months * salary) FROM Employee;
+
+
+Step 2️⃣ — Count how many employees have that earning:
+
+SELECT COUNT(*) FROM Employee WHERE months * salary = (max earning)
+
+🔍 Now combine both parts into one query
+
+Hint: use a subquery for the maximum earning and count employees where (months * salary) equals that value.
+
+Structure will look like:
+
+SELECT 
+    (subquery for max earning),
+    (subquery for count of employees having that earning);
+
+Now your turn:
+
+Try to fill in this structure:
+
+SELECT
+    ( _________ ),
+    ( SELECT COUNT(*) FROM Employee WHERE months * salary = ( _________ ) );
+
+
+Both blanks should contain the same expression.
+
+Want me to check your final answer after you try? 😊
+
+You said:
+select max(salary*months) from employee, select count(*) from employee where months* salary = (select max(salary*months) from employee));
+ChatGPT said:
+
+Good try — the logic is correct, but the syntax is slightly wrong.
+
+You wrote:
+
+select max(salary*months) from employee, select count(*) from employee where ...
+
+
+❌ SQL does NOT allow two SELECT statements like that in one query without a subquery structure.
+They must be inside one SELECT statement, separated by a comma — not two separate SELECT commands.
+
+Here’s how to correct the structure:
+
+You need something like:
+
+SELECT
+   ( subquery ),
+   ( subquery );
+
+
+So rewrite yours like this:
+
+SELECT
+    (SELECT MAX(salary * months) FROM Employee),
+    (SELECT COUNT(*) FROM Employee 
+        WHERE salary * months = (SELECT MAX(salary * months) FROM Employee)
+    );
+
+Why this works:
+Part	Meaning
+SELECT MAX(salary * months)	Finds the highest total earnings
+SELECT COUNT(*) ... WHERE ...	Counts how many employees have that same total earnings
+Output Format Example
+
+It will return something like:
+
+69952 | 1
+
+
+Which matches the expected answer format.
+
+If you want, I can now show how to optimize it into a single subquery instead of repeating the max calculation twice. Want the optimized version? 😊
+
+You said:
+yes
+ChatGPT said:
+
+Great — here’s the cleaner and more optimized version.
+
+Instead of calculating MAX(salary * months) twice, we calculate it once, give it a name, and use it again.
+
+✅ Optimized Query
+SELECT 
+    t.max_earning,
+    COUNT(*) 
+FROM Employee
+JOIN (
+    SELECT MAX(salary * months) AS max_earning
+    FROM Employee
+) t
+ON salary * months = t.max_earning;
+
+🔍 Why this is better:
+Version	Repeats calculation?	Performance
+Your previous subquery version	Yes (twice)	Good
+This optimized version	❌ No	Better
+
+Here, the maximum earning is computed one time in the subquery (t) and reused.
+
+Output
+
+The result will still look like:
+
+69952 1
+
+
+If you want, I can also show how to write it using GROUP BY + ORDER BY + LIMIT (another common SQL style). Want that version too? 😄
+
+You said:
+yes
+ChatGPT said:
+
+Sure — here's the third style, using GROUP BY, ORDER BY, and LIMIT 1.
+
+This approach calculates each employee’s total earnings first, then sorts and picks the top one.
+
+✅ Query Using GROUP BY + ORDER BY + LIMIT
+SELECT 
+    salary * months AS total_earning,
+    COUNT(*) 
+FROM Employee
+GROUP BY total_earning
+ORDER BY total_earning DESC
+LIMIT 1;
+
+🔍 How this version works:
+
+salary * months AS total_earning
+
+Calculates total earnings for each employee.
+
+GROUP BY total_earning
+
+Groups rows by earnings, so if multiple employees have the same total earnings, they are grouped together.
+
+ORDER BY total_earning DESC
+
+Highest earning group comes first.
+
+LIMIT 1
+
+Picks only the top (maximum earning) row.
+
+Output Format Example
+69952	1
+
+
+First value → maximum earning
+
+Second value → number of employees who earned that amount
+
+🔥 Summary of all methods you learned:
+Method	Query Style	Best When
+Nested SELECT	Simple logic	Small datasets
+JOIN optimized	Avoids repeating subqueries	Medium/Large datasets
+GROUP BY + ORDER BY + LIMIT	Clean, readable	When ties are possible
