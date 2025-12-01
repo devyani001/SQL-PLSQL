@@ -1,0 +1,110 @@
+35 . WEATHER OBSERVATION STATION 18
+====================================
+
+Consider  and  to be two points on a 2D plane.
+
+ happens to equal the minimum value in Northern Latitude (LAT_N in STATION).
+ happens to equal the minimum value in Western Longitude (LONG_W in STATION).
+ happens to equal the maximum value in Northern Latitude (LAT_N in STATION).
+ happens to equal the maximum value in Western Longitude (LONG_W in STATION).
+Query the Manhattan Distance between points  and  and round it to a scale of  decimal places.
+
+Input Format
+
+The STATION table is described as follows:
+
+Station.jpg
+
+where LAT_N is the northern latitude and LONG_W is the western longitude.
+
+
+ANSWER :
+========
+
+/*
+Enter your query here.
+*/
+-- select MIN(LAT_N) AS a , MIN(LONG_W) AS b, MAX(LAT_N) AS c, MAX(LONG_W) AS d from station;
+
+select FORMAT( ABS(MIN(LAT_N) - MAX(LAT_N)) + ABS(MIN(LONG_W) - MAX(LONG_W)) , 4 ) from station;
+
+
+
+Q. what i learnt today ?
+-------------------------
+1. print upto 2 decimal
+   MySQL - FORMAT(amount , 2)
+   SQL   - ROUNT(amount , 2)
+
+When to use which?
+-------------------
+Function	Use case
+ROUND(x,2)	When you only need numeric rounding
+FORMAT(x,2)	When you want formatted output (pretty print)
+
+1️⃣ ROUND(x, 2) – Numeric rounding
+
+What it does:
+
+ROUND() simply rounds the number to the specified number of decimal places.
+
+The result is still a numeric value, which you can use in calculations.
+
+Example:
+
+SELECT ROUND(1234.5678, 2) AS rounded_value;
+
+
+Output:
+
+rounded_value
+1234.57
+
+✅ Notice:
+
+Rounded to 2 decimal places.
+
+Output is numeric → you can do further math on it (+, *, etc.).
+
+No commas added for thousands.
+
+2️⃣ FORMAT(x, 2) – Pretty formatting
+
+What it does:
+
+FORMAT() rounds like ROUND(), but returns a string, and formats the number with commas for thousands.
+
+Example:
+
+SELECT FORMAT(1234.5678, 2) AS formatted_value;
+
+
+Output:
+
+formatted_value
+1,234.57
+
+✅ Notice:
+
+Rounded to 2 decimal places.
+
+Commas inserted automatically for thousands.
+
+Output is text, not numeric → you can’t directly perform arithmetic on it.
+
+🔑 Key Difference
+Feature	ROUND(x,2)	FORMAT(x,2)
+Rounds number	✅	✅
+Adds commas	❌	✅
+Returns numeric	✅	❌ (returns string)
+Can use in calculations	✅	❌
+Good for display / reports	❌	✅
+💡 Practical Tip
+
+Use ROUND() when you want to store, calculate, or compare numbers.
+
+Use FORMAT() when you want to show results to the user nicely in reports or dashboards.
+==========================================================================================
+
+2. ABS - absolute values
+3. subtraction is possible of two columns
