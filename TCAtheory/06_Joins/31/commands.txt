@@ -1,0 +1,121 @@
+*Joins*
+------
+--> If both tables are having common column( columns) then we can perform join on it.
+
+--> Ex. ATAB(ano, city), BTAB(bno,city)
+	Ex. Emp(eid,ename, sal, dno)   
+	    Dept(dno,dname)
+
+
+CREATE TABLE ATAB(
+	ano int primary key,
+	city varchar(10)
+);
+
+
+CREATE TABLE BTAB(
+	bno int primary key,
+	city varchar(10)
+);
+
+insert into ATAB values(1,'PUNE'); 
+insert into ATAB values(2,'MUMBAI'); 
+insert into ATAB values(3,'BANGLORE'); 
+insert into ATAB values(4,'DELHI');
+
+
+insert into BTAB values(101,'MUMBAI'); 
+insert into BTAB values(102,'PUNE'); 
+insert into BTAB values(103,'SATARA'); 
+insert into BTAB values(104,'SOLAPUR'); 
+
+SELECT *
+FROM ATAB JOIN BTAB ON ATAB.city = BTAB.city;
+
+
+SELECT ano, ATAB.city, bno, BTAB.city
+FROM ATAB JOIN BTAB ON ATAB.city = BTAB.city;
+
+
+SELECT ano, ATAB.city, bno, BTAB.city
+FROM ATAB INNER JOIN BTAB ON ATAB.city = BTAB.city;
+
+SELECT *
+FROM ATAB, BTAB
+WHERE ATAB.city = BTAB.city;
+
+
+LEFT JOIN
+------------
+
+SELECT ano, ATAB.city, bno, BTAB.city
+FROM ATAB LEFT JOIN BTAB ON ATAB.city = BTAB.city;
+
+
+SELECT ano, ATAB.city, bno, BTAB.city
+FROM BTAB LEFT JOIN ATAB ON ATAB.city = BTAB.city;
+
+
+LEFT OUTER JOIN
+------------------
+SELECT ano, ATAB.city, bno, BTAB.city 
+FROM ATAB LEFT OUTER JOIN BTAB ON ATAB.city = BTAB.city
+WHERE BTAB.city IS NULL;
+
+SELECT ano, ATAB.city
+FROM ATAB LEFT OUTER JOIN BTAB ON ATAB.city = BTAB.city
+WHERE BTAB.city IS NULL;
+
+
+
+RIGHT JOIN
+--------------
+SELECT ano, ATAB.city, bno, BTAB.city
+FROM ATAB RIGHT JOIN BTAB ON ATAB.city = BTAB.city;
+
+
+RIGHT OUTER JOIN
+--------------------
+
+SELECT ano, ATAB.city, bno, BTAB.city
+FROM ATAB RIGHT OUTER JOIN BTAB ON ATAB.city = BTAB.city
+WHERE ATAB.city IS NULL;
+
+
+FULL JOIN
+------------
+SELECT ano, ATAB.city, bno, BTAB.city
+FROM ATAB FULL JOIN BTAB ON ATAB.city = BTAB.city;
+
+FULL OUTER JOIN
+-----------------------
+SELECT ano, ATAB.city, bno, BTAB.city
+FROM ATAB FULL OUTER JOIN BTAB ON ATAB.city = BTAB.city
+WHERE ATAB.city IS NULL OR BTAB.city IS NULL;
+
+
+NATURAL JOIN
+---------------
+SELECT ano, ATAB.city, bno, BTAB.city
+FROM ATAB NATURAL JOIN BTAB;
+
+SELECT ano, ATAB.city, bno, BTAB.city
+FROM ATAB NATURAL LEFT JOIN BTAB;
+
+
+SELECT ano, ATAB.city, bno, BTAB.city
+FROM ATAB NATURAL RIGHT JOIN BTAB;
+
+SELECT ano, ATAB.city, bno, BTAB.city
+FROM ATAB NATURAL INNER JOIN BTAB;
+
+
+CROSS JOIN(Cartesian Producation)
+-----------------------------------
+SELECT ano, ATAB.city, bno, BTAB.city
+FROM ATAB CROSS JOIN BTAB;
+
+
+SELECT *
+FROM ATAB,BTAB;
+

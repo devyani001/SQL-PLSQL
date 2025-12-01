@@ -1,0 +1,348 @@
+Server [localhost]:
+Database [postgres]: tcadb16
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+tcadb16=# CREATE TABLE ATAB(
+tcadb16(#       ano int primary key,
+tcadb16(#       city varchar(10)
+tcadb16(# );
+CREATE TABLE
+tcadb16=#
+tcadb16=#
+tcadb16=# CREATE TABLE BTAB(
+tcadb16(#       bno int primary key,
+tcadb16(#       city varchar(10)
+tcadb16(# );
+CREATE TABLE
+tcadb16=#
+tcadb16=# insert into ATAB values(1,'PUNE');
+INSERT 0 1
+tcadb16=# insert into ATAB values(2,'MUMBAI');
+INSERT 0 1
+tcadb16=# insert into ATAB values(3,'BANGLORE');
+INSERT 0 1
+tcadb16=# insert into ATAB values(4,'DELHI');
+INSERT 0 1
+tcadb16=#
+tcadb16=#
+tcadb16=# insert into BTAB values(101,'MUMBAI');
+INSERT 0 1
+tcadb16=# insert into BTAB values(102,'PUNE');
+INSERT 0 1
+tcadb16=# insert into BTAB values(103,'SATARA');
+INSERT 0 1
+tcadb16=# insert into BTAB values(104,'SOLAPUR');
+INSERT 0 1
+tcadb16=# select * from ATAB;
+ ano |   city
+-----+----------
+   1 | PUNE
+   2 | MUMBAI
+   3 | BANGLORE
+   4 | DELHI
+(4 rows)
+
+
+tcadb16=# select * from BTAB;
+ bno |  city
+-----+---------
+ 101 | MUMBAI
+ 102 | PUNE
+ 103 | SATARA
+ 104 | SOLAPUR
+(4 rows)
+
+
+tcadb16=# SELECT * FROM ATAB JOIN BTAB ON atab.city = btab.city;
+ ano |  city  | bno |  city
+-----+--------+-----+--------
+   2 | MUMBAI | 101 | MUMBAI
+   1 | PUNE   | 102 | PUNE
+(2 rows)
+
+
+tcadb16=# select * from atab, btab WHERE atab.city = btab.city;
+ ano |  city  | bno |  city
+-----+--------+-----+--------
+   2 | MUMBAI | 101 | MUMBAI
+   1 | PUNE   | 102 | PUNE
+(2 rows)
+
+
+tcadb16=# select ano,atab.city, bno, btab.city from atab JOIN btab ON atab.city = btab.city;
+ ano |  city  | bno |  city
+-----+--------+-----+--------
+   2 | MUMBAI | 101 | MUMBAI
+   1 | PUNE   | 102 | PUNE
+(2 rows)
+
+
+tcadb16=# select ano,atab.city, bno, btab.city from atab INNER JOIN btab ON atab.city = btab.city;
+ ano |  city  | bno |  city
+-----+--------+-----+--------
+   2 | MUMBAI | 101 | MUMBAI
+   1 | PUNE   | 102 | PUNE
+(2 rows)
+
+
+tcadb16=# select ano, ATAB.city, bno, BTAB.city FROM ATAB LEFT JOIN BTAB ON atab.city = btab.city;
+ ano |   city   | bno |  city
+-----+----------+-----+--------
+   3 | BANGLORE |     |
+   4 | DELHI    |     |
+   2 | MUMBAI   | 101 | MUMBAI
+   1 | PUNE     | 102 | PUNE
+(4 rows)
+
+
+tcadb16=# select ano, ATAB.city, bno, BTAB.city FROM BTAB LEFT JOIN ATAB ON atab.city = btab.city;
+ ano |  city  | bno |  city
+-----+--------+-----+---------
+   2 | MUMBAI | 101 | MUMBAI
+   1 | PUNE   | 102 | PUNE
+     |        | 103 | SATARA
+     |        | 104 | SOLAPUR
+(4 rows)
+
+
+tcadb16=# select bno, BTAB.city, ano, ATAB.city FROM BTAB LEFT JOIN ATAB ON atab.city = btab.city;
+ bno |  city   | ano |  city
+-----+---------+-----+--------
+ 101 | MUMBAI  |   2 | MUMBAI
+ 102 | PUNE    |   1 | PUNE
+ 103 | SATARA  |     |
+ 104 | SOLAPUR |     |
+(4 rows)
+
+
+tcadb16=# select bno, BTAB.city, ano, ATAB.city FROM BTAB LEFT OUTER JOIN ATAB ON atab.city = btab.city;
+ bno |  city   | ano |  city
+-----+---------+-----+--------
+ 101 | MUMBAI  |   2 | MUMBAI
+ 102 | PUNE    |   1 | PUNE
+ 103 | SATARA  |     |
+ 104 | SOLAPUR |     |
+(4 rows)
+
+
+tcadb16=# select bno, BTAB.city, ano, ATAB.city FROM BTAB LEFT JOIN ATAB ON atab.city = btab.city;
+ bno |  city   | ano |  city
+-----+---------+-----+--------
+ 101 | MUMBAI  |   2 | MUMBAI
+ 102 | PUNE    |   1 | PUNE
+ 103 | SATARA  |     |
+ 104 | SOLAPUR |     |
+(4 rows)
+
+
+tcadb16=# select ano, ATAB.city, bno, BTAB.city FROM ATAB LEFT JOIN BTAB ON atab.city = btab.city;
+ ano |   city   | bno |  city
+-----+----------+-----+--------
+   3 | BANGLORE |     |
+   4 | DELHI    |     |
+   2 | MUMBAI   | 101 | MUMBAI
+   1 | PUNE     | 102 | PUNE
+(4 rows)
+
+
+tcadb16=# select ano, ATAB.city, bno, BTAB.city FROM ATAB LEFT OUTER JOIN BTAB ON atab.city = btab.city;
+ ano |   city   | bno |  city
+-----+----------+-----+--------
+   3 | BANGLORE |     |
+   4 | DELHI    |     |
+   2 | MUMBAI   | 101 | MUMBAI
+   1 | PUNE     | 102 | PUNE
+(4 rows)
+
+
+tcadb16=# select ano, ATAB.city, bno, BTAB.city FROM ATAB LEFT OUTER JOIN BTAB ON atab.city = btab.city WHERE bno IS NULL;
+ ano |   city   | bno | city
+-----+----------+-----+------
+   3 | BANGLORE |     |
+   4 | DELHI    |     |
+(2 rows)
+
+
+tcadb16=# select ano, ATAB.city, bno, BTAB.city FROM ATAB LEFT OUTER JOIN BTAB ON atab.city = btab.city WHERE BTAB.city IS NULL;
+ ano |   city   | bno | city
+-----+----------+-----+------
+   3 | BANGLORE |     |
+   4 | DELHI    |     |
+(2 rows)
+
+
+tcadb16=# select ano, ATAB.city FROM ATAB LEFT OUTER JOIN BTAB ON atab.city = btab.city WHERE BTAB.city IS NULL;
+ ano |   city
+-----+----------
+   3 | BANGLORE
+   4 | DELHI
+(2 rows)
+
+
+tcadb16=# SELECT ano,ATAB.city, bno, BTAB.city FROM ATAB RIGHT JOIN BTAB ON ATAB.city = BTAB.city;
+ ano |  city  | bno |  city
+-----+--------+-----+---------
+   2 | MUMBAI | 101 | MUMBAI
+   1 | PUNE   | 102 | PUNE
+     |        | 103 | SATARA
+     |        | 104 | SOLAPUR
+(4 rows)
+
+
+tcadb16=# SELECT ano,ATAB.city, bno, BTAB.city FROM ATAB RIGHT OUTER JOIN BTAB ON ATAB.city = BTAB.city WHERE ATAB.city IS NULL;
+ ano | city | bno |  city
+-----+------+-----+---------
+     |      | 103 | SATARA
+     |      | 104 | SOLAPUR
+(2 rows)
+
+
+tcadb16=# SELECT bno, BTAB.city FROM ATAB RIGHT OUTER JOIN BTAB ON ATAB.city = BTAB.city WHERE ATAB.city IS NULL;
+ bno |  city
+-----+---------
+ 103 | SATARA
+ 104 | SOLAPUR
+(2 rows)
+
+
+tcadb16=# SELECT ano,ATAB.city, bno, BTAB.city FROM ATAB FULL JOIN BTAB ON ATAB.city = BTAB.city;
+ ano |   city   | bno |  city
+-----+----------+-----+---------
+   3 | BANGLORE |     |
+   4 | DELHI    |     |
+   2 | MUMBAI   | 101 | MUMBAI
+   1 | PUNE     | 102 | PUNE
+     |          | 103 | SATARA
+     |          | 104 | SOLAPUR
+(6 rows)
+
+
+tcadb16=# SELECT ano,ATAB.city, bno, BTAB.city FROM ATAB FULL OUTER JOIN BTAB ON ATAB.city = BTAB.city WHERE ATAB.city SI NULL OR BTAB.city IS NULL;
+ERROR:  syntax error at or near "SI"
+LINE 1: ...OIN BTAB ON ATAB.city = BTAB.city WHERE ATAB.city SI NULL OR...
+                                                             ^
+tcadb16=# SELECT ano,ATAB.city, bno, BTAB.city FROM ATAB FULL OUTER JOIN BTAB ON ATAB.city = BTAB.city WHERE ATAB.city Is NULL OR BTAB.city IS NULL;
+ ano |   city   | bno |  city
+-----+----------+-----+---------
+   3 | BANGLORE |     |
+   4 | DELHI    |     |
+     |          | 103 | SATARA
+     |          | 104 | SOLAPUR
+(4 rows)
+
+
+tcadb16=# SELECT ano,ATAB.city, bno, BTAB.city FROM ATAB INNER JOIN BTAB ON ATAB.city = BTAB.city;
+ ano |  city  | bno |  city
+-----+--------+-----+--------
+   2 | MUMBAI | 101 | MUMBAI
+   1 | PUNE   | 102 | PUNE
+(2 rows)
+
+
+tcadb16=# SELECT ano,ATAB.city, bno, BTAB.city FROM ATAB NATURAL JOIN BTAB;
+ ano |  city  | bno |  city
+-----+--------+-----+--------
+   2 | MUMBAI | 101 | MUMBAI
+   1 | PUNE   | 102 | PUNE
+(2 rows)
+
+
+tcadb16=# SELECT ano,ATAB.city, bno, BTAB.city FROM ATAB NATURAL LEFT JOIN BTAB;
+ ano |   city   | bno |  city
+-----+----------+-----+--------
+   3 | BANGLORE |     |
+   4 | DELHI    |     |
+   2 | MUMBAI   | 101 | MUMBAI
+   1 | PUNE     | 102 | PUNE
+(4 rows)
+
+
+tcadb16=# SELECT ano,ATAB.city, bno, BTAB.city FROM ATAB NATURAL RIGHT JOIN BTAB;
+ ano |  city  | bno |  city
+-----+--------+-----+---------
+   2 | MUMBAI | 101 | MUMBAI
+   1 | PUNE   | 102 | PUNE
+     |        | 103 | SATARA
+     |        | 104 | SOLAPUR
+(4 rows)
+
+
+tcadb16=# SELECT ano,ATAB.city, bno, BTAB.city FROM ATAB NATURAL INNER JOIN BTAB;
+ ano |  city  | bno |  city
+-----+--------+-----+--------
+   2 | MUMBAI | 101 | MUMBAI
+   1 | PUNE   | 102 | PUNE
+(2 rows)
+
+
+tcadb16=# SELECT * FROM ATAB;
+ ano |   city
+-----+----------
+   1 | PUNE
+   2 | MUMBAI
+   3 | BANGLORE
+   4 | DELHI
+(4 rows)
+
+
+tcadb16=# SELECT * FROM BTAB;
+ bno |  city
+-----+---------
+ 101 | MUMBAI
+ 102 | PUNE
+ 103 | SATARA
+ 104 | SOLAPUR
+(4 rows)
+
+
+tcadb16=# SELECT ano, ATAB.city, bno, BTAB.city FROM ATAB CROSS JOIN BTAB;
+ ano |   city   | bno |  city
+-----+----------+-----+---------
+   1 | PUNE     | 101 | MUMBAI
+   1 | PUNE     | 102 | PUNE
+   1 | PUNE     | 103 | SATARA
+   1 | PUNE     | 104 | SOLAPUR
+   2 | MUMBAI   | 101 | MUMBAI
+   2 | MUMBAI   | 102 | PUNE
+   2 | MUMBAI   | 103 | SATARA
+   2 | MUMBAI   | 104 | SOLAPUR
+   3 | BANGLORE | 101 | MUMBAI
+   3 | BANGLORE | 102 | PUNE
+   3 | BANGLORE | 103 | SATARA
+   3 | BANGLORE | 104 | SOLAPUR
+   4 | DELHI    | 101 | MUMBAI
+   4 | DELHI    | 102 | PUNE
+   4 | DELHI    | 103 | SATARA
+   4 | DELHI    | 104 | SOLAPUR
+(16 rows)
+
+
+tcadb16=# select * from atab,btab;
+ ano |   city   | bno |  city
+-----+----------+-----+---------
+   1 | PUNE     | 101 | MUMBAI
+   1 | PUNE     | 102 | PUNE
+   1 | PUNE     | 103 | SATARA
+   1 | PUNE     | 104 | SOLAPUR
+   2 | MUMBAI   | 101 | MUMBAI
+   2 | MUMBAI   | 102 | PUNE
+   2 | MUMBAI   | 103 | SATARA
+   2 | MUMBAI   | 104 | SOLAPUR
+   3 | BANGLORE | 101 | MUMBAI
+   3 | BANGLORE | 102 | PUNE
+   3 | BANGLORE | 103 | SATARA
+   3 | BANGLORE | 104 | SOLAPUR
+   4 | DELHI    | 101 | MUMBAI
+   4 | DELHI    | 102 | PUNE
+   4 | DELHI    | 103 | SATARA
+   4 | DELHI    | 104 | SOLAPUR
+(16 rows)
+
