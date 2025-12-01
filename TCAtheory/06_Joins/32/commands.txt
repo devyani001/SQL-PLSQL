@@ -1,0 +1,76 @@
+==========
+SELF JOIN
+==========
+--> When you join one table with itself.
+
+A INNNER JOIN A
+A LEFT   JOIN  A
+A RIGHT   JOIN A
+A NATRUAT JOIN A
+
+
+SELECT *
+FROM ATAB JOIN BTAB ON ATAB.city = BTAB.city;
+
+
+SELECT *
+FROM ATAB as x JOIN ATAB as y ON x.city = y.city;
+
+SELECT *
+FROM ATAB as x INNER JOIN ATAB as y ON x.city = y.city;
+
+SELECT *
+FROM ATAB as x LEFT JOIN ATAB as y ON x.city = y.city;
+
+
+
+
+CREATE TABLE employee(
+	emp_id int primary key,
+	name varchar(20),
+	manager_id int references employee(emp_id)
+);
+
+INSERT INTO employee VALUES(1, 'Sachin', NULL); 
+INSERT INTO employee VALUES(2, 'Yash', 1); 
+INSERT INTO employee VALUES(3, 'Rutik', 1); 
+INSERT INTO employee VALUES(4, 'Avishkar', 2); 
+INSERT INTO employee VALUES(5, 'Omkar', 2); 
+INSERT INTO employee VALUES(6, 'Vaibhav', 3); 
+
+ Q. print Employees with their managers. -------------------------------------------
+
+ SELECT E.name AS emp_name, M.name as manager_name
+ FROM employee as E INNER JOIN employee as M ON E.manager_id = M.emp_id;
+
+
+ SELECT E.name AS emp_name, M.name as manager_name
+ FROM employee as E LEFT JOIN employee as M ON E.manager_id = M.emp_id;
+
+
+Q. Display Count of employees who are reporting 'Sachin'
+------------------------------------------------------------
+tcadb16=# select count(*) from employee where manager_id =(select emp_id from employee where name='Sachin');
+ count
+-------
+     2
+(1 row)
+
+Q. Display name of employees who are reporting 'Sachin'
+------------------------------------------------------------
+tcadb16=# select name from employee where manager_id =(select emp_id from employee where name='Sachin');
+
+ name
+-------
+ Yash
+ Rutik
+(2 rows)
+
+Q. Print name of employee those who have not manager
+------------------------------------------------------
+tcadb16=# select * from employee where manager_id IS NULL;
+
+ emp_id |  name  | manager_id
+--------+--------+------------
+      1 | Sachin |    
+

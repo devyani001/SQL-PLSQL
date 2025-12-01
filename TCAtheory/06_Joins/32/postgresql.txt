@@ -1,0 +1,386 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# SELECT * FROM ATAB JOIN ATAB ON ATAB.city = ATAB.city;
+ERROR:  table name "atab" specified more than once
+tcadb16=# SELECT * FROM ATAB as x JOIN BTAB as y ON x.city = y.city;
+ ano |  city  | bno |  city
+-----+--------+-----+--------
+   2 | MUMBAI | 101 | MUMBAI
+   1 | PUNE   | 102 | PUNE
+(2 rows)
+
+
+tcadb16=# SELECT *
+tcadb16-# FROM ATAB JOIN BTAB ON ATAB.city = BTAB.city;
+ ano |  city  | bno |  city
+-----+--------+-----+--------
+   2 | MUMBAI | 101 | MUMBAI
+   1 | PUNE   | 102 | PUNE
+(2 rows)
+
+
+tcadb16=# SELECT *
+tcadb16-# FROM ATAB as x JOIN ATAB as y ON x.city = y.city;
+ ano |   city   | ano |   city
+-----+----------+-----+----------
+   3 | BANGLORE |   3 | BANGLORE
+   4 | DELHI    |   4 | DELHI
+   2 | MUMBAI   |   2 | MUMBAI
+   1 | PUNE     |   1 | PUNE
+(4 rows)
+
+
+tcadb16=# SELECT * FROM ATAB;
+ ano |   city
+-----+----------
+   1 | PUNE
+   2 | MUMBAI
+   3 | BANGLORE
+   4 | DELHI
+(4 rows)
+
+
+tcadb16=# SELECT * FROM ATAB as x INNER JOIN ATAB as y ON x.city = y.city;
+ ano |   city   | ano |   city
+-----+----------+-----+----------
+   3 | BANGLORE |   3 | BANGLORE
+   4 | DELHI    |   4 | DELHI
+   2 | MUMBAI   |   2 | MUMBAI
+   1 | PUNE     |   1 | PUNE
+(4 rows)
+
+
+tcadb16=# SELECT * FROM ATAB as x left JOIN ATAB as y ON x.city = y.city;
+ ano |   city   | ano |   city
+-----+----------+-----+----------
+   3 | BANGLORE |   3 | BANGLORE
+   4 | DELHI    |   4 | DELHI
+   2 | MUMBAI   |   2 | MUMBAI
+   1 | PUNE     |   1 | PUNE
+(4 rows)
+
+
+tcadb16=# SELECT * FROM ATAB as x right JOIN ATAB as y ON x.city = y.city;
+ ano |   city   | ano |   city
+-----+----------+-----+----------
+   3 | BANGLORE |   3 | BANGLORE
+   4 | DELHI    |   4 | DELHI
+   2 | MUMBAI   |   2 | MUMBAI
+   1 | PUNE     |   1 | PUNE
+(4 rows)
+
+
+tcadb16=# CREATE TABLE employee(emp_id int primary key, name varchar(20), manager_id INT REFERENCES employee(emp_id));
+CREATE TABLE
+tcadb16=# SELECT * FROM Employee;
+ emp_id | name | manager_id
+--------+------+------------
+(0 rows)
+
+
+tcadb16=# \D EMployee;
+invalid command \D
+Try \? for help.
+tcadb16=# \D EMployee;
+invalid command \D
+Try \? for help.
+tcadb16=# \d EMployee;
+                       Table "public.employee"
+   Column   |         Type          | Collation | Nullable | Default
+------------+-----------------------+-----------+----------+---------
+ emp_id     | integer               |           | not null |
+ name       | character varying(20) |           |          |
+ manager_id | integer               |           |          |
+Indexes:
+    "employee_pkey" PRIMARY KEY, btree (emp_id)
+Foreign-key constraints:
+    "employee_manager_id_fkey" FOREIGN KEY (manager_id) REFERENCES employee(emp_id)
+Referenced by:
+    TABLE "employee" CONSTRAINT "employee_manager_id_fkey" FOREIGN KEY (manager_id) REFERENCES employee(emp_id)
+
+
+tcadb16=# INSERT INTO employee VALUES(1, 'Sachin', NULL);
+INSERT 0 1
+tcadb16=# INSERT INTO employee VALUES(2, 'Yash', 1);
+INSERT 0 1
+tcadb16=# INSERT INTO employee VALUES(3, 'Rutik', 1);
+INSERT 0 1
+tcadb16=# INSERT INTO employee VALUES(4, 'Avishkar', 2);
+INSERT 0 1
+tcadb16=# INSERT INTO employee VALUES(5, 'Omkar', 2);
+INSERT 0 1
+tcadb16=# INSERT INTO employee VALUES(6, 'Vaibhav', 3);
+INSERT 0 1
+tcadb16=# SELECT * FROM Employee;
+ emp_id |   name   | manager_id
+--------+----------+------------
+      1 | Sachin   |
+      2 | Yash     |          1
+      3 | Rutik    |          1
+      4 | Avishkar |          2
+      5 | Omkar    |          2
+      6 | Vaibhav  |          3
+(6 rows)
+
+
+tcadb16=# insert into employee values(7,'Anuj',45);
+ERROR:  insert or update on table "employee" violates foreign key constraint "employee_manager_id_fkey"
+DETAIL:  Key (manager_id)=(45) is not present in table "employee".
+tcadb16=# SELECT * FROM employee as E JOIN employee as M ON E.emp_id = M.manager_id;
+ emp_id |  name  | manager_id | emp_id |   name   | manager_id
+--------+--------+------------+--------+----------+------------
+      1 | Sachin |            |      2 | Yash     |          1
+      1 | Sachin |            |      3 | Rutik    |          1
+      2 | Yash   |          1 |      4 | Avishkar |          2
+      2 | Yash   |          1 |      5 | Omkar    |          2
+      3 | Rutik  |          1 |      6 | Vaibhav  |          3
+(5 rows)
+
+
+tcadb16=# SELECT E.name AS emp_name , M.name AS manager_name FROM employee as E JOIN employee as M ON E.emp_id = M.manager_id;
+ emp_name | manager_name
+----------+--------------
+ Sachin   | Yash
+ Sachin   | Rutik
+ Yash     | Avishkar
+ Yash     | Omkar
+ Rutik    | Vaibhav
+(5 rows)
+
+
+tcadb16=# SELECT E.name AS emp_name, M.name as manager_name
+tcadb16-#  FROM employee as E INNER JOIN employee as M ON E.manager_id = M.emp_id;
+ emp_name | manager_name
+----------+--------------
+ Yash     | Sachin
+ Rutik    | Sachin
+ Avishkar | Yash
+ Omkar    | Yash
+ Vaibhav  | Rutik
+(5 rows)
+
+
+tcadb16=# SELECT E.name AS emp_name, M.name as manager_name
+tcadb16-#  FROM employee as E JOIN employee as M ON E.manager_id = M.emp_id;
+ emp_name | manager_name
+----------+--------------
+ Yash     | Sachin
+ Rutik    | Sachin
+ Avishkar | Yash
+ Omkar    | Yash
+ Vaibhav  | Rutik
+(5 rows)
+
+
+tcadb16=# SELECT E.name AS emp_name , M.name AS manager_name FROM employee as E JOIN employee as M ON E.manager_id = M.employee_id;
+ERROR:  column m.employee_id does not exist
+LINE 1: ...mployee as E JOIN employee as M ON E.manager_id = M.employee...
+                                                             ^
+tcadb16=# SELECT E.name AS emp_name , M.name AS manager_name FROM employee as E JOIN employee as M ON M.manager_id = E.employee_id;
+ERROR:  column e.employee_id does not exist
+LINE 1: ...mployee as E JOIN employee as M ON M.manager_id = E.employee...
+                                                             ^
+tcadb16=# SELECT E.name AS emp_name , M.name AS manager_name FROM employee as E JOIN employee as M ON M.manager_id = E.emp_id;
+ emp_name | manager_name
+----------+--------------
+ Sachin   | Yash
+ Sachin   | Rutik
+ Yash     | Avishkar
+ Yash     | Omkar
+ Rutik    | Vaibhav
+(5 rows)
+
+
+tcadb16=# SELECT E.name AS emp_name , M.name AS manager_name FROM employee as E JOIN employee as M ON E.manager_id = M.emp_id;
+ emp_name | manager_name
+----------+--------------
+ Yash     | Sachin
+ Rutik    | Sachin
+ Avishkar | Yash
+ Omkar    | Yash
+ Vaibhav  | Rutik
+(5 rows)
+
+
+tcadb16=# SELECT E.name AS emp_name, M.name as manager_name
+tcadb16-#  FROM employee as E INNER JOIN employee as M ON E.manager_id = M.emp_id;
+ emp_name | manager_name
+----------+--------------
+ Yash     | Sachin
+ Rutik    | Sachin
+ Avishkar | Yash
+ Omkar    | Yash
+ Vaibhav  | Rutik
+(5 rows)
+
+
+tcadb16=#  SELECT E.name AS emp_name, M.name as manager_name
+tcadb16-#  FROM employee as E LEFT JOIN employee as M ON E.manager_id = M.emp_id;
+ emp_name | manager_name
+----------+--------------
+ Sachin   |
+ Yash     | Sachin
+ Rutik    | Sachin
+ Avishkar | Yash
+ Omkar    | Yash
+ Vaibhav  | Rutik
+(6 rows)
+
+
+tcadb16=# SELECT *
+tcadb16-# FROM ATAB SELF JOIN BTAB ON ATAB.city = BTAB.city;
+ERROR:  invalid reference to FROM-clause entry for table "atab"
+LINE 2: FROM ATAB SELF JOIN BTAB ON ATAB.city = BTAB.city;
+                                    ^
+HINT:  Perhaps you meant to reference the table alias "self".
+tcadb16=# select * from ATAB, BTAB;
+ ano |   city   | bno |  city
+-----+----------+-----+---------
+   1 | PUNE     | 101 | MUMBAI
+   1 | PUNE     | 102 | PUNE
+   1 | PUNE     | 103 | SATARA
+   1 | PUNE     | 104 | SOLAPUR
+   2 | MUMBAI   | 101 | MUMBAI
+   2 | MUMBAI   | 102 | PUNE
+   2 | MUMBAI   | 103 | SATARA
+   2 | MUMBAI   | 104 | SOLAPUR
+   3 | BANGLORE | 101 | MUMBAI
+   3 | BANGLORE | 102 | PUNE
+   3 | BANGLORE | 103 | SATARA
+   3 | BANGLORE | 104 | SOLAPUR
+   4 | DELHI    | 101 | MUMBAI
+   4 | DELHI    | 102 | PUNE
+   4 | DELHI    | 103 | SATARA
+   4 | DELHI    | 104 | SOLAPUR
+(16 rows)
+
+
+tcadb16=# select * from ATAB,ATAB;
+ERROR:  table name "atab" specified more than once
+tcadb16=# select * from employee;
+ emp_id |   name   | manager_id
+--------+----------+------------
+      1 | Sachin   |
+      2 | Yash     |          1
+      3 | Rutik    |          1
+      4 | Avishkar |          2
+      5 | Omkar    |          2
+      6 | Vaibhav  |          3
+(6 rows)
+
+
+tcadb16=# select count(*) from employee as E LEFT JOIN employee as M ON E.manager_id = M.emp_id
+tcadb16-# WHERE E.name = 'Sachin';
+ count
+-------
+     1
+(1 row)
+
+
+tcadb16=# select emp_id from employee where name = 'Sachin';
+ emp_id
+--------
+      1
+(1 row)
+
+
+tcadb16=# select * from employee where rno = ( select emp_id from employee where name = 'Sachin' );
+ERROR:  column "rno" does not exist
+LINE 1: select * from employee where rno = ( select emp_id from empl...
+                                     ^
+tcadb16=# select * from employee where emp_id = ( select emp_id from employee where name = 'Sachin' );
+ emp_id |  name  | manager_id
+--------+--------+------------
+      1 | Sachin |
+(1 row)
+
+
+tcadb16=# select * from employee where manager_id = ( select emp_id from employee where name = 'Sachin' );
+ emp_id | name  | manager_id
+--------+-------+------------
+      2 | Yash  |          1
+      3 | Rutik |          1
+(2 rows)
+
+
+tcadb16=# select count(*) from employee where manager_id = ( select emp_id from employee where name = 'Sachin' );
+ count
+-------
+     2
+(1 row)
+
+
+tcadb16=# select name from employee where manager_id = ( select emp_id from employee where name = 'Sachin' );
+ name
+-------
+ Yash
+ Rutik
+(2 rows)
+
+
+tcadb16=# select * from employee;
+ emp_id |   name   | manager_id
+--------+----------+------------
+      1 | Sachin   |
+      2 | Yash     |          1
+      3 | Rutik    |          1
+      4 | Avishkar |          2
+      5 | Omkar    |          2
+      6 | Vaibhav  |          3
+(6 rows)
+
+
+tcadb16=# select * from employee where manager_id IS NULL;
+ emp_id |  name  | manager_id
+--------+--------+------------
+      1 | Sachin |
+(1 row)
+
+
+tcadb16=# update table employee set manager_id = 4 where emp_id = 5;
+ERROR:  syntax error at or near "table"
+LINE 1: update table employee set manager_id = 4 where emp_id = 5;
+               ^
+tcadb16=# update employee set manager_id = 4 where emp_id = 5;
+UPDATE 1
+tcadb16=# select * from employee;
+ emp_id |   name   | manager_id
+--------+----------+------------
+      1 | Sachin   |
+      2 | Yash     |          1
+      3 | Rutik    |          1
+      4 | Avishkar |          2
+      6 | Vaibhav  |          3
+      5 | Omkar    |          4
+(6 rows)
+
+
+tcadb16=# update employee set manager_id = 4 where emp_id = 5 order by emp_id;
+ERROR:  syntax error at or near "order"
+LINE 1: ...date employee set manager_id = 4 where emp_id = 5 order by e...
+                                                             ^
+tcadb16=# select * from employee order by emp_id;
+ emp_id |   name   | manager_id
+--------+----------+------------
+      1 | Sachin   |
+      2 | Yash     |          1
+      3 | Rutik    |          1
+      4 | Avishkar |          2
+      5 | Omkar    |          4
+      6 | Vaibhav  |          3
+(6 rows)
+
+
+tcadb16=#
