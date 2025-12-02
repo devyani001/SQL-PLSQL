@@ -1,0 +1,53 @@
+=======
+PLSQL
+=======
+--> PL/SQL is procedural language extension for SQL. 
+
+--> PL/SQL is a procedural programming language that enables developers to combine the power of SQL with procedural statements.
+
+--> PL/SQL provides the functionality of decision making, iteration and many more features of procedural programming languages. 
+
+--> PL/SQL can execute several queries in one block (function block) using single command. 
+
+--> One can create a PL/SQL unit(block code) such as procedures, functions, cursors, triggers which are stored in the database for reuse by applications. 
+
+--> PL/SQL provides a feature to handle the exception which occurs in PL/SQL block known as exception handling block. 
+
+Example:
+--------
+--> PostgreSQL has its own procedural language called PL/pgSQL, which is conceptually like PL/SQL.
+
+--> MySQL supports stored programs (procedures, functions, triggers) with SQL/PSM (Persistent Stored Module) syntax, also similar but with some differences. 
+
+stored Procedure:
+----------------
+Ase routine jyala value return karata yet nahi = Procedure
+
+stored function
+---------
+Ase routine jyala value return karata yete  = function
+
+
+select msg();
+drop function msg();
+
+
+select msg();
+drop function msg;
+
+Main Module
+------------
+1. Function
+2. Procedure
+3. cursor
+4. Trigger
+5. view
+
+
+String msg()
+{
+	
+	return "Hello World";
+}
+
+msg();
