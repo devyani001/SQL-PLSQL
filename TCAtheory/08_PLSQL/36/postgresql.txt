@@ -1,0 +1,236 @@
+Server [localhost]:
+Database [postgres]: tcadb16
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+tcadb16=# select msg();
+ERROR:  function msg() does not exist
+LINE 1: select msg();
+               ^
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=# CREATE OR REPLACE FUNCTITON msg()
+tcadb16-# RETURNS VARCHAR
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS &&
+tcadb16-# BEGIN
+tcadb16-# return 'HELLO TCA';
+ERROR:  syntax error at or near "FUNCTITON"
+LINE 1: CREATE OR REPLACE FUNCTITON msg()
+                          ^
+tcadb16=# CREATE OR REPLACE FUNCTION msg()
+tcadb16-# RETURNS VARCHAR
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS &&
+tcadb16-# BEGIN
+tcadb16-# return 'HELLO TCA';
+tcadb16-# END;
+ERROR:  syntax error at or near "&&"
+LINE 4: AS &&
+           ^
+tcadb16=# CREATE OR REPLACE FUNCTION msg()
+tcadb16-# RETURNS VARCHAR
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$# return 'HELLO TCA';
+tcadb16$# END;
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# select msg();
+    msg
+-----------
+ HELLO TCA
+(1 row)
+
+
+tcadb16=# \d
+              List of relations
+ Schema |     Name     |   Type   |  Owner
+--------+--------------+----------+----------
+ public | account      | table    | postgres
+ public | atab         | table    | postgres
+ public | bride        | table    | postgres
+ public | btab         | table    | postgres
+ public | customer     | table    | postgres
+ public | emp          | table    | postgres
+ public | employee     | table    | postgres
+ public | groom        | table    | postgres
+ public | marks        | table    | postgres
+ public | person       | table    | postgres
+ public | registration | table    | postgres
+ public | session      | table    | postgres
+ public | students     | table    | postgres
+ public | tcaseq       | sequence | postgres
+(14 rows)
+
+
+tcadb16=# select * from tcaseq;
+ last_value | log_cnt | is_called
+------------+---------+-----------
+        103 |      32 | t
+(1 row)
+
+
+tcadb16=# \df;
+invalid command \df;
+Try \? for help.
+tcadb16=# \df
+                          List of functions
+ Schema |    Name    | Result data type  | Argument data types | Type
+--------+------------+-------------------+---------------------+------
+ public | calc_grade | trigger           |                     | func
+ public | msg        | character varying |                     | func
+ public | msg2       | character varying |                     | func
+(3 rows)
+
+
+tcadb16=#
+
+Server [localhost]:
+Database [postgres]: tcadb16
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+tcadb16=# select msg();
+ERROR:  function msg() does not exist
+LINE 1: select msg();
+               ^
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=# CREATE OR REPLACE FUNCTITON msg()
+tcadb16-# RETURNS VARCHAR
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS &&
+tcadb16-# BEGIN
+tcadb16-# return 'HELLO TCA';
+ERROR:  syntax error at or near "FUNCTITON"
+LINE 1: CREATE OR REPLACE FUNCTITON msg()
+                          ^
+tcadb16=# CREATE OR REPLACE FUNCTION msg()
+tcadb16-# RETURNS VARCHAR
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS &&
+tcadb16-# BEGIN
+tcadb16-# return 'HELLO TCA';
+tcadb16-# END;
+ERROR:  syntax error at or near "&&"
+LINE 4: AS &&
+           ^
+tcadb16=# CREATE OR REPLACE FUNCTION msg()
+tcadb16-# RETURNS VARCHAR
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$# return 'HELLO TCA';
+tcadb16$# END;
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# select msg();
+    msg
+-----------
+ HELLO TCA
+(1 row)
+
+
+tcadb16=# \d
+              List of relations
+ Schema |     Name     |   Type   |  Owner
+--------+--------------+----------+----------
+ public | account      | table    | postgres
+ public | atab         | table    | postgres
+ public | bride        | table    | postgres
+ public | btab         | table    | postgres
+ public | customer     | table    | postgres
+ public | emp          | table    | postgres
+ public | employee     | table    | postgres
+ public | groom        | table    | postgres
+ public | marks        | table    | postgres
+ public | person       | table    | postgres
+ public | registration | table    | postgres
+ public | session      | table    | postgres
+ public | students     | table    | postgres
+ public | tcaseq       | sequence | postgres
+(14 rows)
+
+
+tcadb16=# select * from tcaseq;
+ last_value | log_cnt | is_called
+------------+---------+-----------
+        103 |      32 | t
+(1 row)
+
+
+tcadb16=# \df;
+invalid command \df;
+Try \? for help.
+tcadb16=# \df
+                          List of functions
+ Schema |    Name    | Result data type  | Argument data types | Type
+--------+------------+-------------------+---------------------+------
+ public | calc_grade | trigger           |                     | func
+ public | msg        | character varying |                     | func
+ public | msg2       | character varying |                     | func
+(3 rows)
+
+
+tcadb16=#
+tcadb16=# CREATE FUNCTION maximum(a int, b int)
+tcadb16-# RETURNS int
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#     m int;
+tcadb16$#
+tcadb16$# BEGIN
+tcadb16$#     IF a > b then
+tcadb16$#         m := a;
+tcadb16$#     ELSE
+tcadb16$#         m := b;
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     return m;
+tcadb16$#
+tcadb16$# END;
+tcadb16$#
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# select maximum();
+ERROR:  function maximum() does not exist
+LINE 1: select maximum();
+               ^
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=# select maximum(2,3);
+ maximum
+---------
+       3
+(1 row)
+
+
+tcadb16=# select maximum(244,36);
+ maximum
+---------
+     244
+(1 row)
+
+
+tcadb16=# drop function maximum();
+ERROR:  function maximum() does not exist
+tcadb16=# drop function maximum;
+DROP FUNCTION
+tcadb16=# drop function msg;
+DROP FUNCTION
+tcadb16=#

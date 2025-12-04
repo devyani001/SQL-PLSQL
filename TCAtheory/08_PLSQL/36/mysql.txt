@@ -1,0 +1,225 @@
+Enter password: **********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 14
+Server version: 8.0.43 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use tcadb16;
+Database changed
+mysql> select msg();
+ERROR 1305 (42000): FUNCTION tcadb16.msg does not exist
+mysql> DELIMITER $$
+mysql> CREATE FUNCTION msg()
+    -> RETURNS VARCHAR(50)
+    -> DETERMINISTIC
+    -> BEGIN
+    ->  return 'Hello TCA!!';
+    -> END$$
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER ;
+mysql> select msg();
++-------------+
+| msg()       |
++-------------+
+| Hello TCA!! |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_tcadb16 |
++-------------------+
+| student           |
++-------------------+
+1 row in set (0.10 sec)
+
+mysql> select * from student;
++-----+---------+------+
+| rno | name    | per  |
++-----+---------+------+
+|   7 | MSD     |   80 |
+| 101 | AAA     |   60 |
+| 102 | BBB     |   70 |
+| 103 | ROHIT   |   45 |
+| 104 | VIRAT   |   18 |
+| 105 | RUTURAJ |   70 |
+| 106 | HARDIK  |   70 |
+| 107 | BUMRAH  |   70 |
++-----+---------+------+
+8 rows in set (0.08 sec)
+
+mysql> show functions
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'functions' at line 1
+mysql> show functions where db='tcadb16';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'functions where db='tcadb16'' at line 1
+mysql> SHOW FUNCTION STATUS WHERE DB=DATABASE();
++---------+------------+----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| Db      | Name       | Type     | Definer        | Modified            | Created             | Security_type | Comment | character_set_client | collation_connection | Database Collation |
++---------+------------+----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| tcadb16 | msg        | FUNCTION | root@localhost | 2025-12-04 18:19:10 | 2025-12-04 18:19:10 | DEFINER       |         | cp850                | cp850_general_ci     | utf8mb4_0900_ai_ci |
+| tcadb16 | today_date | FUNCTION | root@localhost | 2025-12-04 15:03:27 | 2025-12-04 15:03:27 | DEFINER       |         | cp850                | cp850_general_ci     | utf8mb4_0900_ai_ci |
++---------+------------+----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+2 rows in set (0.01 sec)
+
+
+Enter password: **********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 15
+Server version: 8.0.43 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> \c tcadb16;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'tcadb16' at line 1
+mysql> use tcadb16;
+Database changed
+mysql> show function verification db=database();
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'verification db=database()' at line 1
+mysql> show function check db=database();
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'check db=database()' at line 1
+mysql> show functions status db=database();
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'functions status db=database()' at line 1
+mysql> show function status db=database();
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'db=database()' at line 1
+mysql> show function status where db=database();
++---------+------------+----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| Db      | Name       | Type     | Definer        | Modified            | Created             | Security_type | Comment | character_set_client | collation_connection | Database Collation |
++---------+------------+----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| tcadb16 | msg        | FUNCTION | root@localhost | 2025-12-04 18:19:10 | 2025-12-04 18:19:10 | DEFINER       |         | cp850                | cp850_general_ci     | utf8mb4_0900_ai_ci |
+| tcadb16 | today_date | FUNCTION | root@localhost | 2025-12-04 15:03:27 | 2025-12-04 15:03:27 | DEFINER       |         | cp850                | cp850_general_ci     | utf8mb4_0900_ai_ci |
++---------+------------+----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+2 rows in set (0.01 sec)
+
+mysql> show function status where db=database();
++---------+------------+----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| Db      | Name       | Type     | Definer        | Modified            | Created             | Security_type | Comment | character_set_client | collation_connection | Database Collation |
++---------+------------+----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| tcadb16 | msg        | FUNCTION | root@localhost | 2025-12-04 18:19:10 | 2025-12-04 18:19:10 | DEFINER       |         | cp850                | cp850_general_ci     | utf8mb4_0900_ai_ci |
+| tcadb16 | today_date | FUNCTION | root@localhost | 2025-12-04 15:03:27 | 2025-12-04 15:03:27 | DEFINER       |         | cp850                | cp850_general_ci     | utf8mb4_0900_ai_ci |
++---------+------------+----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+2 rows in set (0.00 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE FUNCTION maximum(a int, b int)
+    -> RETURNS int
+    -> DETERMINISTIC
+    ->
+    -> BEGIN
+    ->     DECLARE
+    ->         m int;
+    ->     IF a > b then
+    ->         SET m = b;
+    ->     ELSE
+    ->         SET m = b;
+    ->     END IF;
+    ->
+    ->     return m;
+    ->
+    -> END $$
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> DELIMITER ;
+mysql> select maximum(3,5);
++--------------+
+| maximum(3,5) |
++--------------+
+|            5 |
++--------------+
+1 row in set (0.03 sec)
+
+mysql> select maximum(9,5);
++--------------+
+| maximum(9,5) |
++--------------+
+|            5 |
++--------------+
+1 row in set (0.03 sec)
+
+mysql> drop function maximum();
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '()' at line 1
+mysql> drop function maximum;
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE FUNCTION maximum(a int, b int)
+    -> RETURNS int
+    -> DETERMINISTIC
+    ->
+    -> BEGIN
+    ->     DECLARE
+    ->         m int;
+    ->     IF a > b then
+    ->         SET m = a;
+    ->     ELSE
+    ->         SET m = b;
+    ->     END IF;
+    ->
+    ->     return m;
+    ->
+    -> END $$
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER ;
+mysql> select maximum(3,5);
++--------------+
+| maximum(3,5) |
++--------------+
+|            5 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select maximum(9,5);
++--------------+
+| maximum(9,5) |
++--------------+
+|            9 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> drop function maximum;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE FUNCTION maximum(a int, b int)
+    -> RETURNS int
+    -> DETERMINISTIC
+    -> DECLARE
+    ->         m int;
+    -> BEGIN
+    ->
+    ->     IF a > b then
+    ->         SET m = a;
+    ->     ELSE
+    ->         SET m = b;
+    ->     END IF;
+    ->
+    ->     return m;
+    ->
+    -> END $$
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DECLARE
+        m int;
+BEGIN
+
+    IF a > b then
+        SET m = a;
+    ELSE' at line 4
+mysql> DELIMITER ;
+mysql>

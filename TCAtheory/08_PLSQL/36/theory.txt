@@ -1,0 +1,135 @@
+
+
+
+CREATE FUNCTION maximum(a int, b int)
+RETURNS int
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    m int;
+
+BEGIN
+    IF a > b then
+        m := a;
+    ELSE
+        m := b;
+    END IF;
+
+    return m;
+    
+END;
+
+$$;
+
+
+
+DELIMITER $$
+
+CREATE FUNCTION maximum(a int, b int)
+RETURNS int
+DETERMINISTIC
+
+BEGIN
+    DECLARE 
+        m int;
+    IF a > b then
+        SET m = a;
+    ELSE
+        SET m = b;
+    END IF;
+
+    return m;
+
+END $$
+DELIMITER ;
+
+
+
+
+DELIMITER $$
+
+CREATE FUNCTION maximum(a int, b int)
+RETURNS int
+DETERMINISTIC
+DECLARE 
+        m int;
+BEGIN
+    
+    IF a > b then
+        SET m = a;
+    ELSE
+        SET m = b;
+    END IF;
+
+    return m;
+
+END $$
+DELIMITER ;
+
+====================================================
+
+Q. Find maximum of two numbers
+--------------------------------
+
+
+Postgresql:
+===========
+
+CREATE OR REPLACE FUNCTION maximum(a int, b int)
+RETURNS int
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+	m int; 
+
+BEGIN
+	   
+	IF a > b then
+		m := a;
+	ELSE
+		m := b;
+	END IF;
+
+  	return m;
+END;
+
+$$;
+
+MySQL
+======
+
+DELIMITER $$
+
+CREATE FUNCTION maximum(a int, b int)
+RETURNS int
+DETERMINISTIC
+
+
+BEGIN
+	
+	DECLARE 
+		m int;
+
+	IF a > b then
+		SET m = a;
+	ELSE
+		SET m = b;
+	END IF;
+
+	return m;
+
+END $$
+
+
+DELIMITER ;
+
+
+
+Assignment
+-----------
+Q.  Write a function which return sum of two numbers 
+	
+	add_nums(a int, b int)
+-----------------------------------------------------
