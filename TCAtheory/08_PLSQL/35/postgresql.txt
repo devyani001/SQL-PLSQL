@@ -1,0 +1,125 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# CREATE OR REPLACE FUNCTION msg()
+tcadb16-# RETURNS VARCHAR
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$#     RETURN 'Hello World';
+tcadb16$# END;
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# SELECT msg();
+     msg
+-------------
+ Hello World
+(1 row)
+
+
+tcadb16=# SELECT msg AS message;
+ERROR:  column "msg" does not exist
+LINE 1: SELECT msg AS message;
+               ^
+tcadb16=# SELECT msg() AS message;
+   message
+-------------
+ Hello World
+(1 row)
+
+
+tcadb16=# CREATE OR REPLACE FUNCTION msg2()
+tcadb16-# RETURNS VARCHAR
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$# RETURN 'Hello TCA';
+tcadb16$# END;
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# SELECT msg2();
+   msg2
+-----------
+ Hello TCA
+(1 row)
+
+
+tcadb16=# select MSG2() AS message'
+tcadb16'# ;
+tcadb16'# select MSG2() AS message;
+tcadb16'# \c tcadb16;
+tcadb16'# ;
+tcadb16'# =
+tcadb16'# =;
+
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select MSG2() AS message;
+  message
+-----------
+ Hello TCA
+(1 row)
+
+
+tcadb16=# CREATE OR REPLACE FUNCTION msg()
+tcadb16-# RETURN VARCHAR
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$# RETURN 'Hello TCA!!';
+tcadb16$# END
+tcadb16$# $$;
+ERROR:  syntax error at or near "LANGUAGE"
+LINE 3: LANGUAGE plpgsql
+        ^
+tcadb16=# CREATE OR REPLACE FUNCTION msg()
+tcadb16-# RETURNS VARCHAR
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$# RETURN 'Hello TCA!!';
+tcadb16$# END;
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# select msg();
+     msg
+-------------
+ Hello TCA!!
+(1 row)
+
+
+tcadb16=# DROP FUNCTION msg();
+DROP FUNCTION
+tcadb16=# select msg;
+ERROR:  column "msg" does not exist
+LINE 1: select msg;
+               ^
+tcadb16=# select msg();
+ERROR:  function msg() does not exist
+LINE 1: select msg();
+               ^
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=#

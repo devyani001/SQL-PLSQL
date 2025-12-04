@@ -1,0 +1,117 @@
+Enter password: **********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 13
+Server version: 8.0.43 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql>  \c tcadb16;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'tcadb16' at line 1
+mysql> \c tcadb16;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'tcadb16' at line 1
+mysql> use tcadb16;
+Database changed
+mysql> CREATE FUNCTION msg()
+    -> RETURNS VARCHAR(20)
+    -> DETERMINISTIC
+    -> BEGIN
+    -> return 'Hello World !!';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 5
+mysql> CREATE FUNCTION msg()
+    -> RETURNS VARCHAR(20)
+    -> DETERMINISTIC
+    -> BEGIN
+    -> return 'Hello World';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 5
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE FUNCTION msg()
+    -> RETURNS VARCHAR(50)
+    -> DETERMINISTIC
+    -> BEGIN
+    ->  return 'Hello TCA';
+    -> END$$
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> DELIMITER ;
+mysql> select msg;
+ERROR 1054 (42S22): Unknown column 'msg' in 'field list'
+mysql> select msg();
++-----------+
+| msg()     |
++-----------+
+| Hello TCA |
++-----------+
+1 row in set (0.04 sec)
+
+mysql> CREATE FUNCTION msg2()
+    -> RETURNS VARCHAR(20)
+    -> DETERMINISTIC
+    -> BEGIN
+    ->  return 'Hello World';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 5
+mysql>  return 'Hello TCA';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'return 'Hello TCA'' at line 1
+mysql> DROP FUNCTION msg;
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> select msg();
+ERROR 1305 (42000): FUNCTION tcadb16.msg does not exist
+mysql> SELECT CURDATE;
+ERROR 1054 (42S22): Unknown column 'CURDATE' in 'field list'
+mysql> SELECT CURDATE();
++------------+
+| CURDATE()  |
++------------+
+| 2025-12-04 |
++------------+
+1 row in set (0.03 sec)
+
+mysql> select CURTIME();
++-----------+
+| CURTIME() |
++-----------+
+| 14:59:34  |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> select CURtime();
++-----------+
+| CURtime() |
++-----------+
+| 14:59:46  |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE FUNCTION today_date()
+    -> RETURNS DATE
+    -> NOT DETERMINISTIC
+    -> NO SQL
+    -> BEGIN
+    -> return CURDATE();
+    -> END$$
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> SELECT today_date();
+    -> DELIMITER ;
+    -> SELECT today_date();
+    -> ;
+    ->    -> ^X
+    -> ^C
+mysql> DELIMITER ;
+mysql> SELECT today_date();
++--------------+
+| today_date() |
++--------------+
+| 2025-12-04   |
++--------------+
+1 row in set (0.00 sec)
+
+mysql>

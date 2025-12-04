@@ -1,0 +1,22 @@
+   
+
+
+CREATE OR REPLACE FUNCTION msg()
+RETURNS VARCHAR
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN 'Hello World';
+END;
+$$;
+
+Select msg();
+
+
+
+
+
+
+
+CREATE FUNCTION msg()
+RETURNS VARCHAR(20)

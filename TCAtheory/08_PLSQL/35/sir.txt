@@ -1,0 +1,91 @@
+=================================
+Topic- 1 : How To Write function
+=================================
+
+
+Q. Write a function which returs 'Hello World'.
+=================================================
+
+Postgresql
+----------
+
+CREATE OR REPLACE FUNCTION msg()
+RETURNS VARCHAR
+LANGUAGE plpgsql
+AS $$
+
+BEGIN
+	return 'HELLO TCA';
+
+END;
+$$;
+
+How to call -
+-------------
+	select msg();
+
+
+MySQL
+-----
+
+DELIMITER $$
+
+CREATE FUNCTION msg()
+RETURNS VARCHAR(50)
+DETERMINISTIC
+BEGIN
+	return 'Hello TCA';
+END$$
+DELIMITER ;
+
+
+How to call -
+-------------
+	select msg();
+
+
+How to DROP function
+---------------------
+
+Postgres --> DROP FUNCTION msg();
+Mysql    --> DROP FUNCTION msg;
+
+Why to drop function ?
+---------------------
+--> Becaus in one database you can not store multiple function with same name.
+
+
+Give me example of NOT-DETERMINISTIC -
+-------------------------------------------
+--> NOT-DETERMINISTIC means functions behaiviour is changing for every call.
+
+Example:
+
+DELIMITER $$
+
+CREATE FUNCTION today_time()
+RETURNS TIME
+NOT DETERMINISTIC
+NO SQL
+BEGIN
+	return CURTIME();
+END$$
+DELIMITER ;
+
+Ouput:
+------
+
+mysql> select today_time();
++--------------+
+| today_time() |
++--------------+
+| 20:55:40     |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select today_time();
++--------------+
+| today_time() |
++--------------+
+| 20:55:43     |
++--------------+
