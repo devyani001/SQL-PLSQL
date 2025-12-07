@@ -1,0 +1,259 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# tcadb16;
+ERROR:  syntax error at or near "tcadb16"
+LINE 1: tcadb16;
+        ^
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# CREATE OR REPLACE FUNCTION sum_of_n_nums(n int)
+tcadb16-# RETURNS int
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#     int i;
+tcadb16$#     int ans;
+tcadb16$#
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#     i   := 1;
+tcadb16$#     ans := 0;
+tcadb16$#
+tcadb16$#     while i <= n
+tcadb16$#     LOOP
+tcadb16$#         ans := ans + i;
+tcadb16$#         i   := i   + 1;
+tcadb16$#     END LOOP;
+tcadb16$#
+tcadb16$# END;
+tcadb16$# $$;
+ERROR:  type "i" does not exist
+LINE 7:     int i;
+                ^
+tcadb16=# CREATE OR REPLACE FUNCTION sum_of_n_nums(n int)
+tcadb16-# RETURNS int
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#     i   int;
+tcadb16$#     ans int;
+tcadb16$#
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#     i   := 1;
+tcadb16$#     ans := 0;
+tcadb16$#
+tcadb16$#     while i <= n
+tcadb16$#     LOOP
+tcadb16$#         ans := ans + i;
+tcadb16$#         i   := i   + 1;
+tcadb16$#     END LOOP;
+tcadb16$#
+tcadb16$# END;
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# sum_of_nums(3);
+ERROR:  syntax error at or near "sum_of_nums"
+LINE 1: sum_of_nums(3);
+        ^
+tcadb16=# sum_of_n_nums(3);
+ERROR:  syntax error at or near "sum_of_n_nums"
+LINE 1: sum_of_n_nums(3);
+        ^
+tcadb16=# select sum_of_n_nums(3);
+ERROR:  control reached end of function without RETURN
+CONTEXT:  PL/pgSQL function sum_of_n_nums(integer)
+tcadb16=# select sum_of_n_nums(3);
+ERROR:  control reached end of function without RETURN
+CONTEXT:  PL/pgSQL function sum_of_n_nums(integer)
+tcadb16=# CREATE OR REPLACE FUNCTION sum_of_n_nums(n int)
+tcadb16-# RETURNS int
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#     i   int;
+tcadb16$#     ans int;
+tcadb16$#
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#     i   := 1;
+tcadb16$#     ans := 0;
+tcadb16$#
+tcadb16$#     while i <= n
+tcadb16$#     LOOP
+tcadb16$#         ans := ans + i;
+tcadb16$#         i   := i   + 1;
+tcadb16$#     END LOOP;
+tcadb16$#
+tcadb16$#     return ans;
+tcadb16$# END;
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# select sum_of_n_nums(3);
+ sum_of_n_nums
+---------------
+             6
+(1 row)
+
+
+tcadb16=# select sum_of_n_nums(5);
+ sum_of_n_nums
+---------------
+            15
+(1 row)
+
+
+tcadb16=# select sum_of_n_nums(10);
+ sum_of_n_nums
+---------------
+            55
+(1 row)
+
+
+tcadb16=# select sum_of_n_nums(-5);
+ sum_of_n_nums
+---------------
+             0
+(1 row)
+
+
+tcadb16=# CREATE OR REPLACE FUNCTION sum_of_n_nums(n int)
+tcadb16-# RETURNS int
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#     ans int := 0;
+tcadb16$#
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#     FOR i..n
+tcadb16$#     LOOP
+tcadb16$#         ans := ans + i;
+tcadb16$#     END LOOP;
+tcadb16$#
+tcadb16$# END;
+tcadb16$# $$;
+ERROR:  syntax error at or near ".."
+LINE 11:     FOR i..n
+                  ^
+tcadb16=# CREATE OR REPLACE FUNCTION sum_of_n_nums(n int)
+tcadb16-# RETURNS int
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#     ans int := 0;
+tcadb16$#
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#     FOR i in i..n
+tcadb16$#     LOOP
+tcadb16$#         ans := ans + i;
+tcadb16$#     END LOOP;
+tcadb16$#
+tcadb16$# END;
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# select sum_of_n_nums(3);
+ERROR:  column "i" does not exist
+LINE 1: i
+        ^
+QUERY:  i
+CONTEXT:  PL/pgSQL function sum_of_n_nums(integer) line 8 at FOR with integer loop variable
+tcadb16=# CREATE OR REPLACE FUNCTION sum_of_n_nums(n int)
+tcadb16-# RETURNS int
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#     ans int;
+tcadb16$#     i   int;
+tcadb16$# BEGIN
+tcadb16$#     ans := 0;
+tcadb16$#     FOR i in i..n
+tcadb16$#     LOOP
+tcadb16$#         ans := ans + i;
+tcadb16$#     END LOOP;
+tcadb16$#
+tcadb16$# END;
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# select sum_of_n_nums(3);
+ERROR:  lower bound of FOR loop cannot be null
+CONTEXT:  PL/pgSQL function sum_of_n_nums(integer) line 8 at FOR with integer loop variable
+tcadb16=# CREATE OR REPLACE FUNCTION sum_of_n_nums(n int)
+tcadb16-# RETURNS int
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#     ans int;
+tcadb16$#     i   int;
+tcadb16$# BEGIN
+tcadb16$#     ans := 0;
+tcadb16$#     FOR i in 1..n
+tcadb16$#     LOOP
+tcadb16$#         ans := ans + i;
+tcadb16$#     END LOOP;
+tcadb16$#
+tcadb16$# END;
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# select sum_of_n_nums(3);
+ERROR:  control reached end of function without RETURN
+CONTEXT:  PL/pgSQL function sum_of_n_nums(integer)
+tcadb16=# CREATE OR REPLACE FUNCTION sum_of_n_nums(n int)
+tcadb16-# RETURNS int
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#     ans int;
+tcadb16$#     i   int;
+tcadb16$# BEGIN
+tcadb16$#     ans := 0;
+tcadb16$#     FOR i in 1..n
+tcadb16$#     LOOP
+tcadb16$#         ans := ans + i;
+tcadb16$#     END LOOP;
+tcadb16$#
+tcadb16$#     return ans;
+tcadb16$#
+tcadb16$# END;
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# select sum_of_n_nums(3);
+ sum_of_n_nums
+---------------
+             6
+(1 row)
+
+
+tcadb16=# select sum_of_n_nums(10);
+ sum_of_n_nums
+---------------
+            55
+(1 row)
+
+
+tcadb16=# DROP FUNCTION sum_of_n_numsq;
+ERROR:  could not find a function named "sum_of_n_numsq"
+tcadb16=# DROP FUNCTION sum_of_n_num;
+ERROR:  could not find a function named "sum_of_n_num"
+tcadb16=# DROP FUNCTION sum_of_n_nums;
+DROP FUNCTION
+tcadb16=#

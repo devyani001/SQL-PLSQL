@@ -1,0 +1,172 @@
+int n   = 3;
+int ans = 0;
+
+for(int i=0; i<=n; i++)
+{
+    ans = ans + i;
+}
+
+
+CREATE OR REPLACE FUNCTION sum_of_n_nums(n int)
+RETURNS int
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    i   int;
+    ans int;
+
+BEGIN 
+    
+    i   := 1;
+    ans := 0;
+
+    while i <= n
+    LOOP
+        ans := ans + i;
+        i   := i   + 1;
+    END LOOP;
+
+    return ans;
+END;
+$$;
+
+
+DELIMITER $$
+
+CREATE FUNCTION sum_of_n_nums(n int)
+RETURNS int
+DETERMINISTIC
+BEGIN
+    DECLARE i   int DEFAULT 1;
+    DECLARE ans int DEFAULT 0;
+
+    WHILE i <= n
+    DO
+        SET ans = ans + i;
+        SET i   = i   + 1;
+    END WHILE;
+
+    return ans;
+
+END $$
+DELIMITER ;
+
+
+CREATE OR REPLACE FUNCTION sum_of_n_nums(n int)
+RETURNS int
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    ans int;
+    i   int;
+BEGIN
+    ans := 0;
+    FOR i in 1..n
+    LOOP
+        ans := ans + i;
+    END LOOP;
+
+    return ans;
+
+END;
+$$;
+
+
+===========================
+How to write Loops in PLSQL 
+===========================
+
+--> When we want to perform same action/activity again and again then that can be written using Loop.
+
+--> Example: 
+	1. Sending fees receipt to students.
+	2. Sending Bank Statement every month-end.
+
+--> In PLSQL We can write - 
+	1. for loop
+	2. while loop
+
+
+Q. Write a PLSQL function to return sum of first 'n' numbers.
+==============================================================
+
+Postgresql: While Loop
+-----------------------
+
+CREATE OR REPLACE FUNCTION sum_of_n_nums(n int)
+RETURNS int
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+	i   int := 1;
+	ans int := 0;
+
+BEGIN
+	ans := 0;
+	i   := 1;
+
+	WHILE i<= n 
+	LOOP
+		ans := ans + i;
+		i   :=  i  + 1;
+	END LOOP;
+
+	return ans;
+
+END;
+$$;
+
+
+MySQL : while
+---------------
+
+DELIMITER $$
+
+CREATE FUNCTION  sum_of_n_nums(n int)
+RETURNS int
+DETERMINISTIC
+BEGIN
+	DECLARE ans int   DEFAULT 0;
+	DECLARE i   int   DEFAULT 1;
+
+
+	SET ans = 0;
+	SET i = 1;
+
+	WHILE i<=n
+	DO
+		SET ans =  ans + i;
+		SET i  	=   i  + 1;
+	END WHILE;
+
+	return ans;
+END $$
+DELIMITER ;
+
+Postgresql : for loop
+------------------------
+CREATE OR REPLACE FUNCTION sum_of_n_nums(n int)
+RETURNS int
+LANGUAGE plpgsql
+AS $$
+DECLARE
+	i int;
+	ans int;
+BEGIN
+
+	ans := 0;
+
+	for i in 1..n
+	LOOP
+		ans := ans + i;
+	END LOOP;
+
+	return ans;
+END;
+$$;
+
+
+------------------------------------
