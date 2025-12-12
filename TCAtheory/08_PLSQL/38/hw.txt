@@ -1,0 +1,15 @@
+Assignment
+===========
+Q. Write a function which accepts roll number and returns its 
+grade based on percentage? 
+
+select get_grade(101);
+First class
+select get_grade(102);
+Fail
+select get_grade(103);
+Distincation
+select get_grade(104);
+Absent
+select get_grade(107);
+Student not found

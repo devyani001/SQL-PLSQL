@@ -1,0 +1,517 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select * from student;
+ERROR:  relation "student" does not exist
+LINE 1: select * from student;
+                      ^
+tcadb16=# CREATE TABLE student(rno int primary key, name varchar(10), per float);
+CREATE TABLE
+tcadb16=# insert into student values(101, 'AAA', 60);
+INSERT 0 1
+tcadb16=# insert into student values(101, 'BBB', 30);
+ERROR:  duplicate key value violates unique constraint "student_pkey"
+DETAIL:  Key (rno)=(101) already exists.
+tcadb16=# insert into student values(102, 'BBB', 30);
+INSERT 0 1
+tcadb16=# insert into student values(103, 'CCC', 80);
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  30
+ 103 | CCC  |  80
+(3 rows)
+
+
+tcadb16=# select get_result(101);
+ERROR:  function get_result(integer) does not exist
+LINE 1: select get_result(101);
+               ^
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=# CREATE OR REPLACE FUNCTION get_result(rno int)
+tcadb16-# RETURNS int
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# BEGIN
+tcadb16$#     select rno, per FROM student;
+tcadb16$# END;
+tcadb16$#
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# select get_result(102);
+ERROR:  column reference "rno" is ambiguous
+LINE 1: select rno, per FROM student
+               ^
+DETAIL:  It could refer to either a PL/pgSQL variable or a table column.
+QUERY:  select rno, per FROM student
+CONTEXT:  PL/pgSQL function get_result(integer) line 4 at SQL statement
+tcadb16=#
+===================================================================================================================
+
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select * from student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  30
+ 103 | CCC  |  80
+(3 rows)
+
+
+tcadb16=# select per from student where rno = prno;
+ERROR:  column "prno" does not exist
+LINE 1: select per from student where rno = prno;
+                                            ^
+HINT:  Perhaps you meant to reference the column "student.rno".
+tcadb16=# select per from student where rno = 101;
+ per
+-----
+  60
+(1 row)
+
+
+tcadb16=# CREATE OR REPLACE FUNCTION get_result(prno int)
+tcadb16-# RETURNS TEXT
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#     tper int;
+tcadb16$#     status TEXT;
+tcadb16$#
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#     select per INTO tper
+tcadb16$#     from student
+tcadb16$#     where rno = prno;
+tcadb16$#
+tcadb16$#     IF NOT FOUND THEN
+tcadb16$#         return 'student not found !!!';
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     if tper >= 40 THEN
+tcadb16$#         status := 'pass';
+tcadb16$#     ELSE
+tcadb16$#         status := 'fail';
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     return status;
+tcadb16$# END;
+tcadb16$#
+tcadb16$# $$;
+ERROR:  cannot change return type of existing function
+HINT:  Use DROP FUNCTION get_result(integer) first.
+tcadb16=# get_result(101);
+ERROR:  syntax error at or near "get_result"
+LINE 1: get_result(101);
+        ^
+tcadb16=# select get_result(101);
+ERROR:  column reference "rno" is ambiguous
+LINE 1: select rno, per FROM student
+               ^
+DETAIL:  It could refer to either a PL/pgSQL variable or a table column.
+QUERY:  select rno, per FROM student
+CONTEXT:  PL/pgSQL function get_result(integer) line 4 at SQL statement
+tcadb16=# DROP FUNCTION get_result();
+ERROR:  function get_result() does not exist
+tcadb16=# DROP FUNCTION get_result;
+DROP FUNCTION
+tcadb16=# CREATE OR REPLACE FUNCTION get_result(prno int)
+tcadb16-# RETURNS TEXT
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#     tper int;
+tcadb16$#     status TEXT;
+tcadb16$#
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#     select per INTO tper
+tcadb16$#     from student
+tcadb16$#     where rno = prno;
+tcadb16$#
+tcadb16$#     IF NOT FOUND THEN
+tcadb16$#         return 'student not found !!!';
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     if tper >= 40 THEN
+tcadb16$#         status := 'pass';
+tcadb16$#     ELSE
+tcadb16$#         status := 'fail';
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     return status;
+tcadb16$# END;
+tcadb16$#
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# select get_result(101);
+ get_result
+------------
+ pass
+(1 row)
+
+
+tcadb16=# select get_result(103);
+ get_result
+------------
+ pass
+(1 row)
+
+
+tcadb16=# select get_result(102);
+ get_result
+------------
+ fail
+(1 row)
+
+
+tcadb16=# select get_result(107);
+      get_result
+-----------------------
+ student not found !!!
+(1 row)
+
+
+tcadb16=# select * from student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  30
+ 103 | CCC  |  80
+(3 rows)
+
+
+tcadb16=# insert into student (rno,name) values (104,'DDD');
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  30
+ 103 | CCC  |  80
+ 104 | DDD  |
+(4 rows)
+
+
+tcadb16=# select get_result(104);
+ get_result
+------------
+ fail
+(1 row)
+
+
+tcadb16=# select * from student where rno = 104;
+ rno | name | per
+-----+------+-----
+ 104 | DDD  |
+(1 row)
+
+
+tcadb16=# cls
+tcadb16-# ;
+ERROR:  syntax error at or near "cls"
+LINE 1: cls
+        ^
+tcadb16=# CREATE OR REPLACE FUNCTION get_result(prno int)
+tcadb16-# RETURNS TEXT
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#     tper int;
+tcadb16$#     status TEXT;
+tcadb16$#
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#     select per INTO tper
+tcadb16$#     from student
+tcadb16$#     where rno = prno;
+tcadb16$#
+tcadb16$#     IF NOT FOUND THEN
+tcadb16$#         return 'student not found !!!';
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     IF IS NULL THEN
+tcadb16$#         return 'ABSENT';
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     if tper >= 40 THEN
+tcadb16$#         status := 'pass';
+tcadb16$#     ELSE
+tcadb16$#         status := 'fail';
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     return status;
+tcadb16$# END;
+tcadb16$#
+tcadb16$# $$;
+ERROR:  syntax error at or near "NULL"
+LINE 20:     IF IS NULL THEN
+                   ^
+tcadb16=# CREATE OR REPLACE FUNCTION get_result(prno int)
+tcadb16-# RETURNS TEXT
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#     tper int;
+tcadb16$#     status TEXT;
+tcadb16$#
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#     select per INTO tper
+tcadb16$#     from student
+tcadb16$#     where rno = prno;
+tcadb16$#
+tcadb16$#     IF NOT FOUND THEN
+tcadb16$#         return 'student not found !!!';
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     IF tper IS NULL THEN
+tcadb16$#         return 'ABSENT';
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     if tper >= 40 THEN
+tcadb16$#         status := 'pass';
+tcadb16$#     ELSE
+tcadb16$#         status := 'fail';
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     return status;
+tcadb16$# END;
+tcadb16$#
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# select get_result(101);
+ get_result
+------------
+ pass
+(1 row)
+
+
+tcadb16=# select get_result(102);
+ get_result
+------------
+ fail
+(1 row)
+
+
+tcadb16=# select get_result(103);
+ get_result
+------------
+ pass
+(1 row)
+
+
+tcadb16=# select get_result(107);
+      get_result
+-----------------------
+ student not found !!!
+(1 row)
+
+
+tcadb16=# select get_result(104);
+ get_result
+------------
+ ABSENT
+(1 row)
+
+
+tcadb16=# CREATE OR REPLACE FUNCTION get_result(prno int)
+tcadb16-# RETURNS TEXT
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#     tper int;
+tcadb16$#     status TEXT;
+tcadb16$#
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#     select per INTO tper
+tcadb16$#     from student
+tcadb16$#     where rno = prno;
+tcadb16$#
+tcadb16$#     IF NOT FOUND THEN
+tcadb16$#         return 'student not found !!!';
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     IF tper IS NULL THEN
+tcadb16$#         status := 'ABSENT';
+tcadb16$#     else if tper >= 40 THEN
+tcadb16$#         status := 'pass';
+tcadb16$#     ELSE
+tcadb16$#         status := 'fail';
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     return status;
+tcadb16$# END;
+tcadb16$#
+tcadb16$# $$;
+ERROR:  syntax error at or near ";"
+LINE 29: END;
+            ^
+tcadb16=# CREATE OR REPLACE FUNCTION get_result(prno int)
+tcadb16-# RETURNS TEXT
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#     tper int;
+tcadb16$#     status TEXT;
+tcadb16$#
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#     select per INTO tper
+tcadb16$#     from student
+tcadb16$#     where rno = prno;
+tcadb16$#
+tcadb16$#     IF NOT FOUND THEN
+tcadb16$#         return 'student not found !!!';
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     IF tper IS NULL THEN
+tcadb16$#         status := 'ABSENT';
+tcadb16$#     elseif tper >= 40 THEN
+tcadb16$#         status := 'pass';
+tcadb16$#     ELSE
+tcadb16$#         status := 'fail';
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     return status;
+tcadb16$# END;
+tcadb16$#
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# select get_result(101);
+ get_result
+------------
+ pass
+(1 row)
+
+
+tcadb16=# select get_result(102);
+ get_result
+------------
+ fail
+(1 row)
+
+
+tcadb16=# select get_result(103);
+ get_result
+------------
+ pass
+(1 row)
+
+
+tcadb16=# select get_result(107);
+      get_result
+-----------------------
+ student not found !!!
+(1 row)
+
+
+tcadb16=# select get_result(104);
+ get_result
+------------
+ ABSENT
+(1 row)
+
+
+tcadb16=# CREATE OR REPLACE FUNCTION get_result(prno int)
+tcadb16-# RETURNS TEXT
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#     tper student.per%TYPE;
+tcadb16$#     status TEXT;
+tcadb16$#
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#     select per INTO tper
+tcadb16$#     from student
+tcadb16$#     where rno = prno;
+tcadb16$#
+tcadb16$#     IF NOT FOUND THEN
+tcadb16$#         return 'student not found !!!';
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     IF tper IS NULL THEN
+tcadb16$#         status := 'ABSENT';
+tcadb16$#     elseif tper >= 40 THEN
+tcadb16$#         status := 'pass';
+tcadb16$#     ELSE
+tcadb16$#         status := 'fail';
+tcadb16$#     END IF;
+tcadb16$#
+tcadb16$#     return status;
+tcadb16$# END;
+tcadb16$#
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# select get_result(101);
+ get_result
+------------
+ pass
+(1 row)
+
+
+tcadb16=# select get_result(102);
+ get_result
+------------
+ fail
+(1 row)
+
+
+tcadb16=# select get_result(103);
+ get_result
+------------
+ pass
+(1 row)
+
+
+tcadb16=# select get_result(107);
+      get_result
+-----------------------
+ student not found !!!
+(1 row)
+
+
+tcadb16=# select get_result(104);
+ get_result
+------------
+ ABSENT
+(1 row)
+
+
+tcadb16=#

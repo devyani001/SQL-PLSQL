@@ -1,0 +1,363 @@
+CREATE OR REPLACE FUNCTION get_result(rno int)
+RETURNS int
+LANGUAGE plpgsql
+AS $$
+
+BEGIN
+    select rno, per FROM student;
+END;
+
+$$;
+=================================
+CREATE OR REPLACE FUNCTION get_result(prno int)
+RETURNS TEXT
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    tper int;
+    status TEXT;
+
+BEGIN
+
+    select per INTO tper
+    from student 
+    where rno = prno;
+
+    IF NOT FOUND THEN
+        return 'student not found !!!';
+    END IF;
+
+    IF tper IS NULL THEN
+        return 'ABSENT';
+    END IF;
+
+    if tper >= 40 THEN
+        status := 'pass';
+    ELSE
+        status := 'fail';
+    END IF;
+
+    return status;
+END;
+
+$$;
+
+================== ELSE-IF LADDER ====================
+(elseif - no gap in between else if like C LANGUAGE)
+
+CREATE OR REPLACE FUNCTION get_result(prno int)
+RETURNS TEXT
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    tper int;
+    status TEXT;
+
+BEGIN
+
+    select per INTO tper
+    from student 
+    where rno = prno;
+
+    IF NOT FOUND THEN
+        return 'student not found !!!';
+    END IF;
+
+    IF tper IS NULL THEN
+        status := 'ABSENT';
+    elseif tper >= 40 THEN
+        status := 'pass';
+    ELSE
+        status := 'fail';
+    END IF;
+
+    return status;
+END;
+
+$$;
+
+================= default datatype ==================
+
+CREATE OR REPLACE FUNCTION get_result(prno int)
+RETURNS TEXT
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    tper student.per%TYPE;
+    status TEXT;
+
+BEGIN
+
+    select per INTO tper
+    from student 
+    where rno = prno;
+
+    IF NOT FOUND THEN
+        return 'student not found !!!';
+    END IF;
+
+    IF tper IS NULL THEN
+        status := 'ABSENT';
+    elseif tper >= 40 THEN
+        status := 'pass';
+    ELSE
+        status := 'fail';
+    END IF;
+
+    return status;
+END;
+
+$$;
+
+================================================
+
+------
+MySQL
+------
+
+DELIMITER $$
+CREATE FUNCTION get_result(prno int)
+RETURNS VARCHAR(30)
+DETERMINISTIC
+BEGIN
+    DECLARE tper float;
+    DECLARE status VARCHAR(30);
+
+    select per INTO tper
+    from student 
+    where rno = prno;
+
+    if tper IS NULL THEN
+        return 'Student does not exist !!!';
+    end if;
+
+    if tper >= 40 THEN
+        SET status = 'PASS';
+    else
+        SET status = 'FAIL';
+    end if;
+
+    return status;
+END $$
+
+DELIMITER ;
+
+-------------------------
+
+DELIMITER $$
+CREATE FUNCTION get_result(prno int)
+RETURNS VARCHAR(30)
+DETERMINISTIC
+BEGIN
+    DECLARE trno int;
+    DECLARE tper float;
+    DECLARE status VARCHAR(30);
+
+    select rno, per INTO trno, tper
+    from student 
+    where rno = prno;
+
+    if trno IS NULL THEN
+        return 'Student does not exist !!!';
+    end if;
+
+    if tper IS NULL then
+        SET status = 'ABSENT';
+    elseif tper >= 40 THEN
+        SET status = 'PASS';
+    else
+        SET status = 'FAIL';
+    end if;
+
+    return status;
+END $$
+
+DELIMITER ;
+
+--------------------------
+
+DELIMITER $$
+CREATE FUNCTION get_result(prno int)
+RETURNS VARCHAR(30)
+DETERMINISTIC
+BEGIN
+    DECLARE cnt int;
+    DECLARE trno int;
+    DECLARE tper float;
+    DECLARE status VARCHAR(30);
+
+    select count(*) INTO cnt
+    from student
+    where rno = prno;
+
+    if cnt = 0 THEN
+        return 'Student Not Found';
+    end if;
+
+    select rno, per INTO trno, tper
+    from student 
+    where rno = prno;
+
+    if trno IS NULL THEN
+        return 'Student does not exist !!!';
+    end if;
+
+    if tper IS NULL then
+        SET status = 'ABSENT';
+    elseif tper >= 40 THEN
+        SET status = 'PASS';
+    else
+        SET status = 'FAIL';
+    end if;
+
+    return status;
+END $$
+
+DELIMITER ;
+====================================
+====================================
+
+------------------------------------
+
+
+How to write a function.
+How to pass values function.
+How to declare variable in function.
+How to write decison control statement (if-else)
+How to write Loop Statements(for, while)
+
+
+
+Q. Write a function which accepts roll number & it returns result(Pass or Fail) of that student.
+--------------------------------------------------------------------------------
+
+----------
+Postgresql
+-----------
+
+CREATE OR REPLACE FUNCTION get_result(prno int)
+RETURNS TEXT
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+	tper student.per%TYPE;
+	status TEXT;
+
+BEGIN
+		select per INTO tper
+		from student 
+		where rno = prno;
+	
+		if  NOT FOUND THEN
+			return 'Student does not Exist !!!';
+		end if;
+
+		if tper IS NULL THEN
+			status := 'ABSENT';
+		elseif tper >= 40 THEN
+			status := 'PASS';
+		else
+			status := 'FAIL';
+		end if;
+
+	return status;
+END;
+$$ ;
+
+
+======
+MySQL
+======
+
+DELIMITER $$
+CREATE FUNCTION get_result(prno int)
+RETURNS VARCHAR(30)
+DETERMINISTIC
+BEGIN
+	DECLARE trno int;
+	DECLARE tper float;
+	DECLARE status VARCHAR(30);
+
+	select rno,per INTO trno,tper
+	from student
+	where rno = prno;
+
+	if trno IS NULL THEN
+		return 'Student does not exist !!!';
+	end if;
+
+	if tper IS NULL then
+		SET status = 'ABSENT';
+	elseif tper >= 40 then
+		SET status = 'PASS';
+	else
+		SET status = 'FAIL';
+	end if;
+
+	return status;
+
+END$$
+
+DELIMITER ;
+
+
+Another approach
+-----------------
+DELIMITER $$
+CREATE FUNCTION get_result(prno int)
+RETURNS VARCHAR(30)
+DETERMINISTIC
+BEGIN
+	DECLARE cnt int;
+	DECLARE tper float;
+	DECLARE status VARCHAR(30);
+
+
+	select count(*) INTO cnt
+	from student
+	where rno = prno;
+
+	if cnt=0 then
+		return 'Student Not Found';
+	end if;
+
+	select per INTO tper
+	from student
+	where rno = prno;
+
+	if tper IS NULL then
+		SET status = 'ABSENT';
+	elseif tper >= 40 then
+		SET status = 'PASS';
+	else
+		SET status = 'FAIL';
+	end if;
+
+	return status;
+
+END$$
+
+DELIMITER ;
+
+
+Assignment
+===========
+Q. Write a function which accepts roll number and returns its 
+grade based on percentage? 
+
+select get_grade(101);
+First class
+select get_grade(102);
+Fail
+select get_grade(103);
+Distincation
+select get_grade(104);
+Absent
+select get_grade(107);
+Student not found
+
+=================================================================================

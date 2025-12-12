@@ -1,0 +1,601 @@
+Enter password: **********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 20
+Server version: 8.0.43 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use tcadb16;
+Database changed
+mysql> select * from student;
++-----+---------+------+
+| rno | name    | per  |
++-----+---------+------+
+|   7 | MSD     |   80 |
+| 101 | AAA     |   60 |
+| 102 | BBB     |   70 |
+| 103 | ROHIT   |   45 |
+| 104 | VIRAT   |   18 |
+| 105 | RUTURAJ |   70 |
+| 106 | HARDIK  |   70 |
+| 107 | BUMRAH  |   70 |
++-----+---------+------+
+8 rows in set (0.08 sec)
+
+mysql> select * from students\;
+ERROR:
+Unknown command '\;'.
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '\' at line 1
+mysql> select * from students;
+ERROR 1146 (42S02): Table 'tcadb16.students' doesn't exist
+mysql> drop student;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'student' at line 1
+mysql> drop table student;
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> select * from student;
+ERROR 1146 (42S02): Table 'tcadb16.student' doesn't exist
+mysql> CREATE TABLE student(rno int primary key, name varchar(10), per float);
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> insert into student values(101, 'AAA', 60);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into student values(101, 'BBB', 30);
+ERROR 1062 (23000): Duplicate entry '101' for key 'student.PRIMARY'
+mysql> insert into student values(102, 'BBB', 30);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into student values(103, 'CCC', 80);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from student;
++-----+------+------+
+| rno | name | per  |
++-----+------+------+
+| 101 | AAA  |   60 |
+| 102 | BBB  |   30 |
+| 103 | CCC  |   80 |
++-----+------+------+
+3 rows in set (0.00 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE FUNCTION get_result(prno int)
+    -> RETURNS VARCHAR(30)
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE tper float;
+    ->     DECLARE status VARCHAR(30);
+    ->
+    ->     select per INTO tper
+    ->     from student
+    ->     where rno = prno;
+    ->
+    ->     if tper >= 40 THEN
+    ->         SET status = 'PASS';
+    ->     else
+    ->         SET status = 'FAIL';
+    ->     end if;
+    ->
+    ->     return staus;
+    -> END $$
+Query OK, 0 rows affected (0.04 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> select get_result(101);
+ERROR 1054 (42S22): Unknown column 'staus' in 'field list'
+mysql> DELIMITER $$
+mysql> CREATE FUNCTION get_result(prno int)
+    -> RETURNS VARCHAR(30)
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE tper float;
+    ->     DECLARE status VARCHAR(30);
+    ->
+    ->     select per INTO tper
+    ->     from student
+    ->     where rno = prno;
+    ->
+    ->     if tper >= 40 THEN
+    ->         SET status = 'PASS';
+    ->     else
+    ->         SET status = 'FAIL';
+    ->     end if;
+    ->
+    ->     return status;
+    -> END $$
+ERROR 1304 (42000): FUNCTION get_result already exists
+mysql>
+mysql> DELIMITER ;
+mysql> drop function get_result;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE FUNCTION get_result(prno int)
+    -> RETURNS VARCHAR(30)
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE tper float;
+    ->     DECLARE status VARCHAR(30);
+    ->
+    ->     select per INTO tper
+    ->     from student
+    ->     where rno = prno;
+    ->
+    ->     if tper >= 40 THEN
+    ->         SET status = 'PASS';
+    ->     else
+    ->         SET status = 'FAIL';
+    ->     end if;
+    ->
+    ->     return status;
+    -> END $$
+Query OK, 0 rows affected (0.04 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> select get_result(101);
++-----------------+
+| get_result(101) |
++-----------------+
+| PASS            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(102);
++-----------------+
+| get_result(102) |
++-----------------+
+| FAIL            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(103);
++-----------------+
+| get_result(103) |
++-----------------+
+| PASS            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(107);
++-----------------+
+| get_result(107) |
++-----------------+
+| FAIL            |
++-----------------+
+1 row in set (0.03 sec)
+
+mysql> select get_result(104);
++-----------------+
+| get_result(104) |
++-----------------+
+| FAIL            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select * from student;
++-----+------+------+
+| rno | name | per  |
++-----+------+------+
+| 101 | AAA  |   60 |
+| 102 | BBB  |   30 |
+| 103 | CCC  |   80 |
++-----+------+------+
+3 rows in set (0.00 sec)
+
+mysql> insert into student(rno,name) values(104,'DDD');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from student;
++-----+------+------+
+| rno | name | per  |
++-----+------+------+
+| 101 | AAA  |   60 |
+| 102 | BBB  |   30 |
+| 103 | CCC  |   80 |
+| 104 | DDD  | NULL |
++-----+------+------+
+4 rows in set (0.00 sec)
+
+mysql> select get_result(104);
++-----------------+
+| get_result(104) |
++-----------------+
+| FAIL            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> drop function get_result;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE FUNCTION get_result(prno int)
+    -> RETURNS VARCHAR(30)
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE tper float;
+    ->     DECLARE status VARCHAR(30);
+    ->
+    ->     select per INTO tper
+    ->     from student
+    ->     where rno = prno;
+    ->
+    ->     if tper IS NULL THEN
+    ->         return 'Student does not exist !!!';
+    ->     end if;
+    ->
+    ->     if tper >= 40 THEN
+    ->         SET status = 'PASS';
+    ->     else
+    ->         SET status = 'FAIL';
+    ->     end if;
+    ->
+    ->     return status;
+    -> END $$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> select get_result(101);
++-----------------+
+| get_result(101) |
++-----------------+
+| PASS            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(102);
++-----------------+
+| get_result(102) |
++-----------------+
+| FAIL            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(103);
++-----------------+
+| get_result(103) |
++-----------------+
+| PASS            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(104);
++----------------------------+
+| get_result(104)            |
++----------------------------+
+| Student does not exist !!! |
++----------------------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(107);
++----------------------------+
+| get_result(107)            |
++----------------------------+
+| Student does not exist !!! |
++----------------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from student;
++-----+------+------+
+| rno | name | per  |
++-----+------+------+
+| 101 | AAA  |   60 |
+| 102 | BBB  |   30 |
+| 103 | CCC  |   80 |
+| 104 | DDD  | NULL |
++-----+------+------+
+4 rows in set (0.00 sec)
+
+mysql> drop function get_result;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE FUNCTION get_result(prno int)
+    -> RETURNS VARCHAR(30)
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE trno int;
+    ->     DECLARE tper float;
+    ->     DECLARE status VARCHAR(30);
+    ->
+    ->     select rno, per INTO trno, tper
+    ->     from student
+    ->     where rno = prno;
+    ->
+    ->     if tper IS NULL THEN
+    ->         return 'Student does not exist !!!';
+    ->     end if;
+    ->
+    ->     if tper IS NULL then
+    ->         SET status = 'ABSENT';
+    ->     elseif tper >= 40 THEN
+    ->         SET status = 'PASS';
+    ->     else
+    ->         SET status = 'FAIL';
+    ->     end if;
+    ->
+    ->     return status;
+    -> END $$
+Query OK, 0 rows affected (0.04 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> select get_result(101);
++-----------------+
+| get_result(101) |
++-----------------+
+| PASS            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(102);
++-----------------+
+| get_result(102) |
++-----------------+
+| FAIL            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(103);
++-----------------+
+| get_result(103) |
++-----------------+
+| PASS            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(104);
++----------------------------+
+| get_result(104)            |
++----------------------------+
+| Student does not exist !!! |
++----------------------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(107);
++----------------------------+
+| get_result(107)            |
++----------------------------+
+| Student does not exist !!! |
++----------------------------+
+1 row in set (0.00 sec)
+
+mysql> drop function get_result;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE FUNCTION get_result(prno int)
+    -> RETURNS VARCHAR(30)
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE trno int;
+    ->     DECLARE tper float;
+    ->     DECLARE status VARCHAR(30);
+    ->
+    ->     select rno, per INTO trno, tper
+    ->     from student
+    ->     where rno = prno;
+    ->
+    ->     if trno IS NULL THEN
+    ->         return 'Student does not exist !!!';
+    ->     end if;
+    ->
+    ->     if tper IS NULL then
+    ->         SET status = 'ABSENT';
+    ->     elseif tper >= 40 THEN
+    ->         SET status = 'PASS';
+    ->     else
+    ->         SET status = 'FAIL';
+    ->     end if;
+    ->
+    ->     return status;
+    -> END $$
+Query OK, 0 rows affected (0.04 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> select get_result(101);
++-----------------+
+| get_result(101) |
++-----------------+
+| PASS            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(102);
++-----------------+
+| get_result(102) |
++-----------------+
+| FAIL            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(103);
++-----------------+
+| get_result(103) |
++-----------------+
+| PASS            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(104);
++-----------------+
+| get_result(104) |
++-----------------+
+| ABSENT          |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(107);
++----------------------------+
+| get_result(107)            |
++----------------------------+
+| Student does not exist !!! |
++----------------------------+
+1 row in set (0.00 sec)
+
+mysql> select count() from studen;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') from studen' at line 1
+mysql> select count(*) from student;
++----------+
+| count(*) |
++----------+
+|        4 |
++----------+
+1 row in set (0.04 sec)
+
+mysql> select count(*) from student where rno = 101;
++----------+
+| count(*) |
++----------+
+|        1 |
++----------+
+1 row in set (0.03 sec)
+
+mysql> select count(*) from student where rno = 104;
++----------+
+| count(*) |
++----------+
+|        1 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select count(*) from student where rno = 107;
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE FUNCTION get_result(prno int)
+    -> RETURNS VARCHAR(30)
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE cnt int;
+    ->     DECLARE trno int;
+    ->     DECLARE tper float;
+    ->     DECLARE status VARCHAR(30);
+    ->
+    ->     select count(*) INTO cnt
+    ->     from student
+    ->     where rno = prno;
+    ->
+    ->     if cnt = 0 THEN
+    ->         return 'Student Not Found';
+    ->     end if;
+    ->
+    ->     select rno, per INTO trno, tper
+    ->     from student
+    ->     where rno = prno;
+    ->
+    ->     if trno IS NULL THEN
+    ->         return 'Student does not exist !!!';
+    ->     end if;
+    ->
+    ->     if tper IS NULL then
+    ->         SET status = 'ABSENT';
+    ->     elseif tper >= 40 THEN
+    ->         SET status = 'PASS';
+    ->     else
+    ->         SET status = 'FAIL';
+    ->     end if;
+    ->
+    ->     return status;
+    -> END $$
+ERROR 1304 (42000): FUNCTION get_result already exists
+mysql>
+mysql> DELIMITER ;
+mysql> drop function get_result;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE FUNCTION get_result(prno int)
+    -> RETURNS VARCHAR(30)
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE cnt int;
+    ->     DECLARE trno int;
+    ->     DECLARE tper float;
+    ->     DECLARE status VARCHAR(30);
+    ->
+    ->     select count(*) INTO cnt
+    ->     from student
+    ->     where rno = prno;
+    ->
+    ->     if cnt = 0 THEN
+    ->         return 'Student Not Found';
+    ->     end if;
+    ->
+    ->     select rno, per INTO trno, tper
+    ->     from student
+    ->     where rno = prno;
+    ->
+    ->     if trno IS NULL THEN
+    ->         return 'Student does not exist !!!';
+    ->     end if;
+    ->
+    ->     if tper IS NULL then
+    ->         SET status = 'ABSENT';
+    ->     elseif tper >= 40 THEN
+    ->         SET status = 'PASS';
+    ->     else
+    ->         SET status = 'FAIL';
+    ->     end if;
+    ->
+    ->     return status;
+    -> END $$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> select get_result(101);
++-----------------+
+| get_result(101) |
++-----------------+
+| PASS            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(102);
++-----------------+
+| get_result(102) |
++-----------------+
+| FAIL            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(103);
++-----------------+
+| get_result(103) |
++-----------------+
+| PASS            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(104);
++-----------------+
+| get_result(104) |
++-----------------+
+| ABSENT          |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select get_result(107);
++-------------------+
+| get_result(107)   |
++-------------------+
+| Student Not Found |
++-------------------+
+1 row in set (0.00 sec)
