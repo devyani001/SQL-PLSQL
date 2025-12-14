@@ -1,0 +1,272 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# DROP TABLE student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(
+tcadb16(#
+tcadb16(#       rno int primary key,
+tcadb16(#       name varchar(10),
+tcadb16(#       per float,
+tcadb16(#       grade varchar(20)
+tcadb16(# );
+CREATE TABLE
+tcadb16=# insert into student values(101,'AAA', 60);
+INSERT 0 1
+tcadb16=# insert into student values(102,'BBB', 70);
+INSERT 0 1
+tcadb16=# insert into student values(103,'CCC', 80);
+INSERT 0 1
+tcadb16=#
+tcadb16=# select * from student;
+ rno | name | per | grade
+-----+------+-----+-------
+ 101 | AAA  |  60 |
+ 102 | BBB  |  70 |
+ 103 | CCC  |  80 |
+(3 rows)
+
+
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=#
+tcadb16=# CREATE TABLE student(
+tcadb16(#
+tcadb16(#       rno int primary key,
+tcadb16(#       name varchar(10),
+tcadb16(#       per float
+tcadb16(# );
+CREATE TABLE
+tcadb16=# insert into student values(101,'AAA', 60);
+INSERT 0 1
+tcadb16=# insert into student values(102,'BBB', 70);
+INSERT 0 1
+tcadb16=# insert into student values(103,'CCC', 80);
+INSERT 0 1
+tcadb16=# select * from student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  70
+ 103 | CCC  |  80
+(3 rows)
+
+
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=# CREATE TABLE student(
+tcadb16(#
+tcadb16(#       rno int primary key,
+tcadb16(#       name varchar(10),
+tcadb16(#       per float,
+tcadb16(#       grade varchar(20)
+tcadb16(# );
+CREATE TABLE
+tcadb16=# select * from student;
+ rno | name | per | grade
+-----+------+-----+-------
+(0 rows)
+
+
+tcadb16=# CALL add_student(101,'AAA',60);
+ERROR:  procedure add_student(integer, unknown, integer) does not exist
+LINE 1: CALL add_student(101,'AAA',60);
+             ^
+HINT:  No procedure matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=# CREATE OR REPLACE PROCEDURE add_student(prno int, pname varchar(30), pper float)
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# DECLARE
+tcadb16$#     tgrade varchar(20);
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#     if pper >= 70 then
+tcadb16$#         tgrade := 'DISTINCTION';
+tcadb16$#
+tcadb16$#     elseif pper >= 60 then
+tcadb16$#         tgrade := 'First Class';
+tcadb16$#
+tcadb16$#     elseif pper >= 40 then
+tcadb16$#         tgrade := 'Pass';
+tcadb16$#
+tcadb16$#     else
+tcadb16$#         tgrade := 'Fail';
+tcadb16$#
+tcadb16$#     end if;
+tcadb16$#
+tcadb16$#     insert into student values(prno, pname,pper,tgrade);
+tcadb16$#
+tcadb16$# END;
+tcadb16$# $$;
+CREATE PROCEDURE
+tcadb16=# CALL add_student(101,'AAA',60);
+CALL
+tcadb16=# select * from student;
+ rno | name | per |    grade
+-----+------+-----+-------------
+ 101 | AAA  |  60 | First Class
+(1 row)
+
+
+tcadb16=# CALL add_student(101,'BBB',80);
+ERROR:  duplicate key value violates unique constraint "student_pkey"
+DETAIL:  Key (rno)=(101) already exists.
+CONTEXT:  SQL statement "insert into student values(prno, pname,pper,tgrade)"
+PL/pgSQL function add_student(integer,character varying,double precision) line 20 at SQL statement
+tcadb16=# CALL add_student(102,'BBB',80);
+CALL
+tcadb16=# CALL add_student(103,'CCC',20);
+CALL
+tcadb16=# select * from student;
+ rno | name | per |    grade
+-----+------+-----+-------------
+ 101 | AAA  |  60 | First Class
+ 102 | BBB  |  80 | DISTINCTION
+ 103 | CCC  |  20 | Fail
+(3 rows)
+
+
+tcadb16=# CALL add_student(104,'DDD',38);
+CALL
+tcadb16=# select * from student;
+ rno | name | per |    grade
+-----+------+-----+-------------
+ 101 | AAA  |  60 | First Class
+ 102 | BBB  |  80 | DISTINCTION
+ 103 | CCC  |  20 | Fail
+ 104 | DDD  |  38 | Fail
+(4 rows)
+
+
+tcadb16=# CALL add_student(105,'EEE',42);
+CALL
+tcadb16=# select * from student;
+ rno | name | per |    grade
+-----+------+-----+-------------
+ 101 | AAA  |  60 | First Class
+ 102 | BBB  |  80 | DISTINCTION
+ 103 | CCC  |  20 | Fail
+ 104 | DDD  |  38 | Fail
+ 105 | EEE  |  42 | Pass
+(5 rows)
+
+
+tcadb16=# CREATE OR REPLACE PROCEDURE add_student(prno int, pname varchar(30), pper float)
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# DECLARE
+tcadb16$#     tgrade varchar(20);
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#     if pper >= 70 then
+tcadb16$#         tgrade := 'DISTINCTION';
+tcadb16$#
+tcadb16$#     elseif pper >= 60 then
+tcadb16$#         tgrade := 'First Class';
+tcadb16$#
+tcadb16$#     elseif pper >= 40 then
+tcadb16$#         tgrade := 'Pass';
+tcadb16$#
+tcadb16$#     else
+tcadb16$#         tgrade := 'Fail';
+tcadb16$#
+tcadb16$#     end if;
+tcadb16$#
+tcadb16$#     insert into student values(prno, pname,pper,tgrade);
+tcadb16$#
+tcadb16$#     RAISE NOTICE 'Student % inserted with Grade % !!!',pname,tgrade;
+tcadb16$#
+tcadb16$# END;
+tcadb16$# $$;
+CREATE PROCEDURE
+tcadb16=# CALL add_student(107,'FFF',65);
+NOTICE:  Student FFF inserted with Grade First Class !!!
+CALL
+tcadb16=# select * from student;
+ rno | name | per |    grade
+-----+------+-----+-------------
+ 101 | AAA  |  60 | First Class
+ 102 | BBB  |  80 | DISTINCTION
+ 103 | CCC  |  20 | Fail
+ 104 | DDD  |  38 | Fail
+ 105 | EEE  |  42 | Pass
+ 107 | FFF  |  65 | First Class
+(6 rows)
+
+
+tcadb16=# CALL add_student(pname,pper) VALUES('GGG',40);
+ERROR:  syntax error at or near "VALUES"
+LINE 1: CALL add_student(pname,pper) VALUES('GGG',40);
+                                     ^
+tcadb16=# CREATE OR REPLACE PROCEDURE add_student(prno int, pname varchar(30), pper float)
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# DECLARE
+tcadb16$#     tgrade varchar(20);
+tcadb16$#     cnt int;
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#     SELECT count(*) INTO cnt
+tcadb16$#     FROM student
+tcadb16$#     WHERE rno = prno;
+tcadb16$#
+tcadb16$#     if cnt = 1 then
+tcadb16$#         RAISE NOTICE 'Record is Existed for Roll number %', prno;
+tcadb16$#         return;
+tcadb16$#     end if;
+tcadb16$#
+tcadb16$#     if pper >= 70 then
+tcadb16$#         tgrade := 'DISTINCTION';
+tcadb16$#
+tcadb16$#     elseif pper >= 60 then
+tcadb16$#         tgrade := 'First Class';
+tcadb16$#
+tcadb16$#     elseif pper >= 40 then
+tcadb16$#         tgrade := 'Pass';
+tcadb16$#
+tcadb16$#     else
+tcadb16$#         tgrade := 'Fail';
+tcadb16$#
+tcadb16$#     end if;
+tcadb16$#
+tcadb16$#     insert into student values(prno, pname,pper,tgrade);
+tcadb16$#
+tcadb16$#     RAISE NOTICE 'Student % inserted with Grade % !!!',pname,tgrade;
+tcadb16$#
+tcadb16$# END;
+tcadb16$# $$;
+CREATE PROCEDURE
+tcadb16=# CALL add_student(101,'PPP',88);
+NOTICE:  Record is Existed for Roll number 101
+CALL
+tcadb16=# CALL add_student(104,'PPP',88);
+NOTICE:  Record is Existed for Roll number 104
+CALL
+tcadb16=# CALL add_student(109,'PPP',88);
+NOTICE:  Student PPP inserted with Grade DISTINCTION !!!
+CALL
+tcadb16=# select * from student;
+ rno | name | per |    grade
+-----+------+-----+-------------
+ 101 | AAA  |  60 | First Class
+ 102 | BBB  |  80 | DISTINCTION
+ 103 | CCC  |  20 | Fail
+ 104 | DDD  |  38 | Fail
+ 105 | EEE  |  42 | Pass
+ 107 | FFF  |  65 | First Class
+ 109 | PPP  |  88 | DISTINCTION
+(7 rows)
+
+
+tcadb16=#

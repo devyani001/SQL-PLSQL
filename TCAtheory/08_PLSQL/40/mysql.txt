@@ -1,0 +1,127 @@
+Enter password: **********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 22
+Server version: 8.0.43 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use tcadb16;
+Database changed
+mysql> CREATE TABLE student(
+    ->
+    ->  rno int primary key,
+    ->  name varchar(10),
+    ->  per float,
+    ->  grade varchar(20)
+    -> );
+ERROR 1050 (42S01): Table 'student' already exists
+mysql> drop table student;
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> CREATE TABLE student(
+    ->
+    ->  rno int primary key,
+    ->  name varchar(10),
+    ->  per float,
+    ->  grade varchar(20)
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> select * from student;
+Empty set (0.01 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE PROCEDURE add_student( IN prno int, IN pname varchar(30), IN pper float)
+    ->
+    -> TCA:BEGIN
+    ->          DECLARE tgrade varchar(20);
+    ->          DECLARE cnt    int;
+    ->
+    ->
+    ->          SELECT count(*) INTO cnt
+    ->          FROM   student
+    ->          where  rno = prno;
+    ->
+    ->          if cnt=1 then
+    ->                  SELECT CONCAT('Record Alredy exist for Roll number:', prno) AS msg;
+    ->                  LEAVE TCA;
+    ->          end if;
+    ->
+    ->          if pper >= 70 then
+    ->                  SET tgrade = 'DISTINCTION';
+    ->
+    ->          elseif pper >=60 then
+    ->                  SET tgrade = 'First class';
+    ->
+    ->          elseif pper >= 40 then
+    ->                  SET tgrade = 'Pass';
+    ->
+    ->          else
+    ->                  SET tgrade = 'Fail';
+    ->
+    ->          end if;
+    ->
+    ->          insert into student values(prno, pname, pper, tgrade);
+    ->
+    ->     SELECT CONCAT( 'Student ', pname, ' inserted with Grade ', tgrade) as msg;
+    ->
+    -> END $$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER ;
+mysql> CALL add_student(101,'AAA',60);
++---------------------------------------------+
+| msg                                         |
++---------------------------------------------+
+| Student AAA inserted with Grade First class |
++---------------------------------------------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> CALL add_student(102,'BBB',70);
++---------------------------------------------+
+| msg                                         |
++---------------------------------------------+
+| Student BBB inserted with Grade DISTINCTION |
++---------------------------------------------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from student;
++-----+------+------+-------------+
+| rno | name | per  | grade       |
++-----+------+------+-------------+
+| 101 | AAA  |   60 | First class |
+| 102 | BBB  |   70 | DISTINCTION |
++-----+------+------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> CALL add_student(101,'AAA',60);
++-----------------------------------------+
+| msg                                     |
++-----------------------------------------+
+| Record Alredy exist for Roll number:101 |
++-----------------------------------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from student;
++-----+------+------+-------------+
+| rno | name | per  | grade       |
++-----+------+------+-------------+
+| 101 | AAA  |   60 | First class |
+| 102 | BBB  |   70 | DISTINCTION |
++-----+------+------+-------------+
+2 rows in set (0.00 sec)
+
+mysql>

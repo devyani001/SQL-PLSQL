@@ -1,0 +1,203 @@
+CREATE OR REPLACE PROCEDURE add_student(prno int, pname varchar(30), pper float)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    tgrade varchar(20);
+BEGIN
+
+    if pper >= 70 then
+        tgrade := 'DISTINCTION';
+
+    elseif pper >= 60 then
+        tgrade := 'First Class';
+    
+    elseif pper >= 40 then
+        tgrade := 'Pass';
+
+    else
+        tgrade := 'Fail';
+
+    end if;
+
+    insert into student values(prno, pname,pper,tgrade);
+
+END;
+$$;
+----------------------------------------------------------
+CREATE OR REPLACE PROCEDURE add_student(prno int, pname varchar(30), pper float)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    tgrade varchar(20);
+BEGIN
+
+    if pper >= 70 then
+        tgrade := 'DISTINCTION';
+
+    elseif pper >= 60 then
+        tgrade := 'First Class';
+    
+    elseif pper >= 40 then
+        tgrade := 'Pass';
+
+    else
+        tgrade := 'Fail';
+
+    end if;
+
+    insert into student values(prno, pname,pper,tgrade);
+    
+    RAISE NOTICE 'Student % inserted with Grade % !!!',pname,tgrade;
+
+END;
+$$;
+----------------------------------------------------------
+CREATE OR REPLACE PROCEDURE add_student(prno int, pname varchar(30), pper float)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    tgrade varchar(20);
+    cnt int;
+BEGIN
+
+    SELECT count(*) INTO cnt
+    FROM student
+    WHERE rno = prno;
+
+    if cnt = 1 then
+        RAISE NOTICE 'Record is Existed for Roll number %', prno;
+        return;
+    end if;
+
+    if pper >= 70 then
+        tgrade := 'DISTINCTION';
+
+    elseif pper >= 60 then
+        tgrade := 'First Class';
+    
+    elseif pper >= 40 then
+        tgrade := 'Pass';
+
+    else
+        tgrade := 'Fail';
+
+    end if;
+
+    insert into student values(prno, pname,pper,tgrade);
+    
+    RAISE NOTICE 'Student % inserted with Grade % !!!',pname,tgrade;
+
+END;
+$$;
+
+=====================================================================
+
+Q. Why & When we need to write a procedure ?
+=================================================
+
+Function  ---> SELECT & returing result
+Procedure ---> DML - Insert , delete , update, truncate
+		  ---> Logs, printing message
+
+
+CREATE TABLE student(
+	
+	rno int primary key,
+	name varchar(10),
+	per float,
+	grade varchar(20)
+);
+
+insert into student values(101,'AAA', 60);
+insert into student values(102,'BBB', 70);
+insert into student values(103,'CCC', 80);
+
+add_student(101,'AAA', 60);
+
+
+
+Postgresql Procedure to insert student record
+==============================================
+
+CREATE OR REPLACE PROCEDURE add_student(prno int, pname varchar, pper float)
+LANGUAGE plpgsql
+
+AS $$
+DECLARE
+	tgrade varchar(20);
+	cnt int;	
+BEGIN
+	
+		SELECT count(*) INTO cnt
+		FROM   student
+		where  rno = prno;
+
+		if cnt=1 then
+			RAISE NOTICE 'Record is Existed for Roll number %', prno;
+			return;
+		end if;
+
+		if pper >= 70 then
+			tgrade := 'DISTINCTION';
+
+		elseif pper >=60 then
+			tgrade := 'First class';
+
+		elseif pper >= 40 then
+			tgrade := 'Pass';
+
+		else 
+			tgrade := 'Fail';
+
+		end if;
+
+		insert into student values(prno, pname, pper, tgrade);
+
+		RAISE NOTICE 'Student % inserted with Grade % !!!',pname,tgrade;
+END;
+$$;
+
+
+MySQL Procedure to insert student record
+==============================================
+
+DELIMITER $$
+
+CREATE PROCEDURE add_student( IN prno int, IN pname varchar(30), IN pper float)
+
+TCA:BEGIN
+		DECLARE tgrade varchar(20);
+		DECLARE cnt    int;
+				        
+
+		SELECT count(*) INTO cnt
+		FROM   student
+		where  rno = prno;
+
+		if cnt=1 then
+			SELECT CONCAT('Record Alredy exist for Roll number:', prno) AS msg;
+			LEAVE TCA;
+		end if;
+
+		if pper >= 70 then
+			SET tgrade = 'DISTINCTION';
+
+		elseif pper >=60 then
+			SET tgrade = 'First class';
+
+		elseif pper >= 40 then
+			SET tgrade = 'Pass';
+
+		else 
+			SET tgrade = 'Fail';
+
+		end if;
+
+		insert into student values(prno, pname, pper, tgrade);
+
+	   SELECT CONCAT( 'Student ', pname, ' inserted with Grade ', tgrade) as msg;
+
+END $$
+DELIMITER ;
+
+-----------------------------------------------------
