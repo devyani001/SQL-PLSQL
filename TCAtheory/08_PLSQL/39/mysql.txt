@@ -1,0 +1,319 @@
+Enter password: **********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 21
+Server version: 8.0.43 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use tcadb16;
+Database changed
+mysql> DELIMITER $$
+mysql> CREATE FUNCTION msg()
+    -> RETURNS void
+    -> DETERMINISTIC
+    -> BEGIN
+    ->
+    -> END $$
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'void
+DETERMINISTIC
+BEGIN
+
+END' at line 2
+mysql> DELIMITER ;
+mysql> select msg();
++-------------+
+| msg()       |
++-------------+
+| Hello TCA!! |
++-------------+
+1 row in set (0.05 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE FUNCTION print_msg()
+    -> RETURNS void
+    -> DETERMINISTIC
+    -> BEGIN
+    ->
+    -> END $$
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'void
+DETERMINISTIC
+BEGIN
+
+END' at line 2
+mysql> DELIMITER ;
+mysql> select
+    -> 'TCA'
+    -> ;
++-----+
+| TCA |
++-----+
+| TCA |
++-----+
+1 row in set (0.00 sec)
+
+mysql> select
+    -> 'devil';
++-------+
+| devil |
++-------+
+| devil |
++-------+
+1 row in set (0.00 sec)
+
+mysql> SELECT 'tca';
++-----+
+| tca |
++-----+
+| tca |
++-----+
+1 row in set (0.00 sec)
+
+mysql> SELECT 'tca'$$
+    -> ;
++-----+
+| $$  |
++-----+
+| tca |
++-----+
+1 row in set, 1 warning (0.04 sec)
+
+mysql> SELECT 'tca'99
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '99' at line 1
+mysql> SELECT 'tca'&&
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> SELECT 'tca'^^
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '^' at line 1
+mysql> SELECT 'tca'<>
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> SELECT 'tca'>>
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> DELIMITER $$
+mysql> CREATE PROCEDURE print_msg()
+    -> DETERMINISTIC
+    -> BEGIN
+    ->         SELECT 'Hello World';
+    -> END $$
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> DELIMITER ;
+mysql> select print_msg();
+ERROR 1305 (42000): FUNCTION tcadb16.print_msg does not exist
+mysql> select print_msg;
+ERROR 1054 (42S22): Unknown column 'print_msg' in 'field list'
+mysql> CALL print_msg();
++-------------+
+| Hello World |
++-------------+
+| Hello World |
++-------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE PROCEDURE print_msg()
+    -> DETERMINISTIC
+    -> BEGIN
+    ->         SELECT 'Hello World' AS message;
+    -> END $$
+ERROR 1304 (42000): PROCEDURE print_msg already exists
+mysql> DELIMITER ;
+mysql> DROP PROCEDURE print_msg();
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '()' at line 1
+mysql> DROP PROCEDURE print_msg;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE PROCEDURE print_msg()
+    -> DETERMINISTIC
+    -> BEGIN
+    ->         SELECT 'Hello World' AS message;
+    -> END $$
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER ;
+mysql> CALL print_msg();
++-------------+
+| message     |
++-------------+
+| Hello World |
++-------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> drop procedure print_msg;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE PROCEDURE print_msg()
+    -> DETERMINISTIC
+    -> BEGIN
+    ->         SELECT 'Hello World' AS message;
+    -> END $$
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER ;
+mysql> call procedure print_msg();
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'procedure print_msg()' at line 1
+mysql> call print_msg();
++-------------+
+| message     |
++-------------+
+| Hello World |
++-------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE PROCUDURE print_value()
+    -> BEGIN
+    ->     DECLARE x INT;
+    ->     SET x = 0;
+    ->
+    ->     SELECT CONCAT('VALUE : ', x);
+    -> END $$
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'PROCUDURE print_value()
+BEGIN
+    DECLARE x INT;
+    SET x = 0;
+
+    SELECT CONC' at line 1
+mysql> DELIMITER;
+    -> DELIMITER $$
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DELIMITER;DELIMITER' at line 1
+mysql> CREATE PROCEDURE print_value()
+    -> BEGIN
+    ->     DECLARE x INT;
+    ->     SET x = 0;
+    ->
+    ->     SELECT CONCAT('VALUE : ', x);
+    -> END $$
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER;
+    -> ;
+    ->  ;
+    -> delimiter ;
+    -> DELIMITER $$
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DELIMITER;;
+ ;
+delimiter ;DELIMITER' at line 1
+mysql> CREATE PROCEDURE print_value()
+    -> BEGIN
+    ->     DECLARE x INT;
+    ->     SET x = 0;
+    ->
+    ->     SELECT CONCAT('VALUE : ', x);
+    -> END $$
+ERROR 1304 (42000): PROCEDURE print_value already exists
+mysql> DELIMITER ;
+mysql> DELIMITER $$
+mysql> CREATE PROCEDURE print_value()
+    -> BEGIN
+    ->     DECLARE x INT;
+    ->     SET x = 0;
+    ->
+    ->     SELECT CONCAT('VALUE : ', x);
+    -> END $$
+ERROR 1304 (42000): PROCEDURE print_value already exists
+mysql> DELIMITER ;
+mysql> drop procedure print_value;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE PROCEDURE print_value()
+    -> BEGIN
+    ->     DECLARE x INT;
+    ->     SET x = 0;
+    ->
+    ->     SELECT CONCAT('VALUE : ', x);
+    -> END $$
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER ;
+mysql> CALL print_value();
++-----------------------+
+| CONCAT('VALUE : ', x) |
++-----------------------+
+| VALUE : 0             |
++-----------------------+
+1 row in set (0.03 sec)
+
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE PROCEDURE print_value()
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE x INT;
+    ->     SET x = 10;
+    ->
+    ->     SELECT CONCAT('VALUE : ', x) AS msg;
+    -> END $$
+ERROR 1304 (42000): PROCEDURE print_value already exists
+mysql> DELIMITER ;
+mysql> drop procedure print_value;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE PROCEDURE print_value()
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE x INT;
+    ->     SET x = 10;
+    ->
+    ->     SELECT CONCAT('VALUE : ', x) AS msg;
+    -> END $$
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER ;
+mysql> DELIMITER $$
+mysql> CREATE PROCEDURE print_value()
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE x INT;
+    ->     SET x = 10;
+    ->
+    ->     SELECT CONCAT('VALUE : ', x) AS msg;
+    -> END $$
+ERROR 1304 (42000): PROCEDURE print_value already exists
+mysql> DELIMITER ;
+mysql> drop procedure print_value;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE PROCEDURE print_value()
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE x INT;
+    ->     SET x = 10;
+    ->
+    ->     SELECT CONCAT('VALUE : ', x) AS msg;
+    -> END $$
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER ;
+mysql> call print_value();
++------------+
+| msg        |
++------------+
+| VALUE : 10 |
++------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql>

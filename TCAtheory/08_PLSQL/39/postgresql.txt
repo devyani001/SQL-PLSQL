@@ -1,0 +1,110 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# CREATE OR REPLACE FUNCTION msg()
+tcadb16-# RETURNS void
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$#     -- printf("Hello World");
+tcadb16$#     RAISE NOTICE 'Hello World !!!';
+tcadb16$# END;
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# select msg();
+NOTICE:  Hello World !!!
+ msg
+-----
+
+(1 row)
+
+
+tcadb16=# CREATE OR REPLACE FUNCTION msg()
+tcadb16-# RETURNS void
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$#     -- printf("Hello World");
+tcadb16$#     RAISE NOTICE 'Hello World';
+tcadb16$#     RAISE NOTICE 'Techno Comp Academy';
+tcadb16$#     RAISE NOTICE 'Pune';
+tcadb16$# END;
+tcadb16$# $$;
+CREATE FUNCTION
+tcadb16=# select msg();
+NOTICE:  Hello World
+NOTICE:  Techno Comp Academy
+NOTICE:  Pune
+ msg
+-----
+
+(1 row)
+
+
+tcadb16=# select 'TCA'
+tcadb16-# ;
+ ?column?
+----------
+ TCA
+(1 row)
+
+
+tcadb16=# CREATE OR REPLACE PROCEDURE print_msg()
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$#         RAISE NOTICE 'Welcome to Postgres Procedure;'
+tcadb16$# END;
+tcadb16$# $$;
+ERROR:  syntax error at or near "END"
+LINE 6: END;
+        ^
+tcadb16=# CREATE OR REPLACE PROCEDURE print_msg()
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$#         RAISE NOTICE 'Welcome to Postgres Procedure;
+tcadb16$# END;
+tcadb16$# $$;
+ERROR:  unterminated quoted string at or near "'Welcome to Postgres Procedure;
+END;
+"
+LINE 5:         RAISE NOTICE 'Welcome to Postgres Procedure;
+                             ^
+tcadb16=# CREATE OR REPLACE PROCEDURE print_msg()
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$#         RAISE NOTICE 'Welcome to Postgres Procedure';
+tcadb16$# END;
+tcadb16$# $$;
+CREATE PROCEDURE
+tcadb16=# CALL print_msg();
+NOTICE:  Welcome to Postgres Procedure
+CALL
+tcadb16=# CREATE OR REPLACE PROCEDURE print_msg()
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# DECLARE
+tcadb16$#     x INT := 10;
+tcadb16$# BEGIN
+tcadb16$#         -- RAISE NOTICE 'Value : %d', x;    in C lang
+tcadb16$#         RAISE NOTICE 'Value : %', x;
+tcadb16$# END;
+tcadb16$# $$;
+CREATE PROCEDURE
+tcadb16=# CALL print_msg();
+NOTICE:  Value : 10
+CALL
+tcadb16=#

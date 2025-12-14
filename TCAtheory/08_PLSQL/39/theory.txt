@@ -1,0 +1,189 @@
+PostgreSQL
+-----------
+CREATE OR REPLACE FUNCTION msg()
+RETURNS void
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    -- printf("Hello World");
+    RAISE NOTICE 'Hello World';
+    RAISE NOTICE 'Techno Comp Academy';
+    RAISE NOTICE 'Pune';
+END;
+$$;
+
+---------------------------------------------
+MySQL
+------
+DELIMITER $$
+CREATE FUNCTION print_msg()
+RETURNS void
+DETERMINISTIC
+BEGIN
+
+END $$
+DELIMITER ;
+----------------------
+
+DELIMITER $$
+CREATE PROCEDURE print_msg()
+DETERMINISTIC
+BEGIN
+        SELECT 'Hello World';
+END $$
+DELIMITER ;
+
+mysql> select print_msg();
+ERROR 1305 (42000): FUNCTION tcadb16.print_msg does not exist
+mysql> CALL print_msg();
++-------------+
+| Hello World |
++-------------+
+| Hello World |
++-------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+---------------------
+
+DELIMITER $$
+CREATE PROCEDURE print_msg()
+DETERMINISTIC
+BEGIN
+        SELECT 'Hello World' AS message;
+END $$
+DELIMITER ;
+----------------------------------------------------------------
+PostgreSQL
+-----------
+CREATE OR REPLACE PROCEDURE print_msg()
+LANGUAGE plpgsql
+AS $$
+BEGIN
+        RAISE NOTICE 'Welcome to Postgres Procedure';
+END;
+$$;
+
+-----------------
+CREATE OR REPLACE PROCEDURE print_msg()
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    x INT := 10;
+BEGIN
+        -- RAISE NOTICE 'Value : %d', x;    in C lang
+        RAISE NOTICE 'Value : %', x;
+END;
+$$;
+-----------------
+MySQL - don't write 'DETERMINISTIC' in Procedure
+------
+DELIMITER $$
+CREATE PROCEDURE print_value()
+BEGIN
+    DECLARE x INT;
+    SET x = 0;
+
+    SELECT CONCAT('VALUE : ', x);
+END $$
+DELIMITER ;
+--------------
+DELIMITER $$
+CREATE PROCEDURE print_value()
+DETERMINISTIC
+BEGIN
+    DECLARE x INT;
+    SET x = 10;
+
+    SELECT CONCAT('VALUE : ', x) AS msg;
+END $$
+DELIMITER ;
+
+----------------------
+60% - Entertainment
+40% - Study
+
+
+===================
+PROCEDURE in PLSQL
+====================
+
+
+Q. Sir, I want to write a function which returns nothing?
+Ans:
+--> In c, c++, java programming langues has 'void' as a return type for a method to say that function is not returing nothig.
+--> Postgresql supports 'void'.
+    But MySQL does not.
+
+Example: Write a Function which prints message ?
+
+
+CREATE OR REPLACE FUNCTION print_msg()
+RETURNS void
+LANGUAGE plpgsql
+AS $$
+BEGIN
+		RAISE NOTICE 'Hello World';
+		RAISE NOTICE 'Techno Comp Academy';
+		RAISE NOTICE 'Pune';
+END;
+$$;
+
+Observations
+----------------
+--> Return type as a 'void'
+--> How to print message or value in a function
+	Ans: Using RAISE NOTICE
+--> MySQL Function does not have return type as a 'void'
+	Why?
+	Beacuase procedure.
+	Procedure means its a routine which does not return anything;
+
+Example : Mysql procedure to print Message
+-----------------------------------------------
+DELIMITER $$
+CREATE PROCEDURE print_msg()
+BEGIN
+		SELECT 'Hello World' AS message;
+END $$
+DELIMITER ;
+
+
+Example : Postgresql procedure to print Message
+-----------------------------------------------
+CREATE OR REPLACE PROCEDURE print_msg()
+LANGUAGE plpgsql
+AS $$
+BEGIN
+	RAISE NOTICE 'Welcome to Postgres Procedure';
+END;
+$$;
+
+Q. How to print value of a Variable in Function or Procedure? ----------------------------------------------------------------
+
+Ex: Postgresql
+===============
+
+CREATE OR REPLACE PROCEDURE print_value()
+LANGUAGE plpgsql
+AS $$
+DECLARE 
+ 	x INT :=10;
+BEGIN
+	RAISE NOTICE 'Value : %', x;
+END;
+$$;
+
+
+EX: MySQL
+============
+DELIMITER $$
+CREATE PROCEDURE print_value()
+BEGIN
+	DECLARE x int;
+	SET x = 10;
+	SELECT CONCAT('VALUE :' , x) AS msg;
+END $$
+DELIMITER ;
+
+--------------------------
