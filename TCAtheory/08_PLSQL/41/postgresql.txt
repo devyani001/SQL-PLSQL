@@ -1,0 +1,172 @@
+Server [localhost]:
+Database [postgres]: tcadb16
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+tcadb16=# CREATE OR REPLACE PROCEDURE mul_by_two(IN pnum int, OUT ans int)
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$#         ans := pnum * 2;
+tcadb16$# END;
+tcadb16$# $$;
+ERROR:  no language specified
+tcadb16=#
+tcadb16=# CREATE OR REPLACE PROCEDURE mul_by_two(IN pnum int, OUT ans int)
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$#         ans := pnum * 2;
+tcadb16$# END;
+tcadb16$# $$;
+CREATE PROCEDURE
+tcadb16=# CALL mul_by_two(10,@ans);
+ERROR:  column "ans" does not exist
+LINE 1: CALL mul_by_two(10,@ans);
+                            ^
+tcadb16=# CALL mul_by_two(10,ans);
+ERROR:  column "ans" does not exist
+LINE 1: CALL mul_by_two(10,ans);
+                           ^
+tcadb16=# CALL mul_by_two(10);
+ERROR:  procedure mul_by_two(integer) does not exist
+LINE 1: CALL mul_by_two(10);
+             ^
+HINT:  No procedure matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=# CREATE OR REPLACE PROCEDURE mul_by_two(IN pnum int, OUT ans int)
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$#         ans := pnum * 2;
+tcadb16$# END;
+tcadb16$# $$;
+CREATE PROCEDURE
+tcadb16=# CALL mul_by_two(10);
+ERROR:  procedure mul_by_two(integer) does not exist
+LINE 1: CALL mul_by_two(10);
+             ^
+HINT:  No procedure matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=# CALL mul_by_two(10);
+ERROR:  procedure mul_by_two(integer) does not exist
+LINE 1: CALL mul_by_two(10);
+             ^
+HINT:  No procedure matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=# \df mul_by
+                       List of functions
+ Schema | Name | Result data type | Argument data types | Type
+--------+------+------------------+---------------------+------
+(0 rows)
+
+
+tcadb16=# \df mul_by_two
+                                List of functions
+ Schema |    Name    | Result data type |       Argument data types        | Type
+--------+------------+------------------+----------------------------------+------
+ public | mul_by_two |                  | IN pnum integer, OUT ans integer | proc
+(1 row)
+
+
+tcadb16=# \dp mul_by_two
+                            Access privileges
+ Schema | Name | Type | Access privileges | Column privileges | Policies
+--------+------+------+-------------------+-------------------+----------
+(0 rows)
+
+
+tcadb16=# \df+ mul_by_two
+                                                                                      List of functions
+ Schema |    Name    | Result data type |       Argument data types        | Type | Volatility | Parallel |  Owner   | Security | Access privileges | Language | Internal name | Description
+--------+------------+------------------+----------------------------------+------+------------+----------+----------+----------+-------------------+----------+---------------+-------------
+ public | mul_by_two |                  | IN pnum integer, OUT ans integer | proc | volatile   | unsafe   | postgres | invoker  |                   | plpgsql  |               |
+(1 row)
+
+
+tcadb16=# \dp mul_by_two
+                            Access privileges
+ Schema | Name | Type | Access privileges | Column privileges | Policies
+--------+------+------+-------------------+-------------------+----------
+(0 rows)
+
+
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=# DROP PROCEDURE mul_by_two;
+DROP PROCEDURE
+tcadb16=# CREATE OR REPLACE PROCEDURE mul_by_two(IN pnum int, OUT ans int)
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$#         ans := pnum * 2;
+tcadb16$# END;
+tcadb16$# $$;
+CREATE PROCEDURE
+tcadb16=# CALL mul_by_two(10);
+ERROR:  procedure mul_by_two(integer) does not exist
+LINE 1: CALL mul_by_two(10);
+             ^
+HINT:  No procedure matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=# SELECT version();
+                                 version
+-------------------------------------------------------------------------
+ PostgreSQL 17.5 on x86_64-windows, compiled by msvc-19.44.35209, 64-bit
+(1 row)
+
+
+tcadb16=#
+tcadb16=#
+tcadb16=#
+tcadb16=# CALL mul_by_two(10,NULL);
+ ans
+-----
+  20
+(1 row)
+
+
+tcadb16=# CALL mul_by_two(1,NULL::INT);
+ ans
+-----
+   2
+(1 row)
+
+
+tcadb16=# CREATE OR REPLACE PROCEDURE demo_inout(INOUT num int)
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# BEGIN
+tcadb16$#         num := num * 2;
+tcadb16$# END;
+tcadb16$# $$;
+CREATE PROCEDURE
+tcadb16=# CALL demo_inout(50);
+ num
+-----
+ 100
+(1 row)
+
+
+tcadb16=# CALL demo_inout(5);
+ num
+-----
+  10
+(1 row)
+
+
+tcadb16=#

@@ -1,0 +1,143 @@
+Enter password: **********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 23
+Server version: 8.0.43 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> DELIMITER $$
+mysql> CREATE PROCEDURE mul_by_two(IN pnum int, OUT ans int)
+    -> BEGIN
+    ->         SET ans = pnum * 2;
+    -> END $$
+ERROR 1046 (3D000): No database selected
+mysql> DELIMITER ;
+mysql> use tcadb16;
+Database changed
+mysql> DELIMITER $$
+mysql> CREATE PROCEDURE mul_by_two(IN pnum int, OUT ans int)
+    -> BEGIN
+    ->         SET ans = pnum * 2;
+    -> END $$
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DELIMITER ;
+mysql> select @ans;
++------------+
+| @ans       |
++------------+
+| NULL       |
++------------+
+1 row in set (0.03 sec)
+
+mysql> CALL mul_by_two(10,@ans);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> SELECT @ans;
++------+
+| @ans |
++------+
+|   20 |
++------+
+1 row in set (0.00 sec)
+
+mysql> CALL mul_by_two(0,@ans);
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT @ans;
++------+
+| @ans |
++------+
+|    0 |
++------+
+1 row in set (0.00 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE PROCEDURE demo_inout(INOUT num int)
+    -> BEGIN
+    ->         SET num = num * 2;
+    -> END $$
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DELIMITER ;
+mysql> CALL demo_inout(50);
+ERROR 1414 (42000): OUT or INOUT argument 1 for routine tcadb16.demo_inout is not a variable or NEW pseudo-variable in BEFORE trigger
+mysql> SET @num = 50;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> CALL demo_inout(@NUM);
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT @num;
++------+
+| @num |
++------+
+|  100 |
++------+
+1 row in set (0.00 sec)
+
+mysql> SET @a = 3;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> CALL demo_inout(@a);
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select @A;
++------+
+| @A   |
++------+
+|    6 |
++------+
+1 row in set (0.00 sec)
+
+mysql> SET @x = 2;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SET @y = 3;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT @a + @b;
++---------+
+| @a + @b |
++---------+
+|    NULL |
++---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT @a+@b;
++-------+
+| @a+@b |
++-------+
+|  NULL |
++-------+
+1 row in set (0.00 sec)
+
+mysql> SELECT @x + @y;
++---------+
+| @x + @y |
++---------+
+|       5 |
++---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT @x * @y;
++---------+
+| @x * @y |
++---------+
+|       6 |
++---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT @x * @y AS multiply;
++----------+
+| multiply |
++----------+
+|        6 |
++----------+
+1 row in set (0.00 sec)

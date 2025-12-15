@@ -1,0 +1,75 @@
+MySQL
+------
+DELIMITER $$
+CREATE PROCEDURE mul_by_two(IN pnum int, OUT ans int)
+BEGIN
+        SET ans = pnum * 2;
+END $$
+DELIMITER ;
+
+CALL mul_by_two(10, @ans);
+SELECT @ans;
+--------------------------------------------------------
+Postgresql
+-----------
+CREATE OR REPLACE PROCEDURE mul_by_two(IN pnum int, OUT ans int)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+        ans := pnum * 2;
+END;
+$$;
+--------------------------------------------------------
+DELIMITER $$
+CREATE PROCEDURE demo_inout(INOUT num int)
+BEGIN
+        SET num = num * 2;
+END $$
+DELIMITER ;
+------------------
+CREATE OR REPLACE PROCEDURE demo_inout(INOUT num int)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+        num := num * 2;
+END;
+$$;
+====================================================================
+
+Paramters type for procedures
+--------------------------------
+There are 3 types of Parameter to the procedure -
+	1. IN(default) : In this parameter input  given to the procedure
+	2. OUT         : To return value to Caller
+	3. INOUT       :  Caller passes a value, procedure can modify it, and caller 
+	                  sees updated value.
+
+Example-1
+==========
+DELIMITER $$
+CREATE PROCEDURE mult_by_two(IN pnum int, OUT ans int)
+BEGIN
+		SET ans = pnum * 2;
+END$$
+DELIMITER ;
+
+how to call -
+	CALL mult_by_two(10, @ans);
+
+	SELECT @ans;
+
+Example-2
+==========
+
+DELIMITER $$
+CREATE PROCEDURE demo_inout(INOUT num int)
+BEGIN 
+		SET num = num * 2;
+END$$
+DELIMITER ;
+
+How to call -
+	SET    @num=50;
+	CALL   demo_inout(@num);
+	SELECT @num;
+--------------------------------------------------------------------------------
