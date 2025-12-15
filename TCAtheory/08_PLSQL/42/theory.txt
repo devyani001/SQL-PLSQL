@@ -1,0 +1,12 @@
+SELECT query cha result jya memory madhe thevtat ti memory mhnje CURSOR...
+===========================================================================
+Cursor in PLSQL
+===============
+--> A cursor is a database object (or temporary work area in memory) created when an SQL SELECT statement is executed inside a procedure/function.
+--> It stores the result set (rows returned by the query). 
+--> The result set stored by the cursor is called the 'active set'. 
+--> A cursor can hold multiple rows in its active set, but it allows you to process only one row at a time (by FETCH). 
+
+--> There are two types of CURSOR -
+	1. implicit cursor
+	2. Explicit Cusror
