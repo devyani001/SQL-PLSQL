@@ -1,0 +1,235 @@
+Server [localhost]:
+Database [postgres]: tcadb16
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+tcadb16=# select * from student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  80
+ 103 | CCC  |  20
+ 104 | DDD  |  38
+ 105 | EEE  |  42
+ 107 | FFF  |  65
+(6 rows)
+
+
+tcadb16=# CALL show_students;
+ERROR:  syntax error at or near ";"
+LINE 1: CALL show_students;
+                          ^
+tcadb16=# CALL show_students();
+ERROR:  procedure show_students() does not exist
+LINE 1: CALL show_students();
+             ^
+HINT:  No procedure matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=# CREATE OR REPLACE PROCEDURE show_students()
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# DECLARE
+tcadb16$#         stud_cur CURSOR FOR SELECT rno,name,per FROM student;
+tcadb16$#         stud_res RECORD;
+tcadb16$# BEGIN
+tcadb16$#         OPEN stud_cur;
+tcadb16$#         LOOP
+tcadb16$#             FETCH stud_cur INTO stud_res;
+tcadb16$#             EXIT WHEN NOT FOUND;
+tcadb16$#
+tcadb16$#             RAISE NOTICE 'Roll Num : %  Name : %  Per : %',stud_res.rno,stud_res.name,stud_res.per;
+tcadb16$#
+tcadb16$#         END LOOP;
+tcadb16$# END;
+tcadb16$# $$;
+CREATE PROCEDURE
+tcadb16=# CALL show_students();
+NOTICE:  Roll Num : 101  Name : AAA  Per : 60
+NOTICE:  Roll Num : 102  Name : BBB  Per : 80
+NOTICE:  Roll Num : 103  Name : CCC  Per : 20
+NOTICE:  Roll Num : 104  Name : DDD  Per : 38
+NOTICE:  Roll Num : 105  Name : EEE  Per : 42
+NOTICE:  Roll Num : 107  Name : FFF  Per : 65
+CALL
+tcadb16=# CREATE OR REPLACE PROCEDURE print_stu(pper int)
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# DECLARE
+tcadb16$#         tper int;
+tcadb16$# BEGIN
+tcadb16$#         stud_cur CURSOR FOR SELECT * FROM student WHERE tper > pper;
+tcadb16$#         stud_res RECORD;
+tcadb16$#
+tcadb16$#         LOOP
+tcadb16$#         FETCH stud_cur INTO stud_res;
+tcadb16$#         EXIT WHEN NOT FOUND
+tcadb16$#
+tcadb16$#         RAISE NOTICE 'Roll : %  Name : %  Per : %', stud_res.rno,stud_res.name,stud_res.per;
+tcadb16$#         END LOOP;
+tcadb16$# END;
+tcadb16$# $$;
+ERROR:  syntax error at or near "stud_cur"
+LINE 7:         stud_cur CURSOR FOR SELECT * FROM student WHERE tper...
+                ^
+tcadb16=# CREATE OR REPLACE PROCEDURE print_stu(pper int)
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# DECLARE
+tcadb16$#         tper int;
+tcadb16$#         stud_cur CURSOR FOR SELECT * FROM student WHERE tper > pper;
+tcadb16$#         stud_res RECORD;
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#         OPEN stud_cur;
+tcadb16$#
+tcadb16$#         LOOP
+tcadb16$#         FETCH stud_cur INTO stud_res;
+tcadb16$#         EXIT WHEN NOT FOUND
+tcadb16$#
+tcadb16$#         RAISE NOTICE 'Roll : %  Name : %  Per : %', stud_res.rno,stud_res.name,stud_res.per;
+tcadb16$#         END LOOP;
+tcadb16$#
+tcadb16$#         CLOSE stud_cur;
+tcadb16$# END;
+tcadb16$# $$;
+ERROR:  syntax error at or near "NOTICE"
+LINE 16:         RAISE NOTICE 'Roll : %  Name : %  Per : %', stud_res...
+                       ^
+tcadb16=# CREATE OR REPLACE PROCEDURE print_stu(pper int)
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$# DECLARE
+tcadb16$#         tper int;
+tcadb16$#         stud_cur CURSOR FOR SELECT * FROM student WHERE tper > pper;
+tcadb16$#         stud_res RECORD;
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#         OPEN stud_cur;
+tcadb16$#
+tcadb16$#         LOOP
+tcadb16$#         FETCH stud_cur INTO stud_res;
+tcadb16$#         EXIT WHEN NOT FOUND;
+tcadb16$#
+tcadb16$#         RAISE NOTICE 'Roll Num : %  Name : %  Per : %',stud_res.rno,stud_res.name,stud_res.per;
+tcadb16$#
+tcadb16$#         END LOOP;
+tcadb16$#
+tcadb16$#         CLOSE stud_cur;
+tcadb16$# END;
+tcadb16$# $$;
+CREATE PROCEDURE
+tcadb16=# CALL print_stu(70);
+CALL
+tcadb16=# SELECT * FROM student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  80
+ 103 | CCC  |  20
+ 104 | DDD  |  38
+ 105 | EEE  |  42
+ 107 | FFF  |  65
+(6 rows)
+
+
+tcadb16=# SELECT * FROM stud_res;
+ERROR:  relation "stud_res" does not exist
+LINE 1: SELECT * FROM stud_res;
+                      ^
+tcadb16=# CREATE OR REPLACE PROCEDURE show_students_per(IN pper float)
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#
+tcadb16$#     stud_cur CURSOR FOR SELECT rno,name, per FROM student where per >=pper;
+tcadb16$#     stud_rec RECORD;
+tcadb16$#
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#     OPEN stud_cur;
+tcadb16$#     LOOP
+tcadb16$#         FETCH stud_cur INTO stud_rec;
+tcadb16$#         EXIT WHEN NOT FOUND;
+tcadb16$#
+tcadb16$#         RAISE NOTICE 'Roll Num: %  Name: % Per: %',stud_rec.rno, stud_rec.name, stud_rec.per;
+tcadb16$#
+tcadb16$#     END LOOP;
+tcadb16$#
+tcadb16$#     CLOSE stud_cur;
+tcadb16$# END;
+tcadb16$# $$;
+CREATE PROCEDURE
+tcadb16=# CALL show_students_per(70);
+NOTICE:  Roll Num: 102  Name: BBB Per: 80
+CALL
+tcadb16=# SELECT * from student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  80
+ 103 | CCC  |  20
+ 104 | DDD  |  38
+ 105 | EEE  |  42
+ 107 | FFF  |  65
+(6 rows)
+
+
+tcadb16=# CALL show_students_per(60);
+NOTICE:  Roll Num: 101  Name: AAA Per: 60
+NOTICE:  Roll Num: 102  Name: BBB Per: 80
+NOTICE:  Roll Num: 107  Name: FFF Per: 65
+CALL
+tcadb16=# SELECT * from student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  80
+ 103 | CCC  |  20
+ 104 | DDD  |  38
+ 105 | EEE  |  42
+ 107 | FFF  |  65
+(6 rows)
+
+
+tcadb16=# CALL show_students_per(0);
+NOTICE:  Roll Num: 101  Name: AAA Per: 60
+NOTICE:  Roll Num: 102  Name: BBB Per: 80
+NOTICE:  Roll Num: 103  Name: CCC Per: 20
+NOTICE:  Roll Num: 104  Name: DDD Per: 38
+NOTICE:  Roll Num: 105  Name: EEE Per: 42
+NOTICE:  Roll Num: 107  Name: FFF Per: 65
+CALL
+tcadb16=# CALL show_students_per();
+ERROR:  procedure show_students_per() does not exist
+LINE 1: CALL show_students_per();
+             ^
+HINT:  No procedure matches the given name and argument types. You might need to add explicit type casts.
+tcadb16=# CALL show_students_per(NULL);
+CALL
+tcadb16=# CALL show_students_per(60);
+NOTICE:  Roll Num: 101  Name: AAA Per: 60
+NOTICE:  Roll Num: 102  Name: BBB Per: 80
+NOTICE:  Roll Num: 107  Name: FFF Per: 65
+CALL
+tcadb16=# CALL show_students_per(NULL);
+CALL
+tcadb16=# SELECT * from student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  80
+ 103 | CCC  |  20
+ 104 | DDD  |  38
+ 105 | EEE  |  42
+ 107 | FFF  |  65
+(6 rows)
+
+
+tcadb16=#

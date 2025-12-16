@@ -1,0 +1,284 @@
+CREATE OR REPLACE PROCEDURE show_students()
+LANGUAGE plpgsql
+AS $$
+DECLARE
+        stud_cur CURSOR FOR SELECT rno,name,per FROM student;
+        stud_res RECORD;
+BEGIN
+        OPEN stud_cur;
+        LOOP
+            FETCH stud_cur INTO stud_res;
+            EXIT WHEN NOT FOUND;
+
+            RAISE NOTICE 'Roll Num : %  Name : %  Per : %',stud_res.rno,stud_res.name,stud_res.per;
+
+        END LOOP;
+        CLOSE stud_cur; 
+END;
+$$;
+---------------------------------------------------------------------------------------------------
+SIR
+=====
+DELIMITER $$
+
+CREATE PROCEDURE show_students()
+BEGIN
+    
+    DECLARE IS_DONE INT DEFAULT FALSE;
+
+    DECLARE trno int;
+    DECLARE tname varchar(20);
+    DECLARE tper float;
+
+    DECLARE stud_cur CURSOR FOR  select rno, name, per from student;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND  SET IS_DONE = TRUE;
+
+    OPEN stud_cur;
+    TCA:LOOP
+        FETCH stud_cur INTO trno, tname, tper;
+
+        IF IS_DONE THEN
+            LEAVE TCA;
+        END IF;
+
+        SELECT CONCAT('Roll Num:', trno, ' Name:', tname, ' Per: ', tper) AS msg;
+
+    END LOOP;
+    CLOSE stud_cur;
+
+
+END $$
+DELIMITER ;
+-----------------------------------------------------------------------------------------------------
+I
+=====
+CREATE OR REPLACE PROCEDURE print_stu(pper int)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+        tper int;
+        stud_cur CURSOR FOR SELECT * FROM student WHERE tper > pper;
+        stud_res RECORD;
+BEGIN
+        
+        OPEN stud_cur;
+
+        LOOP
+        FETCH stud_cur INTO stud_res;
+        EXIT WHEN NOT FOUND;
+
+        RAISE NOTICE 'Roll Num : %  Name : %  Per : %',stud_res.rno,stud_res.name,stud_res.per;
+
+        END LOOP;
+
+        CLOSE stud_cur;
+END;
+$$;
+-------------------------------------
+SIR
+=====
+MySQL
+=====
+DELIMITER $$
+
+CREATE PROCEDURE show_students_per(IN pper float)
+BEGIN
+    
+    DECLARE IS_DONE INT DEFAULT FALSE;
+
+    DECLARE trno int;
+    DECLARE tname varchar(20);
+    DECLARE tper float;
+
+    DECLARE stud_cur CURSOR FOR  select rno, name, per from student where per>=pper;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND  SET IS_DONE = TRUE;
+
+    OPEN stud_cur;
+    TCA:LOOP
+        FETCH stud_cur INTO trno, tname, tper;
+
+        IF IS_DONE THEN
+            LEAVE TCA;
+        END IF;
+
+        SELECT CONCAT('Roll Num:', trno, ' Name:', tname, ' Per: ', tper) AS msg;
+
+    END LOOP;
+    CLOSE stud_cur;
+
+
+END $$
+DELIMITER ;
+===============================
+PostgreSQL
+===========
+
+CREATE OR REPLACE PROCEDURE show_students_per(IN pper float)
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    
+    stud_cur CURSOR FOR SELECT rno,name, per FROM student where per >=pper;
+    stud_rec RECORD;
+
+BEGIN
+
+    OPEN stud_cur;
+    LOOP
+        FETCH stud_cur INTO stud_rec;
+        EXIT WHEN NOT FOUND;
+
+        RAISE NOTICE 'Roll Num: %  Name: % Per: %',stud_rec.rno, stud_rec.name, stud_rec.per;
+
+    END LOOP;
+
+    CLOSE stud_cur; 
+END;
+$$;
+========================
+PostgreSQL is more powerful than MySQL , postgres having JSON datatype...
+
+Explict Cursor
+===================
+--> You have to declare Cursor Using 'CURSOR'.
+--> Use cursor using -
+	OPEN
+	FETCH
+	CLOSE
+
+
+Write a cursor to display Student Information
+-----------------------------------------------
+
+Postgresql
+==========
+
+CREATE OR REPLACE PROCEDURE show_students()
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    
+    stud_cur CURSOR FOR SELECT rno,name, per FROM student;
+    stud_rec RECORD;
+
+BEGIN
+
+    OPEN stud_cur;
+    LOOP
+        FETCH stud_cur INTO stud_rec;
+        EXIT WHEN NOT FOUND;
+
+        RAISE NOTICE 'Roll Num: %  Name: % Per: %',stud_rec.rno, stud_rec.name, stud_rec.per;
+
+    END LOOP;
+
+    CLOSE stud_cur; 
+END;
+$$;
+
+
+
+
+MySQL
+=====
+
+DELIMITER $$
+
+CREATE PROCEDURE show_students()
+BEGIN
+    
+    DECLARE IS_DONE INT DEFAULT FALSE;
+
+    DECLARE trno int;
+    DECLARE tname varchar(20);
+    DECLARE tper float;
+
+    DECLARE stud_cur CURSOR FOR  select rno, name, per from student;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND  SET IS_DONE = TRUE;
+
+    OPEN stud_cur;
+    TCA:LOOP
+        FETCH stud_cur INTO trno, tname, tper;
+
+        IF IS_DONE THEN
+            LEAVE TCA;
+        END IF;
+
+        SELECT CONCAT('Roll Num:', trno, ' Name:', tname, ' Per: ', tper) AS msg;
+
+    END LOOP;
+    CLOSE stud_cur;
+
+
+END $$
+DELIMITER ;
+
+
+
+Q. Write a cursor which prints student information which are having per greter or equal than given percentage.
+---------------------------------------------------------------------------
+PostgreSQL
+===========
+
+CREATE OR REPLACE PROCEDURE show_students_per(IN pper float)
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    
+    stud_cur CURSOR FOR SELECT rno,name, per FROM student where per >=pper;
+    stud_rec RECORD;
+
+BEGIN
+
+    OPEN stud_cur;
+    LOOP
+        FETCH stud_cur INTO stud_rec;
+        EXIT WHEN NOT FOUND;
+
+        RAISE NOTICE 'Roll Num: %  Name: % Per: %',stud_rec.rno, stud_rec.name, stud_rec.per;
+
+    END LOOP;
+
+    CLOSE stud_cur; 
+END;
+$$;
+
+
+
+MySQL
+=====
+DELIMITER $$
+
+CREATE PROCEDURE show_students_per(IN pper float)
+BEGIN
+    
+    DECLARE IS_DONE INT DEFAULT FALSE;
+
+    DECLARE trno int;
+    DECLARE tname varchar(20);
+    DECLARE tper float;
+
+    DECLARE stud_cur CURSOR FOR  select rno, name, per from student where per>=pper;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND  SET IS_DONE = TRUE;
+
+    OPEN stud_cur;
+    TCA:LOOP
+        FETCH stud_cur INTO trno, tname, tper;
+
+        IF IS_DONE THEN
+            LEAVE TCA;
+        END IF;
+
+        SELECT CONCAT('Roll Num:', trno, ' Name:', tname, ' Per: ', tper) AS msg;
+
+    END LOOP;
+    CLOSE stud_cur;
+
+
+END $$
+DELIMITER ;
+
+-----------------------------------------------------------------
