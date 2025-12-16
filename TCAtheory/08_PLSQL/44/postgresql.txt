@@ -1,0 +1,141 @@
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]:
+Password for user postgres:
+
+psql (17.5)
+WARNING: Console code page (437) differs from Windows code page (1252)
+         8-bit characters might not work correctly. See psql reference
+         page "Notes for Windows users" for details.
+Type "help" for help.
+
+postgres=# \c tcadb16;
+You are now connected to database "tcadb16" as user "postgres".
+tcadb16=# select * from student;
+ rno | name | per
+-----+------+-----
+ 101 | AAA  |  60
+ 102 | BBB  |  80
+ 103 | CCC  |  20
+ 104 | DDD  |  38
+ 105 | EEE  |  42
+ 107 | FFF  |  65
+(6 rows)
+
+
+tcadb16=# drop table student;
+DROP TABLE
+tcadb16=# select * from student;
+ERROR:  relation "student" does not exist
+LINE 1: select * from student;
+                      ^
+tcadb16=# CREATE TABLE student (
+tcadb16(#     rno INT PRIMARY KEY,
+tcadb16(#       name VARCHAR(20),
+tcadb16(#     per float
+tcadb16(# );
+CREATE TABLE
+tcadb16=#
+tcadb16=#
+tcadb16=# INSERT INTO student VALUES
+tcadb16-# (101, 'AAA', 82.5),
+tcadb16-# (102, 'BBB', 67.0),
+tcadb16-# (103, 'CCC', 45.5),
+tcadb16-# (104, 'DDD', 76.0);
+INSERT 0 4
+tcadb16=#
+tcadb16=# select * from student;
+ rno | name | per
+-----+------+------
+ 101 | AAA  | 82.5
+ 102 | BBB  |   67
+ 103 | CCC  | 45.5
+ 104 | DDD  |   76
+(4 rows)
+
+
+tcadb16=# ALTER TABLE student ADD COLUMN grade VARCHAR(20);
+ALTER TABLE
+tcadb16=# select * from student;
+ rno | name | per  | grade
+-----+------+------+-------
+ 101 | AAA  | 82.5 |
+ 102 | BBB  |   67 |
+ 103 | CCC  | 45.5 |
+ 104 | DDD  |   76 |
+(4 rows)
+
+
+tcadb16=# UPDATE student SET grade = 'Distinction' WHERE rno = 101;
+UPDATE 1
+tcadb16=# select * from student;
+ rno | name | per  |    grade
+-----+------+------+-------------
+ 102 | BBB  |   67 |
+ 103 | CCC  | 45.5 |
+ 104 | DDD  |   76 |
+ 101 | AAA  | 82.5 | Distinction
+(4 rows)
+
+
+tcadb16=# CREATE OR REPLACE PROCEDURE update_students_grade()
+tcadb16-# LANGUAGE plpgsql
+tcadb16-# AS $$
+tcadb16$#
+tcadb16$# DECLARE
+tcadb16$#
+tcadb16$#     stud_cur CURSOR FOR SELECT rno,name,per FROM student;
+tcadb16$#     stud_rec RECORD;
+tcadb16$#     tgrade varchar(20);
+tcadb16$#
+tcadb16$# BEGIN
+tcadb16$#
+tcadb16$#     OPEN stud_cur;
+tcadb16$#     LOOP
+tcadb16$#         FETCH stud_cur INTO stud_rec;
+tcadb16$#         EXIT WHEN NOT FOUND;
+tcadb16$#
+tcadb16$#         if stud_rec.per >= 70 then
+tcadb16$#             tgrade := 'Distincation';
+tcadb16$#         elseif stud_rec.per >= 60 then
+tcadb16$#             tgrade := 'First class';
+tcadb16$#         elseif stud_rec.per >=40 then
+tcadb16$#             tgrade := 'Pass';
+tcadb16$#         else
+tcadb16$#             tgrade := 'Fail';
+tcadb16$#         end if;
+tcadb16$#
+tcadb16$#         UPDATE student
+tcadb16$#         SET grade = tgrade
+tcadb16$#         WHERE rno = stud_rec.rno;
+tcadb16$#
+tcadb16$#     END LOOP;
+tcadb16$#
+tcadb16$#     CLOSE stud_cur;
+tcadb16$# END;
+tcadb16$# $$;
+CREATE PROCEDURE
+tcadb16=# select * from student;
+ rno | name | per  |    grade
+-----+------+------+-------------
+ 102 | BBB  |   67 |
+ 103 | CCC  | 45.5 |
+ 104 | DDD  |   76 |
+ 101 | AAA  | 82.5 | Distinction
+(4 rows)
+
+
+tcadb16=# CALL  update_students_grade();
+CALL
+tcadb16=# select * from student;
+ rno | name | per  |    grade
+-----+------+------+--------------
+ 102 | BBB  |   67 | First class
+ 103 | CCC  | 45.5 | Pass
+ 104 | DDD  |   76 | Distincation
+ 101 | AAA  | 82.5 | Distincation
+(4 rows)
+
+
+tcadb16=#

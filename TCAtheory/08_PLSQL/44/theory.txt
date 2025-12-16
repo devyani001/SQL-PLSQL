@@ -1,0 +1,111 @@
+Q. Why we must write cursor? 
+----------------------------------- 
+Ans:  
+• A cursor is used when a SQL query returns multiple rows and we need to process them one row at a time inside PL-SQL.
+
+
+Example:
+
+CREATE TABLE student ( 
+    rno INT PRIMARY KEY, 
+	name VARCHAR(20), 
+    per float 
+);
+
+
+INSERT INTO student VALUES 
+(101, 'AAA', 82.5), 
+(102, 'BBB', 67.0), 
+(103, 'CCC', 45.5), 
+(104, 'DDD', 76.0); 
+
+Postgresql
+-----------
+CREATE OR REPLACE PROCEDURE update_students_grade()
+LANGUAGE plpgsql
+AS $$
+
+DECLARE
+    
+    stud_cur CURSOR FOR SELECT rno,name,per FROM student;
+    stud_rec RECORD;
+    tgrade varchar(20);
+
+BEGIN
+
+    OPEN stud_cur;
+    LOOP
+        FETCH stud_cur INTO stud_rec;
+        EXIT WHEN NOT FOUND;
+
+        if stud_rec.per >= 70 then
+            tgrade := 'Distincation';
+        elseif stud_rec.per >= 60 then
+            tgrade := 'First class';
+        elseif stud_rec.per >=40 then
+            tgrade := 'Pass';
+        else 
+            tgrade := 'Fail';
+        end if;
+
+        UPDATE student 
+        SET grade = tgrade
+        WHERE rno = stud_rec.rno;
+
+    END LOOP;
+
+    CLOSE stud_cur; 
+END;
+$$;
+
+
+MySQL
+====
+DELIMITER $$
+
+CREATE PROCEDURE update_students_grade()
+BEGIN
+    
+    DECLARE IS_DONE INT DEFAULT FALSE;
+
+    DECLARE trno int;
+    DECLARE tname varchar(20);
+    DECLARE tper float;
+    DECLARE tgrade varchar(20);
+
+    DECLARE stud_cur CURSOR FOR  select rno, name, per from student;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND  SET IS_DONE = TRUE;
+
+    OPEN stud_cur;
+    TCA:LOOP
+        FETCH stud_cur INTO trno, tname, tper;
+
+        IF IS_DONE THEN
+            LEAVE TCA;
+        END IF;
+
+        -- grade calculation  if
+
+        if tper>=70 then
+            SET tgrade = 'Distinction';
+        elseif tper>=60 then
+            SET tgrade  = 'First Class';
+        elseif tper>=40 then
+            SET tgrade = 'Pass';
+        else
+            SET tgrade = 'Fail';
+        end if;  
+
+        -- Updating students grade
+
+        UPDATE student
+        SET    grade = tgrade
+        WHERE  rno = trno;
+
+
+    END LOOP;
+    CLOSE stud_cur;
+
+    
+END $$
+DELIMITER ;

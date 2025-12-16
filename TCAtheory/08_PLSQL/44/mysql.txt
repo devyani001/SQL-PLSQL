@@ -1,0 +1,150 @@
+Enter password: **********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 25
+Server version: 8.0.43 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use tcadb16;
+Database changed
+mysql> select * from student;
++-----+------+------+-------------+
+| rno | name | per  | grade       |
++-----+------+------+-------------+
+| 101 | AAA  |   60 | First class |
+| 102 | BBB  |   70 | DISTINCTION |
++-----+------+------+-------------+
+2 rows in set (0.05 sec)
+
+mysql> drop table student;
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> drop table students;
+ERROR 1051 (42S02): Unknown table 'tcadb16.students'
+mysql> CREATE TABLE student (
+    ->     rno INT PRIMARY KEY,
+    ->  name VARCHAR(20),
+    ->     per float
+    -> );
+Query OK, 0 rows affected (0.08 sec)
+
+mysql>
+mysql>
+mysql> INSERT INTO student VALUES
+    -> (101, 'AAA', 82.5),
+    -> (102, 'BBB', 67.0),
+    -> (103, 'CCC', 45.5),
+    -> (104, 'DDD', 76.0);
+Query OK, 4 rows affected (0.05 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from student;
++-----+------+------+
+| rno | name | per  |
++-----+------+------+
+| 101 | AAA  | 82.5 |
+| 102 | BBB  |   67 |
+| 103 | CCC  | 45.5 |
+| 104 | DDD  |   76 |
++-----+------+------+
+4 rows in set (0.00 sec)
+
+mysql> ALTER TABLE student
+    -> ADD COLUMN grade VARCHAR(50);
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from student;
++-----+------+------+-------+
+| rno | name | per  | grade |
++-----+------+------+-------+
+| 101 | AAA  | 82.5 | NULL  |
+| 102 | BBB  |   67 | NULL  |
+| 103 | CCC  | 45.5 | NULL  |
+| 104 | DDD  |   76 | NULL  |
++-----+------+------+-------+
+4 rows in set (0.00 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE PROCEDURE update_students_grade()
+    -> BEGIN
+    ->
+    ->     DECLARE IS_DONE INT DEFAULT FALSE;
+    ->
+    ->     DECLARE trno int;
+    ->     DECLARE tname varchar(20);
+    ->     DECLARE tper float;
+    ->     DECLARE tgrade varchar(20);
+    ->
+    ->     DECLARE stud_cur CURSOR FOR  select rno, name, per from student;
+    ->     DECLARE CONTINUE HANDLER FOR NOT FOUND  SET IS_DONE = TRUE;
+    ->
+    ->     OPEN stud_cur;
+    ->     TCA:LOOP
+    ->         FETCH stud_cur INTO trno, tname, tper;
+    ->
+    ->         IF IS_DONE THEN
+    ->             LEAVE TCA;
+    ->         END IF;
+    ->
+    ->         -- grade calculation  if
+    ->
+    ->         if tper>=70 then
+    ->             SET tgrade = 'Distinction';
+    ->         elseif tper>=60 then
+    ->             SET tgrade  = 'First Class';
+    ->         elseif tper>=40 then
+    ->             SET tgrade = 'Pass';
+    ->         else
+    ->             SET tgrade = 'Fail';
+    ->         end if;
+    ->
+    ->         -- Updating students grade
+    ->
+    ->         UPDATE student
+    ->         SET    grade = tgrade
+    ->         WHERE  rno = trno;
+    ->
+    ->
+    ->     END LOOP;
+    ->     CLOSE stud_cur;
+    ->
+    ->
+    -> END $$
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> DELIMITER ;
+mysql>
+mysql> SELECT * FROM student;
++-----+------+------+-------+
+| rno | name | per  | grade |
++-----+------+------+-------+
+| 101 | AAA  | 82.5 | NULL  |
+| 102 | BBB  |   67 | NULL  |
+| 103 | CCC  | 45.5 | NULL  |
+| 104 | DDD  |   76 | NULL  |
++-----+------+------+-------+
+4 rows in set (0.00 sec)
+
+mysql> CALL update_students_grade();
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> select * from student;
++-----+------+------+-------------+
+| rno | name | per  | grade       |
++-----+------+------+-------------+
+| 101 | AAA  | 82.5 | Distinction |
+| 102 | BBB  |   67 | First Class |
+| 103 | CCC  | 45.5 | Pass        |
+| 104 | DDD  |   76 | Distinction |
++-----+------+------+-------------+
+4 rows in set (0.00 sec)
+
+mysql>
